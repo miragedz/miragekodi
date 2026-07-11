@@ -1,0 +1,268 @@
+/* ==========================================================================
+   Thème "Black" pour Bootstrap 5.3
+   À charger APRÈS bootstrap.min.css
+   Utilise le système de color modes de Bootstrap 5.3 (data-bs-theme)
+   ========================================================================== */
+
+:root,
+[data-bs-theme="dark"] {
+  /* Couleurs de base */
+  --bs-body-bg: #000000;
+  --bs-body-bg-rgb: 0, 0, 0;
+  --bs-body-color: #e8e8e8;
+  --bs-body-color-rgb: 232, 232, 232;
+
+  --bs-secondary-bg: #121212;
+  --bs-secondary-bg-rgb: 18, 18, 18;
+  --bs-tertiary-bg: #1a1a1a;
+  --bs-tertiary-bg-rgb: 26, 26, 26;
+
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+
+  --bs-secondary-color: #b0b0b0;
+  --bs-secondary-color-rgb: 176, 176, 176;
+  --bs-tertiary-color: #808080;
+  --bs-tertiary-color-rgb: 128, 128, 128;
+
+  /* Bordures */
+  --bs-border-color: #2a2a2a;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.1);
+
+  /* Couleurs thématiques */
+  --bs-primary: #4dabf7;
+  --bs-primary-rgb: 77, 171, 247;
+  --bs-secondary: #6c757d;
+  --bs-secondary-rgb: 108, 117, 125;
+  --bs-success: #51cf66;
+  --bs-success-rgb: 81, 207, 102;
+  --bs-info: #22b8cf;
+  --bs-info-rgb: 34, 184, 207;
+  --bs-warning: #fcc419;
+  --bs-warning-rgb: 252, 196, 25;
+  --bs-danger: #ff6b6b;
+  --bs-danger-rgb: 255, 107, 107;
+  --bs-light: #2a2a2a;
+  --bs-light-rgb: 42, 42, 42;
+  --bs-dark: #000000;
+  --bs-dark-rgb: 0, 0, 0;
+
+  --bs-link-color: var(--bs-primary);
+  --bs-link-color-rgb: var(--bs-primary-rgb);
+  --bs-link-hover-color: #74c0fc;
+  --bs-link-hover-color-rgb: 116, 192, 252;
+
+  --bs-code-color: #ff8787;
+
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background-color: #050505 !important;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background-color: #0d0d0d;
+  border: 1px solid var(--bs-border-color);
+}
+
+.card-header,
+.card-footer {
+  background-color: #141414;
+  border-color: var(--bs-border-color);
+}
+
+/* ---------- Modals ---------- */
+.modal-content {
+  background-color: #0d0d0d;
+  border: 1px solid var(--bs-border-color);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--bs-border-color);
+}
+
+/* ---------- Dropdowns ---------- */
+.dropdown-menu {
+  background-color: #121212;
+  border: 1px solid var(--bs-border-color);
+}
+
+.dropdown-item {
+  color: var(--bs-body-color);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+.dropdown-divider {
+  border-color: var(--bs-border-color);
+}
+
+/* ---------- Tables ---------- */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-border-color: var(--bs-border-color);
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+  background-color: #121212;
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #171717;
+  color: #ffffff;
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(77, 171, 247, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--bs-tertiary-color);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #0a0a0a;
+  color: var(--bs-tertiary-color);
+}
+
+.input-group-text {
+  background-color: #1a1a1a;
+  border-color: var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.form-check-input {
+  background-color: #121212;
+  border-color: var(--bs-border-color);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* ---------- Buttons (outline sur fond noir) ---------- */
+.btn-dark {
+  background-color: #1a1a1a;
+  border-color: #2a2a2a;
+  color: #fff;
+}
+
+.btn-dark:hover {
+  background-color: #2a2a2a;
+  border-color: #3a3a3a;
+}
+
+.btn-outline-light {
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.btn-outline-light:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* ---------- List group ---------- */
+.list-group-item {
+  background-color: #0d0d0d;
+  border-color: var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.list-group-item.active {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #000000;
+}
+
+/* ---------- Alerts (léger ajustement pour contraste sur noir) ---------- */
+.alert {
+  border: 1px solid var(--bs-border-color);
+}
+
+/* ---------- Pagination ---------- */
+.page-link {
+  background-color: #121212;
+  border-color: var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.page-link:hover {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+.page-item.active .page-link {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #000;
+}
+
+/* ---------- Badges / Toasts / Offcanvas / Accordion ---------- */
+.toast,
+.offcanvas {
+  background-color: #0d0d0d;
+  border: 1px solid var(--bs-border-color);
+}
+
+.accordion-item {
+  background-color: #0d0d0d;
+  border: 1px solid var(--bs-border-color);
+}
+
+.accordion-button {
+  background-color: #121212;
+  color: var(--bs-body-color);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #1a1a1a;
+  color: #fff;
+  box-shadow: inset 0 -1px 0 var(--bs-border-color);
+}
+
+.accordion-button::after {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* ---------- Scrollbar (optionnel, esthétique) ---------- */
+* {
+  scrollbar-color: #333 #000;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #000;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 6px;
+  border: 2px solid #000;
+}
