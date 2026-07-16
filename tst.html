@@ -1,158 +1,504 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name | One Page Template</title>
-    <script src="https://tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: '#4F46E5' // Indigo
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marrow Press — Letterpress Studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --ink:#141210;
+    --paper:#f3ede1;
+    --paper-dim:#e7ddc9;
+    --ember:#b3421e;
+    --ember-dim:#8f3517;
+    --line: rgba(20,18,16,0.16);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Mono', monospace;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.15rem;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--ember);}
+  nav ul{
+    list-style:none;
+    display:flex; gap:28px;
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  nav ul a{
+    text-decoration:none;
+    padding-bottom:4px;
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  nav ul a:hover, nav ul a:focus-visible{
+    border-color:var(--ember);
+    color:var(--ember-dim);
+    outline:none;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:96px 0 88px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap:48px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-size:0.75rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--ember-dim);
+    margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--ember);
+    display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 5vw, 4.4rem);
+    line-height:0.98;
+    margin-bottom:24px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--ember);
+  }
+  .hero p.lede{
+    font-family:'Space Mono', monospace;
+    font-size:1rem;
+    max-width:46ch;
+    color:#3a352e;
+    margin-bottom:32px;
+  }
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block;
+    padding:14px 26px;
+    font-family:'Space Mono', monospace;
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border:1px solid var(--ink);
+    transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .btn-solid{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .btn-solid:hover{background:var(--ember); border-color:var(--ember); transform:translateY(-1px);}
+  .btn-ghost:hover{background:var(--ink); color:var(--paper); transform:translateY(-1px);}
+
+  /* Composing stick signature graphic */
+  .stick{
+    width:100%;
+    aspect-ratio: 4/5;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stick svg{width:100%; height:100%;}
+
+  /* ---------- Marquee strip ---------- */
+  .marquee-strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--ink);
+    color:var(--paper-dim);
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .marquee-track{
+    display:inline-block;
+    padding:14px 0;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    animation: scroll 28s linear infinite;
+  }
+  .marquee-track span{margin:0 28px; color:var(--ember);}
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- Work section ---------- */
+  section{padding:100px 0;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:52px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:24px;
+    flex-wrap:wrap; gap:16px;
+  }
+  .section-head h2{font-size:clamp(1.8rem, 3vw, 2.6rem);}
+  .section-head .tag{
+    font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ember-dim);
+  }
+
+  .grid-work{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .card{
+    background:var(--paper);
+    padding:32px 28px;
+    transition:background .2s ease;
+  }
+  .card:hover{background:var(--paper-dim);}
+  .card .num{
+    font-size:0.75rem;
+    color:var(--ember);
+    margin-bottom:18px;
+    letter-spacing:0.1em;
+  }
+  .card h3{font-size:1.3rem; margin-bottom:10px;}
+  .card p{font-size:0.85rem; color:#4a443b;}
+
+  /* ---------- Process ---------- */
+  .process{background:var(--ink); color:var(--paper);}
+  .process .section-head{border-color:rgba(243,237,225,0.16);}
+  .process .section-head .tag{color:#e5a488;}
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:32px;
+  }
+  .step .mark{
+    font-family:'Fraunces', serif;
+    font-size:2.4rem;
+    color:var(--ember);
+    margin-bottom:12px;
+    line-height:1;
+  }
+  .step h3{font-size:1.05rem; margin-bottom:8px; color:var(--paper);}
+  .step p{font-size:0.82rem; color:#c9c1b2;}
+
+  /* ---------- Specimens / type case ---------- */
+  .specimens .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .type-case{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:6px;
+    border:1px solid var(--line);
+    padding:14px;
+    background:var(--paper-dim);
+  }
+  .type-case .sort{
+    aspect-ratio:1;
+    background:var(--paper);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-size:1.1rem;
+    color:var(--ink);
+  }
+  .type-case .sort.hi{
+    background:var(--ember);
+    color:var(--paper);
+    border-color:var(--ember);
+  }
+  .specimens h2{font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:20px;}
+  .specimens p{font-size:0.9rem; color:#3a352e; max-width:48ch; margin-bottom:16px;}
+
+  /* ---------- Footer / contact ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:72px 0 40px;
+  }
+  .foot-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:40px;
+    margin-bottom:56px;
+  }
+  footer h2{font-size:clamp(1.9rem,3vw,2.8rem); margin-bottom:18px;}
+  footer p{font-size:0.9rem; color:#3a352e; max-width:38ch;}
+  .foot-col h4{
+    font-family:'Space Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ember-dim);
+    margin-bottom:14px;
+  }
+  .foot-col ul{list-style:none; font-size:0.85rem;}
+  .foot-col li{margin-bottom:8px;}
+  .foot-col a{text-decoration:none;}
+  .foot-col a:hover{color:var(--ember);}
+  .fine{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:#6b6459;
+    border-top:1px solid var(--line);
+    padding-top:24px;
+  }
+
+  @media (max-width: 860px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .stick{max-width:280px; margin:0 auto;}
+    .grid-work{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr 1fr;}
+    .specimens .wrap{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    nav ul{display:none;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body>
 
-    <!-- Navbar -->
-    <nav class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 top-0 left-0">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-brand">Brand.</a>
-            <div class="hidden md:flex space-x-8 font-medium">
-                <a href="#home" class="hover:text-brand transition">Home</a>
-                <a href="#about" class="hover:text-brand transition">About</a>
-                <a href="#services" class="hover:text-brand transition">Services</a>
-                <a href="#portfolio" class="hover:text-brand transition">Portfolio</a>
-                <a href="#contact" class="hover:text-brand transition">Contact</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <nav class="wrap">
+    <div class="brand">MARROW <span>&</span> PRESS</div>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#specimens">Type</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <!-- Hero Section -->
-    <section id="home" class="pt-32 pb-20 max-w-7xl mx-auto px-6 flex flex-col items-center text-center lg:flex-row lg:text-left lg:justify-between min-h-screen">
-        <div class="lg:w-1/2">
-            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
-                We craft digital experiences that <span class="text-brand">grow your business.</span>
-            </h1>
-            <p class="mt-6 text-lg text-gray-600">A clean, modern one-page template designed to showcase your work and convert visitors into clients.</p>
-            <div class="mt-10 flex justify-center lg:justify-start gap-4">
-                <a href="#contact" class="bg-brand hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium shadow-md transition">Get Started</a>
-                <a href="#portfolio" class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition">View Work</a>
-            </div>
-        </div>
-        <div class="lg:w-1/2 mt-12 lg:mt-0 flex justify-center">
-            <div class="w-80 h-80 bg-indigo-100 rounded-full flex items-center justify-center text-brand text-9xl">⚡</div>
-        </div>
-    </section>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Est. 2014 &middot; Hand-set &middot; Cast iron</div>
+      <h1>Ink pressed<br>into <em>paper</em>,<br>not printed on it.</h1>
+      <p class="lede">A one-room letterpress studio setting type by hand and running it through a 1962 Vandercook. Wedding suites, broadsides, and small edition prints — every sort locked in the chase before a single sheet moves.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="#contact">Start a project</a>
+        <a class="btn btn-ghost" href="#work">See the work</a>
+      </div>
+    </div>
+    <div class="stick" aria-hidden="true">
+      <svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- composing stick outline -->
+        <rect x="30" y="60" width="260" height="60" fill="none" stroke="#141210" stroke-width="2"/>
+        <rect x="30" y="60" width="30" height="60" fill="#141210"/>
+        <!-- set type / sorts inside the stick -->
+        <g font-family="Fraunces, serif" font-weight="600" font-size="34">
+          <rect x="70" y="66" width="34" height="48" fill="#f3ede1" stroke="#141210" stroke-width="1.5"/>
+          <text x="80" y="100" fill="#141210">M</text>
+          <rect x="106" y="66" width="34" height="48" fill="#f3ede1" stroke="#141210" stroke-width="1.5"/>
+          <text x="116" y="100" fill="#141210">A</text>
+          <rect x="142" y="66" width="34" height="48" fill="#b3421e" stroke="#141210" stroke-width="1.5"/>
+          <text x="152" y="100" fill="#f3ede1">R</text>
+          <rect x="178" y="66" width="34" height="48" fill="#f3ede1" stroke="#141210" stroke-width="1.5"/>
+          <text x="188" y="100" fill="#141210">R</text>
+          <rect x="214" y="66" width="34" height="48" fill="#f3ede1" stroke="#141210" stroke-width="1.5"/>
+          <text x="224" y="100" fill="#141210">O</text>
+          <rect x="250" y="66" width="24" height="48" fill="#141210"/>
+        </g>
+        <!-- loose sorts scattered below, like a type case -->
+        <g stroke="#141210" stroke-width="1.5">
+          <rect x="40" y="180" width="46" height="46" fill="#f3ede1"/>
+          <rect x="94" y="180" width="46" height="46" fill="#f3ede1"/>
+          <rect x="148" y="180" width="46" height="46" fill="#b3421e" stroke="#b3421e"/>
+          <rect x="202" y="180" width="46" height="46" fill="#f3ede1"/>
+          <rect x="40" y="234" width="46" height="46" fill="#f3ede1"/>
+          <rect x="94" y="234" width="46" height="46" fill="#e7ddc9"/>
+          <rect x="148" y="234" width="46" height="46" fill="#f3ede1"/>
+          <rect x="202" y="234" width="46" height="46" fill="#f3ede1"/>
+          <rect x="40" y="288" width="46" height="46" fill="#e7ddc9"/>
+          <rect x="94" y="288" width="46" height="46" fill="#f3ede1"/>
+          <rect x="148" y="288" width="46" height="46" fill="#f3ede1"/>
+          <rect x="202" y="288" width="46" height="46" fill="#b3421e" stroke="#b3421e"/>
+        </g>
+        <g font-family="'Space Mono', monospace" font-size="12" fill="#141210" opacity="0.55">
+          <text x="40" y="352">18 PT CASLON — LOCKED &amp; JUSTIFIED</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
 
-    <!-- About Section -->
-    <section id="about" class="bg-white py-24">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
-                <h2 class="text-4xl font-bold text-gray-900">About Us</h2>
-                <p class="mt-6 text-gray-600 text-lg">We are a team of passionate designers, developers, and strategists committed to delivering exceptional web solutions for modern brands.</p>
-                <p class="mt-4 text-gray-600">From initial wireframe to final deployment, we focus on user-centric design, robust functionality, and scalable architecture to ensure your digital presence stands out.</p>
-            </div>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <h3 class="text-3xl font-bold text-brand">5+</h3>
-                    <p class="mt-2 text-gray-600">Years Experience</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <h3 class="text-3xl font-bold text-brand">50+</h3>
-                    <p class="mt-2 text-gray-600">Projects Completed</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <h3 class="text-3xl font-bold text-brand">100%</h3>
-                    <p class="mt-2 text-gray-600">Client Satisfaction</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <h3 class="text-3xl font-bold text-brand">24/7</h3>
-                    <p class="mt-2 text-gray-600">Premium Support</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span>WEDDING SUITES</span>BROADSIDES<span>BUSINESS CARDS</span>LETTERPRESS POSTERS<span>SMALL EDITIONS</span>FOIL &amp; DEBOSS<span>WEDDING SUITES</span>BROADSIDES<span>BUSINESS CARDS</span>LETTERPRESS POSTERS<span>SMALL EDITIONS</span>FOIL &amp; DEBOSS
+  </div>
+</div>
 
-    <!-- Services Section -->
-    <section id="services" class="py-24 max-w-7xl mx-auto px-6">
-        <div class="text-center">
-            <h2 class="text-4xl font-bold text-gray-900">Our Services</h2>
-            <p class="mt-4 text-gray-600 max-w-2xl mx-auto">We offer a comprehensive suite of digital services designed to elevate your brand's online footprint.</p>
-        </div>
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-2xl mb-6">🎨</div>
-                <h3 class="text-xl font-semibold text-gray-900">UI/UX Design</h3>
-                <p class="mt-3 text-gray-600">Creating intuitive, beautiful, and engaging user interfaces that provide seamless experiences across all devices.</p>
-            </div>
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-2xl mb-6">💻</div>
-                <h3 class="text-xl font-semibold text-gray-900">Web Development</h3>
-                <p class="mt-3 text-gray-600">Building fast, secure, and scalable web applications tailored to your specific business requirements.</p>
-            </div>
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-2xl mb-6">📈</div>
-                <h3 class="text-xl font-semibold text-gray-900">Digital Strategy</h3>
-                <p class="mt-3 text-gray-600">Data-driven marketing and SEO strategies aimed at increasing traffic, user engagement, and conversion rates.</p>
-            </div>
-        </div>
-    </section>
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Selected editions</h2>
+      <div class="tag">04 recent runs</div>
+    </div>
+    <div class="grid-work">
+      <div class="card">
+        <div class="num">01 — 2026</div>
+        <h3>Harrow & Vine Suite</h3>
+        <p>Cotton stock invitations for a vineyard wedding, three-color run with a deep burgundy deboss.</p>
+      </div>
+      <div class="card">
+        <div class="num">02 — 2025</div>
+        <h3>Nightjar Broadside</h3>
+        <p>Limited edition poetry broadside, hand-set in 24pt Caslon, 60-piece run on a hand-fed platen.</p>
+      </div>
+      <div class="card">
+        <div class="num">03 — 2025</div>
+        <h3>Cellar Door Cards</h3>
+        <p>Business cards for an independent wine shop, foil-stamped edges on 220gsm cotton.</p>
+      </div>
+      <div class="card">
+        <div class="num">04 — 2024</div>
+        <h3>Founders' Row Poster</h3>
+        <p>A four-color woodtype poster for a neighborhood market, printed in a single afternoon run.</p>
+      </div>
+      <div class="card">
+        <div class="num">05 — 2024</div>
+        <h3>Almanac Notecards</h3>
+        <p>A set of twelve seasonal notecards, one letterform per month, sold in small batches.</p>
+      </div>
+      <div class="card">
+        <div class="num">06 — 2023</div>
+        <h3>Quiet House Menus</h3>
+        <p>Dinner menus for a tasting-menu restaurant, reprinted weekly as the seasonal courses shift.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="bg-white py-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center">
-                <h2 class="text-4xl font-bold text-gray-900">Recent Projects</h2>
-                <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Take a look at some of our recent work and the results we've delivered for our clients.</p>
-            </div>
-            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="group overflow-hidden rounded-2xl shadow-sm border border-gray-100 relative">
-                    <div class="h-64 bg-gray-200 group-hover:scale-105 transition duration-500"></div>
-                    <div class="p-6 bg-white relative">
-                        <h3 class="text-xl font-bold text-gray-900">Brand Redesign</h3>
-                        <p class="mt-2 text-gray-600">A comprehensive brand and web redesign for a modern tech startup.</p>
-                    </div>
-                </div>
-                <div class="group overflow-hidden rounded-2xl shadow-sm border border-gray-100 relative">
-                    <div class="h-64 bg-gray-200 group-hover:scale-105 transition duration-500"></div>
-                    <div class="p-6 bg-white relative">
-                        <h3 class="text-xl font-bold text-gray-900">E-Commerce Platform</h3>
-                        <p class="mt-2 text-gray-600">Scalable online storefront built for a rapidly growing retail brand.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How a job gets made</h2>
+      <div class="tag">Start to finish</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="mark">01</div>
+        <h3>Compose</h3>
+        <p>Type is set by hand, letter by letter, into a composing stick, then locked into a steel chase.</p>
+      </div>
+      <div class="step">
+        <div class="mark">02</div>
+        <h3>Proof</h3>
+        <p>A single proof pull checks spacing, inking, and impression depth before the full run begins.</p>
+      </div>
+      <div class="step">
+        <div class="mark">03</div>
+        <h3>Run</h3>
+        <p>Sheets feed through the Vandercook one at a time, each pull inked and pressed by hand.</p>
+      </div>
+      <div class="step">
+        <div class="mark">04</div>
+        <h3>Distribute</h3>
+        <p>Once dry, every sort is cleaned and returned to its case — nothing stays set past its job.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 max-w-7xl mx-auto px-6">
-        <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
-            <div class="text-center">
-                <h2 class="text-4xl font-bold text-gray-900">Let's Work Together</h2>
-                <p class="mt-4 text-gray-600">Ready to start your next project? Fill out the form below and we'll get back to you shortly.</p>
-            </div>
-            <form class="mt-12 space-y-6" action="#" method="POST">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">First Name</label>
-                        <input type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-brand outline-none transition">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Last Name</label>
-                        <input type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-brand outline-none transition">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" class="mt-2 w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-brand outline-none transition">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Message</label>
-                    <textarea rows="4" class="mt-2 w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-brand outline-none transition"></textarea>
-                </div>
+<section id="specimens" class="specimens">
+  <div class="wrap">
+    <div class="type-case" aria-hidden="true">
+      <div class="sort">A</div><div class="sort">B</div><div class="sort hi">C</div>
+      <div class="sort">D</div><div class="sort">E</div><div class="sort">F</div>
+      <div class="sort">G</div><div class="sort hi">H</div><div class="sort">I</div>
+      <div class="sort">J</div><div class="sort">K</div><div class="sort">L</div>
+      <div class="sort">M</div><div class="sort">N</div><div class="sort hi">O</div>
+      <div class="sort">P</div><div class="sort">Q</div><div class="sort">R</div>
+    </div>
+    <div>
+      <h2>Every letter, still in metal.</h2>
+      <p>The case holds three weights of Caslon and a single condensed woodtype face, kept in working order and cleaned after every run. Nothing here is digital — the C, H, and O you see highlighted are the sorts worn softest, the ones pulled most often.</p>
+      <p>Custom specimen sheets are available on request for clients who want to see a face on paper before committing to a run.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h2>Bring us<br>your words.</h2>
+        <p>Studio visits by appointment. Most jobs are quoted within two working days of a written brief.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Studio</h4>
+        <ul>
+          <li>221 Foundry Lane</li>
+          <li>Providence, RI</li>
+          <li>By appointment</li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@marrowpress.studio">hello@marrowpress.studio</a></li>
+          <li><a href="tel:+14015550142">(401) 555-0142</a></li>
+          <li><a href="#work">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fine">
+      <span>&copy; 2026 Marrow Press. All formes distributed after use.</span>
+      <span>Hand-set in Providence</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
