@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurum AI — Luxury AI Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --white:#ffffff;
+      --text:rgba(255,255,255,.72);
+      --muted:rgba(255,255,255,.45);
+      --border:rgba(255,255,255,.10);
+      --glass:rgba(255,255,255,.03);
+      --gold:#a78b71;
+      --gold-light:#c9b8a0;
+      --gold-hover:#e8d5b7;
+      --shadow:0 25px 60px rgba(0,0,0,.35);
+      --ease:cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--white);
+      font-family:"Inter",sans-serif;
+      overflow-x:hidden;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,.08) 1px, transparent 0);
+      background-size:32px 32px;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(167,139,113,.20), transparent 25%),
+        radial-gradient(circle at 20% 80%, rgba(167,139,113,.10), transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(201,184,160,.08), transparent 30%);
+      filter:blur(60px);
+      z-index:-1;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    .container{width:min(1440px,92vw);margin-inline:auto}
+    .section{padding:120px 0}
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.35em;
+      text-transform:uppercase;
+      color:var(--gold-light);
+      margin-bottom:18px;
+      display:inline-block;
+    }
+
+    .glass{
+      background:var(--glass);
+      border:1px solid var(--border);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 24px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:600;
+      transition:all .45s var(--ease);
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+
+    .btn-primary{
+      background:#fff;
+      color:#000;
+    }
+    .btn-primary:hover{
+      background:#f7f7f7;
+      transform:translateY(-2px);
+    }
+
+    .btn-secondary{
+      background:transparent;
+      color:#fff;
+      border-color:rgba(255,255,255,.16);
+    }
+    .btn-secondary:hover{
+      border-color:rgba(232,213,183,.35);
+      background:rgba(255,255,255,.03);
+      transform:translateY(-2px);
+    }
+
+    nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      background:rgba(10,10,10,.55);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+
+    .nav-inner{
+      height:88px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:32px;
+    }
+
+    .logo{
+      font-family:"Playfair Display",serif;
+      font-style:italic;
+      font-weight:700;
+      font-size:28px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:32px;
+      align-items:center;
+      justify-content:center;
+      flex:1;
+    }
+
+    .nav-links a{
+      font-size:11px;
+      letter-spacing:.35em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.72);
+      transition:color .3s ease;
+    }
+
+    .nav-links a:hover{color:var(--gold-hover)}
+
+    .hero{
+      position:relative;
+      padding-top:170px;
+      padding-bottom:120px;
+      overflow:hidden;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      align-items:center;
+      gap:48px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero h1{
+      font-family:"Playfair Display",serif;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      letter-spacing:-.03em;
+      font-size:clamp(2.5rem,8vw,6rem);
+      margin:0 0 24px;
+    }
+
+    .hero h1 .gold{color:var(--gold)}
+
+    .hero p{
+      color:var(--text);
+      max-width:620px;
+      font-size:17px;
+      line-height:1.7;
+      margin:0 0 32px;
+    }
+
+    .hero-cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      margin-bottom:28px;
+    }
+
+    .live-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(10px);
+    }
+
+    .live-dot{
+      width:8px;height:8px;border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 10px rgba(34,197,94,.5);
+      animation:pulse 1.6s infinite;
+    }
+
+    .live-pill strong{
+      font-size:8px;
+      letter-spacing:.28em;
+      color:#22c55e;
+    }
+
+    .live-pill span{
+      font-size:12px;
+      color:#fff;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:560px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .central-node{
+      position:relative;
+      width:min(560px,100%);
+      aspect-ratio:16/9;
+      border-radius:40px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:32px;
+    }
+
+    .central-node::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(167,139,113,.25), transparent 40%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+    }
+
+    .central-node::after{
+      content:"";
+      position:absolute;
+      inset:20%;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 0 100px rgba(167,139,113,.20);
+    }
+
+    .central-content{
+      position:relative;
+      z-index:2;
+    }
+
+    .central-content .eyebrow{margin-bottom:14px}
+    .central-content h3{
+      margin:0 0 10px;
+      font-family:"Playfair Display",serif;
+      font-style:italic;
+      font-size:34px;
+    }
+
+    .central-content p{
+      margin:0;
+      color:var(--text);
+      font-size:15px;
+    }
+
+    .satellite{
+      position:absolute;
+      width:260px;
+      border-radius:24px;
+      overflow:hidden;
+      transition:transform .6s var(--ease), box-shadow .6s var(--ease), border-color .6s var(--ease);
+    }
+
+    .satellite img{
+      width:100%;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      filter:grayscale(100%);
+      transition:filter .7s ease, transform .7s ease;
+    }
+
+    .satellite-content{
+      padding:18px;
+    }
+
+    .satellite-content small{
+      font-size:11px;
+      letter-spacing:.35em;
+      text-transform:uppercase;
+      color:var(--gold-light);
+      display:block;
+      margin-bottom:10px;
+    }
+
+    .satellite-content h4{
+      margin:0 0 8px;
+      font-size:18px;
+      font-weight:600;
+    }
+
+    .satellite-content p{
+      margin:0;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .satellite:hover{
+      transform:translateY(-6px) scale(1.05);
+      border-color:rgba(232,213,183,.35);
+      box-shadow:0 0 60px rgba(167,139,113,.30);
+    }
+
+    .satellite:hover img{
+      filter:grayscale(0%);
+      transform:scale(1.02);
+    }
+
+    .satellite-1{top:10%;left:-8%}
+    .satellite-2{top:62%;left:-2%}
+    .satellite-3{top:8%;right:-6%}
+    .satellite-4{top:62%;right:-2%}
+
+    .hero-lines{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .node-line{
+      stroke-width:2.5;
+      fill:none;
+      stroke:url(#goldGradient);
+      opacity:.55;
+      animation:pulsing-branch 3.2s ease-in-out infinite;
+    }
+
+    .node-line.secondary{
+      stroke-dasharray:5 15;
+      opacity:.32;
+    }
+
+    @keyframes pulsing-branch{
+      0%,100%{opacity:.4}
+      50%{opacity:.7}
+    }
+
+    @keyframes pulse{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.25);opacity:.7}
+    }
+
+    .section-header{
+      text-align:center;
+      margin-bottom:64px;
+    }
+
+    .section-header h2{
+      font-family:"Playfair Display",serif;
+      font-style:italic;
+      font-size:clamp(2.2rem,5vw,3.5rem);
+      margin:0 0 16px;
+    }
+
+    .section-header p{
+      max-width:680px;
+      margin:0 auto;
+      color:var(--text);
+      line-height:1.7;
+    }
+
+    .features-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:24px;
+    }
+
+    .feature-card{
+      padding:32px;
+      border-radius:24px;
+      transition:transform .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease);
+    }
+
+    .feature-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(232,213,183,.35);
+      box-shadow:0 0 50px rgba(167,139,113,.16);
+    }
+
+    .feature-icon{
+      width:48px;height:48px;
+      border-radius:16px;
+      background:rgba(167,139,113,.10);
+      display:grid;
+      place-items:center;
+      color:var(--gold);
+      margin-bottom:24px;
+      transition:transform .45s var(--ease), background .45s var(--ease);
+    }
+
+    .feature-card:hover .feature-icon{
+      transform:scale(1.1);
+      background:rgba(167,139,113,.16);
+    }
+
+    .feature-card h3{
+      margin:0 0 12px;
+      font-size:20px;
+      font-weight:700;
+    }
+
+    .feature-card p{
+      margin:0;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .pricing-toggle{
+      width:max-content;
+      margin:0 auto 40px;
+      padding:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      display:flex;
+      gap:6px;
+    }
+
+    .pricing-toggle button{
+      border:0;
+      background:transparent;
+      color:rgba(255,255,255,.72);
+      padding:10px 18px;
+      border-radius:999px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all .35s var(--ease);
+    }
+
+    .pricing-toggle button.active{
+      background:#fff;
+      color:#000;
+    }
+
+    .pricing-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+    }
+
+    .pricing-card{
+      position:relative;
+      padding:40px 32px;
+      border-radius:32px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .pricing-card.pro{
+      border-color:rgba(167,139,113,.40);
+      box-shadow:0 0 60px rgba(167,139,113,.16);
+    }
+
+    .pricing-badge{
+      position:absolute;
+      top:-16px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--gold);
+      color:#fff;
+      padding:8px 16px;
+      border-radius:999px;
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      font-weight:600;
+    }
+
+    .pricing-card h3{
+      margin:0;
+      font-size:24px;
+      font-weight:700;
+    }
+
+    .price{
+      font-size:48px;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .price span{
+      font-size:16px;
+      color:var(--text);
+      font-weight:500;
+    }
+
+    .pricing-card p{
+      margin:0;
+      color:var(--text);
+      line-height:1.7;
+    }
+
+    .pricing-features{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .pricing-features div{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pricing-features div::before{
+      content:"✓";
+      color:var(--gold-light);
+      font-weight:700;
+    }
+
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:32px;
+    }
+
+    .team-card{
+      overflow:hidden;
+      border-radius:32px;
+    }
+
+    .team-card img{
+      width:100%;
+      aspect-ratio:4/5;
+      object-fit:cover;
+      filter:grayscale(100%);
+      transition:filter .7s ease, transform .7s ease;
+    }
+
+    .team-card:hover img{
+      filter:grayscale(0%);
+      transform:scale(1.03);
+    }
+
+    .team-info{
+      padding:24px;
+    }
+
+    .team-info h3{
+      margin:0 0 8px;
+      font-family:"Playfair Display",serif;
+      font-size:32px;
+      font-style:italic;
+    }
+
+    .team-info p{
+      margin:0;
+      font-size:11px;
+      letter-spacing:.35em;
+      text-transform:uppercase;
+      color:var(--gold-light);
+      font-weight:300;
+    }
+
+    footer{
+      padding:100px 0 60px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr 1fr 1.2fr;
+      gap:32px;
+    }
+
+    .footer-brand p{
+      color:var(--text);
+      line-height:1.7;
+      margin:16px 0 24px;
+      max-width:320px;
+    }
+
+    .socials{
+      display:flex;
+      gap:12px;
+    }
+
+    .socials a{
+      width:40px;height:40px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      display:grid;
+      place-items:center;
+      transition:all .35s var(--ease);
+    }
+
+    .socials a:hover{
+      border-color:rgba(232,213,183,.35);
+      color:var(--gold-hover);
+      background:rgba(255,255,255,.03);
+    }
+
+    .footer-col h4{
+      margin:0 0 18px;
+      font-size:14px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--gold-light);
+    }
+
+    .footer-col a{
+      display:block;
+      color:var(--text);
+      margin-bottom:12px;
+      transition:color .3s ease;
+    }
+
+    .footer-col a:hover{color:var(--gold-hover)}
+
+    .digest{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 8px 8px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(10px);
+    }
+
+    .digest input{
+      flex:1;
+      background:transparent;
+      border:0;
+      color:#fff;
+      outline:none;
+      font-size:14px;
+    }
+
+    .digest button{
+      width:38px;height:38px;
+      border-radius:999px;
+      border:0;
+      background:#fff;
+      color:#000;
+      cursor:pointer;
+      transition:transform .35s var(--ease), background .35s var(--ease);
+    }
+
+    .digest button:hover{
+      transform:scale(1.05);
+      background:#f7f7f7;
+    }
+
+    @media (max-width:1100px){
+      .hero-grid,
+      .team-grid,
+      .footer-grid{grid-template-columns:1fr}
+      .features-grid{grid-template-columns:repeat(2,1fr)}
+      .pricing-grid{grid-template-columns:1fr}
+      .hero-visual{min-height:700px}
+      .satellite-1,.satellite-2{left:0}
+      .satellite-3,.satellite-4{right:0}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .hero{padding-top:140px}
+      .features-grid{grid-template-columns:1fr}
+      .satellite{width:220px}
+      .satellite-1{top:2%;left:-4%}
+      .satellite-2{top:72%;left:0}
+      .satellite-3{top:2%;right:-4%}
+      .satellite-4{top:72%;right:0}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <div class="logo">Aurum AI</div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#team">Team</a>
+        <a href="#footer">Resources</a>
+      </div>
+      <a href="#pricing" class="btn btn-primary">Start Free Trial</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Luxury AI Platform</span>
+          <h1>Build AI that <span class="gold">thinks beautifully</span> and creates with precision.</h1>
+          <p>
+            Aurum AI combines cinematic interfaces, neural connectivity, and premium creative tooling into one elegant workspace for founders, designers, and creative teams.
+          </p>
+          <div class="hero-cta">
+            <a href="#pricing" class="btn btn-primary">Start Free Trial</a>
+            <a href="#features" class="btn btn-secondary">Explore Features</a>
+          </div>
+          <div class="live-pill">
+            <span class="live-dot"></span>
+            <strong>LIVE</strong>
+            <span>Neural workspace generating cinematic outputs</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <svg class="hero-lines" viewBox="0 0 800 600" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="10%" stop-color="#a78b71"/>
+                <stop offset="90%" stop-color="#c9b8a0"/>
+              </linearGradient>
+            </defs>
+            <path class="node-line" d="M120 110 C220 170 250 230 400 300"/>
+            <path class="node-line secondary" d="M140 140 C250 190 280 240 400 300"/>
+            <path class="node-line" d="M120 450 C220 390 260 360 400 300"/>
+            <path class="node-line secondary" d="M150 430 C250 380 300 340 400 300"/>
+            <path class="node-line" d="M680 110 C580 170 540 230 400 300"/>
+            <path class="node-line secondary" d="M650 135 C560 185 520 240 400 300"/>
+            <path class="node-line" d="M680 450 C580 390 540 360 400 300"/>
+            <path class="node-line secondary" d="M650 430 C560 385 510 340 400 300"/>
+          </svg>
+
+          <div class="central-node glass">
+            <div class="central-content">
+              <span class="eyebrow">Neural Workspace</span>
+              <h3>Central Intelligence</h3>
+              <p>Connected tools, live data, cinematic outputs, and creative workflows orbiting a single elegant AI core.</p>
+            </div>
+          </div>
+
+          <div class="satellite satellite-1 glass">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" alt="AI dashboard">
+            <div class="satellite-content">
+              <small>Analytics</small>
+              <h4>Realtime intelligence</h4>
+              <p>Monitor creative performance, audience signals, and model outputs in one cinematic dashboard.</p>
+            </div>
+          </div>
+
+          <div class="satellite satellite-2 glass">
+            <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80" alt="Creative workflow">
+            <div class="satellite-content">
+              <small>Workflow</small>
+              <h4>Automated creation</h4>
+              <p>Design, generate, review, and publish content through connected AI production pipelines.</p>
+            </div>
+          </div>
+
+          <div class="satellite satellite-3 glass">
+            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80" alt="AI collaboration">
+            <div class="satellite-content">
+              <small>Collaboration</small>
+              <h4>Shared creative intelligence</h4>
+              <p>Teams collaborate inside a refined environment where every asset stays connected to the central node.</p>
+            </div>
+          </div>
+
+          <div class="satellite satellite-4 glass">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80" alt="AI output">
+            <div class="satellite-content">
+              <small>Output</small>
+              <h4>Cinematic delivery</h4>
+              <p>Generate polished visuals, copy, strategy, and presentations with premium editorial quality.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Core capabilities</span>
+          <h2>Tools designed for premium creative intelligence</h2>
+          <p>
+            Every feature is built with the same luxury design language: elegant, high-contrast, glassmorphic, and deeply connected to the neural workspace.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card glass">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/><circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
+            <h3>Neural connectivity</h3>
+            <p>Connect dashboards, creative tools, prompts, and outputs through animated SVG connection lines.</p>
+          </div>
+
+          <div class="feature-card glass">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <h3>Glassmorphic workspace</h3>
+            <p>Premium blurred layers, subtle borders, and high-radius corners create a refined luxury interface.</p>
+          </div>
+
+          <div class="feature-card glass">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20l8-16 8 16"/><path d="M8 12h8"/><path d="M10 16h4"/>
+              </svg>
+            </div>
+            <h3>Cinematic generation</h3>
+            <p>Create visuals, copy, strategy, and presentations with editorial-level polish and precision.</p>
+          </div>
+
+          <div class="feature-card glass">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="12" cy="16" r="3"/>
+                <path d="M10.5 10.5L12 13"/><path d="M13.5 10.5L12 13"/><path d="M8 11v2"/><path d="M16 11v2"/>
+              </svg>
+            </div>
+            <h3>Team intelligence</h3>
+            <p>Collaborate across creative, strategy, and product teams while keeping every asset connected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Pricing</span>
+          <h2>Choose the plan that matches your creative ambition</h2>
+          <p>
+            Flexible pricing for individuals, studios, and enterprise teams building premium AI-powered experiences.
+          </p>
+        </div>
+
+        <div class="pricing-toggle glass">
+          <button class="active" type="button">Monthly</button>
+          <button type="button">Annual</button>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card glass">
+            <h3>Starter</h3>
+            <div class="price">$29 <span>/ month</span></div>
+            <p>For creators exploring premium AI workflows and cinematic content generation.</p>
+            <div class="pricing-features">
+              <div>10 AI projects</div>
+              <div>Basic neural workspace</div>
+              <div>Standard exports</div>
+              <div>Email support</div>
+            </div>
+            <a href="#" class="btn btn-secondary">Get Started</a>
+          </div>
+
+          <div class="pricing-card pro glass">
+            <div class="pricing-badge">Most Popular</div>
+            <h3>Pro</h3>
+            <div class="price">$79 <span>/ month</span></div>
+            <p>Perfect for creative teams that need advanced generation, collaboration, and analytics.</p>
+            <div class="pricing-features">
+              <div>Unlimited AI projects</div>
+              <div>Advanced neural workspace</div>
+              <div>Realtime analytics</div>
+              <div>Team collaboration</div>
+              <div>Priority support</div>
+            </div>
+            <a href="#" class="btn btn-primary">Start Pro Trial</a>
+          </div>
+
+          <div class="pricing-card glass">
+            <h3>Enterprise</h3>
+            <div class="price">$199 <span>/ month</span></div>
+            <p>For organizations requiring custom workflows, security, and dedicated creative intelligence.</p>
+            <div class="pricing-features">
+              <div>Custom AI workflows</div>
+              <div>Dedicated workspace</div>
+              <div>Advanced security</div>
+              <div>Custom integrations</div>
+              <div>Dedicated success manager</div>
+            </div>
+            <a href="#" class="btn btn-secondary">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="team" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Leadership</span>
+          <h2>The team shaping premium creative intelligence</h2>
+          <p>
+            Designers, engineers, and strategists building a luxury AI platform for the next generation of creative work.
+          </p>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-card glass">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80" alt="Sophia Laurent">
+            <div class="team-info">
+              <h3>Sophia Laurent</h3>
+              <p>Creative Director</p>
+            </div>
+          </div>
+
+          <div class="team-card glass">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80" alt="Adrian Vale">
+            <div class="team-info">
+              <h3>Adrian Vale</h3>
+              <p>Chief AI Architect</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Aurum AI</div>
+        <p>Luxury AI tools for creative teams, founders, and brands building cinematic digital experiences.</p>
+        <div class="socials">
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="Dribbble">◌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#">Integrations</a>
+        <a href="#">Roadmap</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">Guides</a>
+        <a href="#">API</a>
+        <a href="#">Community</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#team">Team</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Join Digest</h4>
+        <p style="color:var(--text);line-height:1.7;margin:0 0 18px;">Get premium AI insights, product updates, and creative inspiration delivered monthly.</p>
+        <div class="digest">
+          <input type="email" placeholder="Your email address" aria-label="Email address">
+          <button type="button" aria-label="Subscribe">→</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
