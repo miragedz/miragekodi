@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mirage — AI Prompt Library</title>
+<meta name="description" content="A curated glassmorphic library of production-grade AI prompts for prompt engineering, document restoration, OCR and photo editing." />
+<meta name="theme-color" content="#07080f" />
+
+<!-- ============ Bootstrap 5 ============ -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<!-- ============ Typography (Google Fonts) ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1. DESIGN TOKENS
+   ===================================================================== */
+:root{
+  --ink:#07080f;
+  --surface:rgba(255,255,255,.055);
+  --surface-2:rgba(255,255,255,.09);
+  --stroke:rgba(255,255,255,.11);
+  --stroke-strong:rgba(255,255,255,.2);
+  --fg:#eef1f8;
+  --fg-muted:#9aa3b8;
+  --indigo:#6366f1;
+  --cyan:#22d3ee;
+  --green:#34d399;
+  --radius:22px;
+  --blur:22px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --nav-h:66px;
+}
+html[data-theme="light"]{
+  --ink:#eef1f7;
+  --surface:rgba(255,255,255,.6);
+  --surface-2:rgba(255,255,255,.82);
+  --stroke:rgba(12,16,32,.09);
+  --stroke-strong:rgba(12,16,32,.18);
+  --fg:#0e1220;
+  --fg-muted:#5a6377;
+  --indigo:#4f46e5;
+  --cyan:#0891b2;
+  --green:#059669;
+}
+
+/* =====================================================================
+   2. BASE
+   ===================================================================== */
+*{-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;background:var(--ink);transition:background .45s var(--ease)}
+/* NOTE: keep the page background on <html> only — <body> must stay transparent
+   so the fixed z-index:-1 aurora layer remains visible behind the content. */
+body{
+  background:transparent;
+  color:var(--fg);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+  transition:background .45s var(--ease),color .45s var(--ease);
+}
+h1,h2,h3,h4,.font-display{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.02em;line-height:1.15}
+::selection{background:var(--indigo);color:#fff}
+a{text-decoration:none}
+.text-muted-2{color:var(--fg-muted)!important}
+
+/* Ambient aurora backdrop — fixed, GPU-friendly, no layout cost */
+.aurora{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.aurora span{
+  position:absolute;display:block;border-radius:50%;
+  filter:blur(90px);opacity:.5;will-change:transform;
+}
+.aurora .a1{width:46vw;height:46vw;left:-10vw;top:-12vw;background:var(--indigo);animation:drift1 26s var(--ease) infinite alternate}
+.aurora .a2{width:38vw;height:38vw;right:-8vw;top:14vh;background:var(--cyan);opacity:.34;animation:drift2 31s var(--ease) infinite alternate}
+.aurora .a3{width:40vw;height:40vw;left:22vw;bottom:-18vw;background:var(--green);opacity:.26;animation:drift3 36s var(--ease) infinite alternate}
+html[data-theme="light"] .aurora span{opacity:.16!important}
+@keyframes drift1{to{transform:translate3d(14vw,8vh,0) scale(1.15)}}
+@keyframes drift2{to{transform:translate3d(-12vw,12vh,0) scale(1.1)}}
+@keyframes drift3{to{transform:translate3d(10vw,-10vh,0) scale(1.2)}}
+
+/* Fine grain texture so glass reads as a real material */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);
+  background-size:4px 4px;
+}
+html[data-theme="light"] body::after{
+  opacity:.35;
+  background-image:radial-gradient(rgba(12,16,32,.06) 1px,transparent 1px);
+}
+
+/* =====================================================================
+   3. GLASS PRIMITIVES
+   ===================================================================== */
+.glass{
+  background:var(--surface);
+  border:1px solid var(--stroke);
+  backdrop-filter:blur(var(--blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(160%);
+  border-radius:var(--radius);
+}
+/* Border-glow on hover: conic gradient masked to the 1px ring */
+.glow{position:relative;isolation:isolate}
+.glow::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:conic-gradient(from var(--ang,0deg),var(--indigo),var(--cyan),var(--green),var(--indigo));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .4s var(--ease);z-index:1;pointer-events:none;
+}
+.glow:hover::before,.glow:focus-within::before{opacity:1;animation:spin 4s linear infinite}
+@keyframes spin{to{--ang:360deg}}
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+
+/* Glass buttons */
+.btn-glass{
+  --b:var(--stroke-strong);
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.7rem 1.25rem;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--b);color:var(--fg);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-weight:600;font-size:.92rem;
+  transition:transform .3s var(--ease),background .3s var(--ease),border-color .3s var(--ease);
+}
+.btn-glass:hover{transform:translateY(-2px);background:var(--surface);border-color:var(--indigo);color:var(--fg)}
+.btn-glass:active{transform:translateY(0)}
+/* Animated gradient button */
+.btn-gradient{
+  position:relative;display:inline-flex;align-items:center;gap:.55rem;
+  padding:.78rem 1.6rem;border:0;border-radius:999px;color:#fff;font-weight:600;
+  background:linear-gradient(110deg,var(--indigo),var(--cyan),var(--green),var(--indigo));
+  background-size:300% 100%;animation:slide 7s linear infinite;
+  box-shadow:0 10px 30px -12px color-mix(in oklab,var(--indigo) 80%,transparent);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+.btn-gradient:hover{transform:translateY(-2px);box-shadow:0 18px 40px -14px color-mix(in oklab,var(--cyan) 70%,transparent);color:#fff}
+@keyframes slide{to{background-position:300% 0}}
+
+.chip{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.35rem .8rem;border-radius:999px;font-size:.75rem;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;
+  background:var(--surface);border:1px solid var(--stroke);color:var(--fg-muted);
+}
+.grad-text{
+  background:linear-gradient(100deg,var(--indigo),var(--cyan) 55%,var(--green));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.icon{width:18px;height:18px;stroke-width:2;flex:0 0 auto}
+.icon-sm{width:15px;height:15px}
+
+/* =====================================================================
+   4. FLOATING GLASS NAVBAR
+   ===================================================================== */
+.nav-wrap{position:fixed;top:14px;left:0;right:0;z-index:1040;padding:0 1rem;transition:top .4s var(--ease)}
+.nav-pill{
+  max-width:940px;margin:0 auto;height:var(--nav-h);
+  display:flex;align-items:center;gap:1rem;
+  padding:0 .55rem 0 1.1rem;border-radius:999px;
+  background:var(--surface);border:1px solid var(--stroke);
+  backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+  transition:background .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease),height .4s var(--ease);
+}
+.nav-wrap.scrolled .nav-pill{
+  height:58px;
+  background:color-mix(in oklab,var(--ink) 72%,transparent);
+  border-color:var(--stroke-strong);
+  box-shadow:0 18px 50px -22px rgba(0,0,0,.75);
+}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--fg);font-size:1.05rem}
+.brand-mark{
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--indigo),var(--cyan));
+}
+/* Desktop links + sliding pill indicator */
+.nav-links{position:relative;display:none;align-items:center;gap:.15rem;margin-left:auto}
+@media(min-width:992px){.nav-links{display:flex}}
+.nav-link-x{
+  position:relative;z-index:2;padding:.5rem .95rem;border-radius:999px;
+  color:var(--fg-muted);font-size:.9rem;font-weight:600;
+  transition:color .3s var(--ease);
+}
+.nav-link-x:hover{color:var(--fg)}
+.nav-link-x.active{color:var(--fg)}
+/* animated underline on hover */
+.nav-link-x::after{
+  content:'';position:absolute;left:.95rem;right:.95rem;bottom:.28rem;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--indigo),var(--cyan));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);
+}
+.nav-link-x:hover::after{transform:scaleX(1)}
+.nav-link-x.active::after{transform:scaleX(0)}
+#navIndicator{
+  position:absolute;z-index:1;top:50%;translate:0 -50%;height:38px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--stroke);
+  transition:left .45s var(--ease),width .45s var(--ease),opacity .3s var(--ease);
+  opacity:0;
+}
+.nav-actions{display:flex;align-items:center;gap:.4rem;margin-left:auto}
+@media(min-width:992px){.nav-actions{margin-left:.5rem}}
+.icon-btn{
+  width:40px;height:40px;display:grid;place-items:center;border-radius:999px;
+  background:transparent;border:1px solid var(--stroke);color:var(--fg);
+  transition:background .3s var(--ease),transform .3s var(--ease),border-color .3s var(--ease);
+}
+.icon-btn:hover{background:var(--surface-2);transform:translateY(-1px);border-color:var(--stroke-strong)}
+
+/* Animated hamburger */
+.burger{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--stroke);border-radius:999px;background:transparent}
+@media(min-width:992px){.burger{display:none}}
+.burger{position:relative}
+/* absolutely positioned bars so the rotation pivots stay put */
+.burger i{
+  position:absolute;left:50%;width:17px;height:1.8px;margin-left:-8.5px;
+  border-radius:2px;background:var(--fg);
+  transition:transform .4s var(--ease),opacity .25s var(--ease);
+}
+.burger i:nth-child(1){top:13.5px}
+.burger i:nth-child(2){top:19.1px}
+.burger i:nth-child(3){top:24.7px}
+.burger.open i:nth-child(1){transform:translateY(5.6px) rotate(45deg)}
+.burger.open i:nth-child(2){opacity:0;transform:scaleX(.2)}
+.burger.open i:nth-child(3){transform:translateY(-5.6px) rotate(-45deg)}
+
+/* Fullscreen mobile menu with slide-down + stagger */
+.mobile-menu{
+  position:fixed;inset:0;z-index:1035;display:grid;place-items:center;
+  background:color-mix(in oklab,var(--ink) 88%,transparent);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  clip-path:inset(0 0 100% 0);transition:clip-path .6s var(--ease);
+}
+.mobile-menu.open{clip-path:inset(0 0 0 0)}
+.mobile-menu ul{list-style:none;padding:0;margin:0;text-align:center}
+.mobile-menu li{overflow:hidden}
+.mobile-menu a{
+  display:block;padding:.35rem 0;font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:clamp(2rem,10vw,3rem);color:var(--fg);
+  transform:translateY(115%);transition:transform .6s var(--ease),color .3s var(--ease);
+}
+.mobile-menu.open a{transform:translateY(0)}
+.mobile-menu.open li:nth-child(1) a{transition-delay:.1s}
+.mobile-menu.open li:nth-child(2) a{transition-delay:.17s}
+.mobile-menu.open li:nth-child(3) a{transition-delay:.24s}
+.mobile-menu.open li:nth-child(4) a{transition-delay:.31s}
+.mobile-menu a:hover{color:var(--cyan)}
+body.locked{overflow:hidden}
+
+/* =====================================================================
+   5. HERO
+   ===================================================================== */
+.hero{position:relative;padding:clamp(7.5rem,17vw,11rem) 0 clamp(3.5rem,7vw,5.5rem)}
+.hero h1{font-size:clamp(2.5rem,7.2vw,4.6rem);font-weight:700}
+.hero p.lead{max-width:34rem;color:var(--fg-muted);font-size:clamp(1rem,1.6vw,1.12rem)}
+/* Cross-fading rotator */
+.rotator{position:relative;display:inline-grid;vertical-align:bottom}
+.rotator b{
+  grid-area:1/1;opacity:0;transform:translateY(.35em) scale(.98);filter:blur(6px);
+  transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease);
+  font-weight:700;white-space:nowrap;
+}
+.rotator b.show{opacity:1;transform:none;filter:blur(0)}
+.stat-row{display:flex;flex-wrap:wrap;gap:.6rem}
+
+/* =====================================================================
+   6. SEARCH
+   ===================================================================== */
+.search-shell{display:flex;align-items:center;gap:.75rem;padding:.55rem .55rem .55rem 1.1rem;border-radius:999px}
+.search-shell input{
+  flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--fg);
+  font-size:1rem;padding:.55rem 0;
+}
+.search-shell input::placeholder{color:var(--fg-muted)}
+kbd{
+  background:var(--surface-2);border:1px solid var(--stroke);border-radius:7px;
+  padding:.18rem .45rem;font-size:.72rem;color:var(--fg-muted);font-family:inherit;
+}
+
+/* =====================================================================
+   7. ACCORDION
+   ===================================================================== */
+.acc-item{margin-bottom:1rem;overflow:hidden;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.acc-item[hidden]{display:none}
+.acc-head{
+  width:100%;display:flex;align-items:center;gap:1rem;text-align:left;
+  padding:1.15rem 1.3rem;background:transparent;border:0;color:var(--fg);
+}
+.acc-badge{
+  width:44px;height:44px;flex:0 0 auto;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(140deg,color-mix(in oklab,var(--indigo) 40%,transparent),color-mix(in oklab,var(--cyan) 30%,transparent));
+  border:1px solid var(--stroke);color:var(--fg);
+  transition:transform .45s var(--ease);
+}
+.acc-item.open .acc-badge{transform:rotate(-8deg) scale(1.06)}
+.acc-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.06rem;margin:0}
+.acc-sub{font-size:.8rem;color:var(--fg-muted);margin:0}
+.acc-caret{margin-left:auto;color:var(--fg-muted);transition:transform .45s var(--ease),color .3s var(--ease)}
+.acc-item.open .acc-caret{transform:rotate(180deg);color:var(--cyan)}
+.acc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.acc-item.open .acc-panel{grid-template-rows:1fr}
+.acc-panel>div{overflow:hidden}
+.acc-body{padding:0 1.3rem 1.3rem;border-top:1px solid transparent}
+.prompt-text{
+  margin:0;white-space:pre-wrap;font-family:ui-monospace,'SFMono-Regular',Menlo,monospace;
+  font-size:.855rem;line-height:1.75;color:var(--fg-muted);
+  background:color-mix(in oklab,var(--ink) 45%,transparent);
+  border:1px solid var(--stroke);border-radius:16px;padding:1.05rem 1.15rem;
+  max-height:22rem;overflow:auto;
+}
+html[data-theme="light"] .prompt-text{background:rgba(255,255,255,.55)}
+.acc-tools{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+
+/* =====================================================================
+   8. SCROLL REVEAL
+   ===================================================================== */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* =====================================================================
+   9. TOASTS
+   ===================================================================== */
+.toast-stack{position:fixed;z-index:1090;right:1rem;bottom:1rem;display:flex;flex-direction:column;gap:.6rem;pointer-events:none}
+.toast-x{
+  display:flex;align-items:center;gap:.65rem;min-width:220px;
+  padding:.8rem 1.05rem;border-radius:16px;font-size:.9rem;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--stroke-strong);color:var(--fg);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 20px 45px -20px rgba(0,0,0,.7);
+  transform:translateY(16px) scale(.96);opacity:0;
+  transition:transform .45s var(--ease),opacity .45s var(--ease);
+}
+.toast-x.in{transform:none;opacity:1}
+.toast-x .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in oklab,var(--green) 25%,transparent)}
+.toast-x[data-kind="warn"] .dot{background:var(--cyan);box-shadow:0 0 0 4px color-mix(in oklab,var(--cyan) 25%,transparent)}
+
+/* =====================================================================
+   10. FOOTER + MISC
+   ===================================================================== */
+.section{padding:clamp(3rem,7vw,5rem) 0}
+/* keep anchored headings clear of the floating navbar */
+section[id],header[id]{scroll-margin-top:110px}
+.eyebrow{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg-muted);font-weight:600}
+footer{padding:2.5rem 0;border-top:1px solid var(--stroke);color:var(--fg-muted);font-size:.875rem}
+.empty-state{padding:3rem 1rem;text-align:center;color:var(--fg-muted)}
+</style>
+</head>
+
+<body>
+<!-- ambient background -->
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<!-- =====================================================================
+     NAVBAR — floating glass pill
+     ===================================================================== -->
+<div class="nav-wrap" id="navWrap">
+  <nav class="nav-pill" aria-label="Main">
+    <a class="brand" href="#home">
+      <span class="brand-mark"><i data-lucide="sparkles" class="icon icon-sm"></i></span>
+      Mirage
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <span id="navIndicator" aria-hidden="true"></span>
+      <a class="nav-link-x active" href="#home" data-nav>Home</a>
+      <a class="nav-link-x" href="#library" data-nav>Library</a>
+      <a class="nav-link-x" href="#workflow" data-nav>Workflow</a>
+      <a class="nav-link-x" href="#about" data-nav>About</a>
+    </div>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle color theme">
+        <i data-lucide="moon" class="icon" id="themeIcon"></i>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- Fullscreen mobile menu -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="#home" data-mnav>Home</a></li>
+    <li><a href="#library" data-mnav>Library</a></li>
+    <li><a href="#workflow" data-mnav>Workflow</a></li>
+    <li><a href="#about" data-mnav>About</a></li>
+  </ul>
+</div>
+
+<main>
+  <!-- =====================================================================
+       HERO
+       ===================================================================== -->
+  <header class="hero" id="home">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="chip reveal"><i data-lucide="zap" class="icon icon-sm"></i> 5 battle-tested prompts</span>
+          <h1 class="mt-4 mb-3 reveal text-balance">
+            Prompts that behave like
+            <span class="rotator">
+              <b class="grad-text show">instruments.</b>
+              <b class="grad-text">blueprints.</b>
+              <b class="grad-text">a toolkit.</b>
+            </span>
+          </h1>
+          <p class="lead mb-4 reveal text-pretty">
+            A small, opinionated library for restoration, OCR and image work — each entry copy-ready,
+            written to survive real production use instead of a single lucky generation.
+          </p>
+          <div class="d-flex flex-wrap gap-2 mb-4 reveal">
+            <a href="#library" class="btn-gradient"><i data-lucide="library-big" class="icon"></i> Browse the library</a>
+            <button class="btn-glass" type="button" id="copyAllBtn"><i data-lucide="copy" class="icon"></i> Copy every prompt</button>
+          </div>
+          <div class="stat-row reveal">
+            <span class="chip"><i data-lucide="scan-text" class="icon icon-sm"></i> OCR</span>
+            <span class="chip"><i data-lucide="image-up" class="icon icon-sm"></i> Restoration</span>
+            <span class="chip"><i data-lucide="shirt" class="icon icon-sm"></i> Outfit swap</span>
+            <span class="chip"><i data-lucide="brain" class="icon icon-sm"></i> Prompt design</span>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <!-- decorative-but-useful preview card -->
+          <div class="glass glow p-4 reveal">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--green)"></span>
+              <small class="text-muted-2">prompt / preview</small>
+              <span class="ms-auto"><kbd>Ctrl</kbd> <kbd>K</kbd></span>
+            </div>
+            <p class="prompt-text mb-0" style="max-height:14rem">Act as a professional image editor delivering studio-quality results:
+noise reduction and sharpening, meticulous removal of
+cracks / tears / blemishes, realistic lighting adjustments,
+professional composition and cropping…</p>
+            <div class="d-flex align-items-center gap-2 mt-3">
+              <i data-lucide="check-check" class="icon" style="color:var(--green)"></i>
+              <small class="text-muted-2">Geometry, expression and lighting preserved.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       LIBRARY — search + accordion
+       ===================================================================== -->
+  <section class="section" id="library">
+    <div class="container">
+      <div class="row align-items-end g-3 mb-4">
+        <div class="col-md">
+          <p class="eyebrow mb-2 reveal">The library</p>
+          <h2 class="mb-0 reveal text-balance">Five prompts, fully expanded</h2>
+        </div>
+        <div class="col-md-auto reveal">
+          <div class="d-flex gap-2">
+            <button class="btn-glass" type="button" id="expandAll"><i data-lucide="unfold-vertical" class="icon"></i> Expand all</button>
+            <button class="btn-glass" type="button" id="collapseAll"><i data-lucide="fold-vertical" class="icon"></i> Collapse</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live search -->
+      <div class="glass glow search-shell mb-4 reveal">
+        <i data-lucide="search" class="icon" style="color:var(--fg-muted)"></i>
+        <input id="search" type="search" placeholder="Search prompts — try “OCR”, “outfit”, “restoration”…" aria-label="Search prompts" autocomplete="off">
+        <span class="d-none d-sm-inline"><kbd>Ctrl</kbd> <kbd>K</kbd></span>
+      </div>
+
+      <!-- Accordion (event delegation on this container) -->
+      <div id="accordion">
+
+        <!-- item 1 -->
+        <article class="acc-item glass glow reveal" data-tags="prompt engineering optimisation ingénierie versions clarify contexte expert intelligence artificielle">
+          <button class="acc-head" type="button" aria-expanded="false">
+            <span class="acc-badge"><i data-lucide="brain-circuit" class="icon"></i></span>
+            <span>
+              <h3 class="acc-title">Prompt Engineering</h3>
+              <p class="acc-sub">Meta-prompt · 3 optimized rewrites</p>
+            </span>
+            <i data-lucide="chevron-down" class="icon acc-caret"></i>
+          </button>
+          <div class="acc-panel"><div>
+            <div class="acc-body">
+              <pre class="prompt-text">1- Agis en tant qu'expert en intelligence artificielle et spécialiste en ingénierie des prompts.
+Propose le meilleur résultat possible pour la tâche suivante : [xxxxxxxx]
+
+2- Analyse ma demande et pose-moi des questions pour clarifier le contexte, puis propose-moi 3 versions optimisées et plus performantes de mon prompt, en précisant pourquoi chaque version est meilleure.</pre>
+              <div class="acc-tools">
+                <button class="btn-glass" type="button" data-copy><i data-lucide="clipboard-copy" class="icon"></i> Copy to clipboard</button>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        <!-- item 2 -->
+        <article class="acc-item glass glow reveal" data-tags="scanned documents restoration text enhancement scanner noise blur yellow tint archiving fhd legibility photorealistic">
+          <button class="acc-head" type="button" aria-expanded="false">
+            <span class="acc-badge"><i data-lucide="file-scan" class="icon"></i></span>
+            <span>
+              <h3 class="acc-title">Scanned Documents</h3>
+              <p class="acc-sub">High-fidelity restoration · archival quality</p>
+            </span>
+            <i data-lucide="chevron-down" class="icon acc-caret"></i>
+          </button>
+          <div class="acc-panel"><div>
+            <div class="acc-body">
+              <pre class="prompt-text">1- High-fidelity document restoration,
+2- ultra-sharp text enhancement,
+3- clean white paper background,
+4- deep black ink contrast,
+5- Remove scanner noise, eliminate motion blur, remove yellow tint and shadows,
+--no artistic distortion, --no cursive alterations.
+6- Professional digital document archiving quality,
+7- FHD resolution, micro-details reconstruction, maximum legibility, photorealistic.</pre>
+              <div class="acc-tools">
+                <button class="btn-glass" type="button" data-copy><i data-lucide="clipboard-copy" class="icon"></i> Copy to clipboard</button>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        <!-- item 3 -->
+        <article class="acc-item glass glow reveal" data-tags="ocr transcription reconnaissance optique caractères markdown illisible crochets artefacts scan">
+          <button class="acc-head" type="button" aria-expanded="false">
+            <span class="acc-badge"><i data-lucide="scan-text" class="icon"></i></span>
+            <span>
+              <h3 class="acc-title">OCR Transcription</h3>
+              <p class="acc-sub">Faithful transcription · Markdown layout</p>
+            </span>
+            <i data-lucide="chevron-down" class="icon acc-caret"></i>
+          </button>
+          <div class="acc-panel"><div>
+            <div class="acc-body">
+              <pre class="prompt-text">1- Agis en tant qu'expert en OCR (Reconnaissance Optique de Caractères) et restauration de documents.
+2- Je vais te fournir l'image d'un document scanné dont la lisibilité est altérée. Ta mission :
+3- transcris l'intégralité du texte visible sans modifier le sens original ;
+4- si un mot est partiellement illisible,
+5- déduis-le du contexte et place-le entre crochets [comme ceci] ;
+6- corrige la mise en page en Markdown ;
+7- ignore les artefacts de scan (tâches, ombres, plis).</pre>
+              <div class="acc-tools">
+                <button class="btn-glass" type="button" data-copy><i data-lucide="clipboard-copy" class="icon"></i> Copy to clipboard</button>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        <!-- item 4 -->
+        <article class="acc-item glass glow reveal" data-tags="old photo restoration cracks tears blemishes lighting cinematic vibrant minimalist portrait product geometry">
+          <button class="acc-head" type="button" aria-expanded="false">
+            <span class="acc-badge"><i data-lucide="image-up" class="icon"></i></span>
+            <span>
+              <h3 class="acc-title">Old Photo Restoration</h3>
+              <p class="acc-sub">Studio retouch · structure preserved</p>
+            </span>
+            <i data-lucide="chevron-down" class="icon acc-caret"></i>
+          </button>
+          <div class="acc-panel"><div>
+            <div class="acc-body">
+              <pre class="prompt-text">1- Act as a professional image editor delivering studio-quality results:
+2- noise reduction and sharpening, meticulous removal of cracks/tears/blemishes,
+3- realistic lighting adjustments, professional composition and cropping,
+4- styling options (natural, cinematic, vibrant, minimalist, portrait, product),
+5- restoration of clothing and background with modern clarity,
+6- strictly preserving the geometry, facial expression, and lighting of the source, with no structural modifications.</pre>
+              <div class="acc-tools">
+                <button class="btn-glass" type="button" data-copy><i data-lucide="clipboard-copy" class="icon"></i> Copy to clipboard</button>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        <!-- item 5 -->
+        <article class="acc-item glass glow reveal" data-tags="outfit changer dress jewelry fabric embroidery folds face accuracy color correction reference image">
+          <button class="acc-head" type="button" aria-expanded="false">
+            <span class="acc-badge"><i data-lucide="shirt" class="icon"></i></span>
+            <span>
+              <h3 class="acc-title">Outfit Changer</h3>
+              <p class="acc-sub">Reference match · 100% face accuracy</p>
+            </span>
+            <i data-lucide="chevron-down" class="icon acc-caret"></i>
+          </button>
+          <div class="acc-panel"><div>
+            <div class="acc-body">
+              <pre class="prompt-text">1- Act as a professional image editor.
+2- Keep the face, identity, pose, body shape, background, camera angle, and lighting exactly the same
+3- change only the outfit.
+4- Match the exact dress and jewelry from the reference image,
+5- matching fabric, color, embroidery, and design accurately.
+6- Make it ultra-realistic with natural folds and perfect blending, with 100% face accuracy.
+7- advanced color correction (balance, contrast, saturation).</pre>
+              <div class="acc-tools">
+                <button class="btn-glass" type="button" data-copy><i data-lucide="clipboard-copy" class="icon"></i> Copy to clipboard</button>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+      </div>
+
+      <p class="empty-state" id="emptyState" hidden>
+        <i data-lucide="search-x" class="icon mb-2"></i><br>
+        No prompt matches that search.
+      </p>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       WORKFLOW
+       ===================================================================== -->
+  <section class="section" id="workflow">
+    <div class="container">
+      <p class="eyebrow mb-2 reveal">Workflow</p>
+      <h2 class="mb-4 reveal text-balance">How these are meant to be used</h2>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="glass glow p-4 h-100 reveal">
+            <i data-lucide="clipboard-copy" class="icon mb-3" style="color:var(--indigo)"></i>
+            <h3 class="h6 mb-2">Copy verbatim</h3>
+            <p class="text-muted-2 mb-0 small">Every constraint is load-bearing. Trimming the negative directives is what reintroduces artefacts.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass glow p-4 h-100 reveal">
+            <i data-lucide="settings-2" class="icon mb-3" style="color:var(--cyan)"></i>
+            <h3 class="h6 mb-2">Swap the bracket</h3>
+            <p class="text-muted-2 mb-0 small">Only <code>[xxxxxxxx]</code> and the reference image are meant to change between runs.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass glow p-4 h-100 reveal">
+            <i data-lucide="repeat-2" class="icon mb-3" style="color:var(--green)"></i>
+            <h3 class="h6 mb-2">Chain them</h3>
+            <p class="text-muted-2 mb-0 small">Restore the scan first, then transcribe. OCR on a cleaned document is dramatically more accurate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       ABOUT
+       ===================================================================== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="glass glow p-4 p-md-5 reveal">
+        <div class="row align-items-center g-4">
+          <div class="col-md-8">
+            <p class="eyebrow mb-2">About</p>
+            <h2 class="h3 mb-3 text-balance">A library, not a prompt dump.</h2>
+            <p class="text-muted-2 mb-0 text-pretty">
+              Mirage collects the prompts that kept working after the novelty wore off — the ones precise
+              enough to hand to someone else. Nothing here is generated filler; each entry is the exact text
+              used in production, kept intact so results stay reproducible.
+            </p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <button class="btn-gradient" type="button" id="copyAllBtn2"><i data-lucide="download" class="icon"></i> Copy all prompts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container d-flex flex-wrap justify-content-between gap-2">
+    <span>© <span id="year"></span> Mirage Prompt Library</span>
+    <span class="d-flex align-items-center gap-2"><i data-lucide="sparkles" class="icon icon-sm"></i> Built for reproducible results</span>
+  </div>
+</footer>
+
+<!-- toast host -->
+<div class="toast-stack" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
+<!-- =====================================================================
+     SCRIPTS
+     ===================================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  const $  = (s,r=document)=>r.querySelector(s);
+  const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+
+  /* ---------- Icons ---------- */
+  const drawIcons = () => window.lucide && window.lucide.createIcons();
+  drawIcons();
+
+  $('#year').textContent = new Date().getFullYear();
+
+  /* =================================================================
+     TOASTS
+     ================================================================= */
+  const toastHost = $('#toasts');
+  function toast(msg, kind='ok'){
+    const el = document.createElement('div');
+    el.className = 'toast-x';
+    el.dataset.kind = kind;
+    el.innerHTML = '<span class="dot"></span><span></span>';
+    el.lastElementChild.textContent = msg;
+    toastHost.appendChild(el);
+    requestAnimationFrame(()=> el.classList.add('in'));
+    setTimeout(()=>{
+      el.classList.remove('in');
+      el.addEventListener('transitionend', ()=> el.remove(), {once:true});
+    }, 2400);
+  }
+
+  /* =================================================================
+     THEME (dark / light)
+     ================================================================= */
+  const root = document.documentElement;
+  const themeIcon = $('#themeIcon');
+  function applyTheme(t){
+    root.dataset.theme = t;
+    root.setAttribute('data-bs-theme', t);
+    themeIcon.setAttribute('data-lucide', t === 'dark' ? 'moon' : 'sun');
+    drawIcons();
+  }
+  applyTheme('dark'); // dark glassmorphic is the intended default
+  $('#themeBtn').addEventListener('click', ()=>{
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    toast(next === 'dark' ? 'Dark mode' : 'Light mode', 'warn');
+  });
+
+  /* =================================================================
+     NAVBAR — scroll state, sliding pill indicator, active section
+     ================================================================= */
+  const navWrap = $('#navWrap');
+  const navLinks = $('#navLinks');
+  const indicator = $('#navIndicator');
+
+  function moveIndicator(el){
+    if(!el || window.innerWidth < 992){ indicator.style.opacity = 0; return; }
+    indicator.style.left  = el.offsetLeft + 'px';
+    indicator.style.width = el.offsetWidth + 'px';
+    indicator.style.opacity = 1;
+  }
+  const setActive = el => {
+    $$('[data-nav]').forEach(a => a.classList.toggle('active', a === el));
+    moveIndicator(el);
+  };
+  requestAnimationFrame(()=> moveIndicator($('[data-nav].active')));
+  window.addEventListener('resize', ()=> moveIndicator($('[data-nav].active')));
+
+  // hover preview of the pill, snap back to active on leave
+  navLinks.addEventListener('pointerover', e => {
+    const a = e.target.closest('[data-nav]');
+    if(a) moveIndicator(a);
+  });
+  navLinks.addEventListener('pointerleave', ()=> moveIndicator($('[data-nav].active')));
+
+  // passive scroll listener, rAF-throttled
+  let ticking = false;
+  window.addEventListener('scroll', ()=>{
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(()=>{
+      navWrap.classList.toggle('scrolled', window.scrollY > 24);
+      ticking = false;
+    });
+  }, {passive:true});
+
+  // active link follows the visible section
+  const sections = $$('main section, main header[id]');
+  const secObs = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting) return;
+      const link = $('[data-nav][href="#'+en.target.id+'"]');
+      if(link) setActive(link);
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  sections.forEach(s => secObs.observe(s));
+
+  /* =================================================================
+     MOBILE MENU — animated hamburger + fullscreen slide-down
+     ================================================================= */
+  const burger = $('#burger');
+  const menu   = $('#mobileMenu');
+  function setMenu(open){
+    burger.classList.toggle('open', open);
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.body.classList.toggle('locked', open);
+  }
+  burger.addEventListener('click', ()=> setMenu(!menu.classList.contains('open')));
+  menu.addEventListener('click', e => { if(e.target.closest('[data-mnav]')) setMenu(false); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') setMenu(false); });
+
+  /* =================================================================
+     ACCORDION + COPY — single delegated listener
+     ================================================================= */
+  const accordion = $('#accordion');
+
+  accordion.addEventListener('click', async e => {
+    // copy button
+    const copyBtn = e.target.closest('[data-copy]');
+    if(copyBtn){
+      const text = copyBtn.closest('.acc-body').querySelector('.prompt-text').textContent.trim();
+      const title = copyBtn.closest('.acc-item').querySelector('.acc-title').textContent.trim();
+      await copy(text, `“${title}” copied`);
+      return;
+    }
+    // header toggle
+    const head = e.target.closest('.acc-head');
+    if(head){
+      const item = head.closest('.acc-item');
+      const open = !item.classList.contains('open');
+      item.classList.toggle('open', open);
+      head.setAttribute('aria-expanded', String(open));
+    }
+  });
+
+  async function copy(text, msg){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast(msg);
+    }catch{
+      // fallback for restricted clipboard contexts
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); toast(msg); }
+      catch{ toast('Copy blocked by the browser', 'warn'); }
+      ta.remove();
+    }
+  }
+
+  const items = $$('.acc-item', accordion);
+  const setAll = open => items.forEach(it=>{
+    it.classList.toggle('open', open);
+    it.querySelector('.acc-head').setAttribute('aria-expanded', String(open));
+  });
+  $('#expandAll').addEventListener('click', ()=>{ setAll(true);  toast('All prompts expanded','warn'); });
+  $('#collapseAll').addEventListener('click', ()=>{ setAll(false); toast('All prompts collapsed','warn'); });
+
+  const allText = () => items.map(it =>
+    '### ' + it.querySelector('.acc-title').textContent.trim() + '\n' +
+    it.querySelector('.prompt-text').textContent.trim()
+  ).join('\n\n');
+  [$('#copyAllBtn'), $('#copyAllBtn2')].forEach(b =>
+    b.addEventListener('click', ()=> copy(allText(), 'All 5 prompts copied'))
+  );
+
+  /* =================================================================
+     LIVE SEARCH — debounced, matches title + body + tags
+     ================================================================= */
+  const search = $('#search');
+  const empty  = $('#emptyState');
+  let t;
+  search.addEventListener('input', ()=>{
+    clearTimeout(t);
+    t = setTimeout(()=>{
+      const q = search.value.trim().toLowerCase();
+      let shown = 0;
+      items.forEach(it=>{
+        const hay = (it.dataset.tags + ' ' +
+                     it.querySelector('.acc-title').textContent + ' ' +
+                     it.querySelector('.prompt-text').textContent).toLowerCase();
+        const hit = !q || hay.includes(q);
+        it.hidden = !hit;
+        if(hit) shown++;
+      });
+      empty.hidden = shown !== 0;
+    }, 110);
+  });
+
+  // ⌘K / Ctrl+K focuses search
+  document.addEventListener('keydown', e=>{
+    if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
+      e.preventDefault();
+      search.focus();
+      search.select();
+    }
+  });
+
+  /* =================================================================
+     HERO ROTATOR — smooth cross-fade
+     ================================================================= */
+  const words = $$('.rotator b');
+  let wi = 0;
+  if(words.length > 1){
+    setInterval(()=>{
+      words[wi].classList.remove('show');
+      wi = (wi + 1) % words.length;
+      words[wi].classList.add('show');
+    }, 2600);
+  }
+
+  /* =================================================================
+     SCROLL REVEAL — staggered, unobserve after first paint
+     ================================================================= */
+  const revObs = new IntersectionObserver((entries, obs)=>{
+    entries.forEach((en, i)=>{
+      if(!en.isIntersecting) return;
+      en.target.style.transitionDelay = (i * 70) + 'ms';
+      en.target.classList.add('in');
+      obs.unobserve(en.target);
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  $$('.reveal').forEach(el => revObs.observe(el));
+})();
+</script>
+</body>
+</html>
