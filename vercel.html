@@ -401,52 +401,6 @@ footer{padding:2.5rem 0;border-top:1px solid var(--stroke);color:var(--fg-muted)
        ===================================================================== -->
   <header class="hero" id="home">
     <div class="container">
-      <div class="row align-items-center g-5">
-        <div class="col-lg-7">
-          <span class="chip reveal"><i data-lucide="zap" class="icon icon-sm"></i> 5 battle-tested prompts</span>
-          <h1 class="mt-4 mb-3 reveal text-balance">
-            Prompts that behave like
-            <span class="rotator">
-              <b class="grad-text show">instruments.</b>
-              <b class="grad-text">blueprints.</b>
-              <b class="grad-text">a toolkit.</b>
-            </span>
-          </h1>
-          <p class="lead mb-4 reveal text-pretty">
-            A small, opinionated library for restoration, OCR and image work — each entry copy-ready,
-            written to survive real production use instead of a single lucky generation.
-          </p>
-          <div class="d-flex flex-wrap gap-2 mb-4 reveal">
-            <a href="#library" class="btn-gradient"><i data-lucide="library-big" class="icon"></i> Browse the library</a>
-            <button class="btn-glass" type="button" id="copyAllBtn"><i data-lucide="copy" class="icon"></i> Copy every prompt</button>
-          </div>
-          <div class="stat-row reveal">
-            <span class="chip"><i data-lucide="scan-text" class="icon icon-sm"></i> OCR</span>
-            <span class="chip"><i data-lucide="image-up" class="icon icon-sm"></i> Restoration</span>
-            <span class="chip"><i data-lucide="shirt" class="icon icon-sm"></i> Outfit swap</span>
-            <span class="chip"><i data-lucide="brain" class="icon icon-sm"></i> Prompt design</span>
-          </div>
-        </div>
-
-        <div class="col-lg-5">
-          <!-- decorative-but-useful preview card -->
-          <div class="glass glow p-4 reveal">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <span class="dot" style="width:9px;height:9px;border-radius:50%;background:var(--green)"></span>
-              <small class="text-muted-2">prompt / preview</small>
-              <span class="ms-auto"><kbd>Ctrl</kbd> <kbd>K</kbd></span>
-            </div>
-            <p class="prompt-text mb-0" style="max-height:14rem">Act as a professional image editor delivering studio-quality results:
-noise reduction and sharpening, meticulous removal of
-cracks / tears / blemishes, realistic lighting adjustments,
-professional composition and cropping…</p>
-            <div class="d-flex align-items-center gap-2 mt-3">
-              <i data-lucide="check-check" class="icon" style="color:var(--green)"></i>
-              <small class="text-muted-2">Geometry, expression and lighting preserved.</small>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -851,7 +805,9 @@ Propose le meilleur résultat possible pour la tâche suivante : [xxxxxxxx]
     '### ' + it.querySelector('.acc-title').textContent.trim() + '\n' +
     it.querySelector('.prompt-text').textContent.trim()
   ).join('\n\n');
-  [$('#copyAllBtn'), $('#copyAllBtn2')].forEach(b =>
+  // filter(Boolean) — the hero copy button is optional, so only wire up
+  // the buttons that actually exist in the markup.
+  [$('#copyAllBtn'), $('#copyAllBtn2')].filter(Boolean).forEach(b =>
     b.addEventListener('click', ()=> copy(allText(), 'All 5 prompts copied'))
   );
 
