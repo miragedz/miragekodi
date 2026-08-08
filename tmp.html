@@ -1,66 +1,76 @@
 <!DOCTYPE html>
-<html lang="fr" data-bs-theme="light">
+<html lang="fr" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IA Solutions — Révolutionner le Futur</title>
+    <title>IA · Intelligence Artificielle</title>
+    <meta name="description" content="Découvrez comment l'intelligence artificielle transforme notre avenir." />
+    <meta name="keywords" content="IA, intelligence artificielle, futur, technologie" />
+    <meta name="author" content="IA Solutions" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="IA · Intelligence Artificielle" />
+    <meta property="og:description" content="L'intelligence artificielle transforme notre avenir." />
+    <meta property="og:type" content="website" />
 
     <!-- Bootstrap 5 + Icons + Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
 
     <style>
         /* ============================================================
-                   CSS VARIABLES & THEMES
-                   ============================================================ */
+           VARIABLES & THÈMES
+           ============================================================ */
         :root {
-            /* -- Couleurs principales -- */
-            --primary: #6C63FF;
-            --primary-rgb: 108, 99, 255;
-            --secondary: #FF6584;
-            --secondary-rgb: 255, 101, 132;
+            --font-family: 'Inter', sans-serif;
+            --transition-theme: 0.4s ease;
 
-            /* -- Thème clair (défaut) -- */
-            --bg-body: #f0f2f5;
-            --bg-surface: rgba(255, 255, 255, 0.55);
-            --bg-surface-solid: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --text-muted: #6c6c8a;
-            --border-glass: rgba(255, 255, 255, 0.35);
-            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.06);
-            --hero-overlay: rgba(255, 255, 255, 0.55);
-            --footer-bg: rgba(255, 255, 255, 0.7);
-            --accordion-bg: rgba(255, 255, 255, 0.50);
-            --accordion-border: rgba(255, 255, 255, 0.30);
-            --nav-blur: blur(18px);
-            --glass-glow: 0 0 30px rgba(108, 99, 255, 0.10);
+            /* Couleurs de base (dark par défaut) */
+            --bg-primary: #070b14;
+            --bg-secondary: #0d1322;
+            --bg-surface: rgba(255, 255, 255, 0.06);
+            --bg-surface-hover: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #7dd3fc;
+            --accent-purple: #c084fc;
+            --accent-pink: #f472b6;
+            --gradient-hero: linear-gradient(135deg, #7dd3fc, #c084fc, #f472b6);
+            --gradient-btn: linear-gradient(135deg, #7dd3fc, #c084fc);
+            --hero-badge-bg: rgba(125, 211, 252, 0.15);
+            --hero-badge-color: #7dd3fc;
+            --scroll-progress-bg: linear-gradient(90deg, #7dd3fc, #c084fc);
+            --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --footer-bg: rgba(13, 19, 34, 0.7);
         }
 
-        [data-bs-theme="dark"] {
-            --bg-body: #0a0a1a;
-            --bg-surface: rgba(20, 20, 40, 0.55);
-            --bg-surface-solid: #16162e;
-            --text-primary: #f0f0ff;
-            --text-secondary: #c8c8e8;
-            --text-muted: #9494b8;
-            --border-glass: rgba(255, 255, 255, 0.12);
-            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
-            --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.35);
-            --hero-overlay: rgba(10, 10, 26, 0.60);
-            --footer-bg: rgba(16, 16, 32, 0.70);
-            --accordion-bg: rgba(20, 20, 40, 0.50);
-            --accordion-border: rgba(255, 255, 255, 0.08);
-            --nav-blur: blur(20px);
-            --glass-glow: 0 0 40px rgba(108, 99, 255, 0.18);
+        /* Thème clair */
+        [data-bs-theme="light"] {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-surface: rgba(255, 255, 255, 0.45);
+            --bg-surface-hover: rgba(255, 255, 255, 0.70);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --hero-badge-bg: rgba(108, 99, 255, 0.12);
+            --hero-badge-color: #6C63FF;
+            --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            --footer-bg: rgba(255, 255, 255, 0.60);
         }
 
         /* ============================================================
-                   RESET & BASE
-                   ============================================================ */
-        * {
+           RESET & GLOBAL
+           ============================================================ */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -71,74 +81,77 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-body);
+            font-family: var(--font-family);
+            background: var(--bg-primary);
             color: var(--text-primary);
-            transition: background 0.5s ease, color 0.4s ease;
+            transition: background var(--transition-theme), color var(--transition-theme);
             min-height: 100vh;
             overflow-x: hidden;
+            padding-top: 80px;
+            /* pour la navbar fixe */
         }
 
         a {
-            color: var(--primary);
+            color: var(--accent-blue);
             text-decoration: none;
             transition: color 0.3s ease;
         }
         a:hover {
-            color: var(--secondary);
+            color: var(--accent-purple);
         }
 
         /* ============================================================
-                   GLASSMORPHIC UTILITIES
-                   ============================================================ */
-        .glass {
-            background: var(--bg-surface) !important;
-            backdrop-filter: var(--nav-blur);
-            -webkit-backdrop-filter: var(--nav-blur);
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-glass), var(--glass-glow);
-            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .glass-solid {
-            background: var(--bg-surface-solid) !important;
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-card);
-            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .glass-glow-hover:hover {
-            box-shadow: var(--shadow-glass), 0 0 50px rgba(108, 99, 255, 0.20);
-            transform: translateY(-4px);
-        }
-
-        /* ============================================================
-                   NAVBAR
-                   ============================================================ */
-        .navbar-custom {
+           SCROLL PROGRESS BAR
+           ============================================================ */
+        #scroll-progress {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
+            height: 3px;
+            background: var(--scroll-progress-bg);
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 12px rgba(125, 211, 252, 0.3);
+        }
+
+        /* ============================================================
+           NAVBAR (floating glass)
+           ============================================================ */
+        .navbar-custom {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 1200px;
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow), 0 0 40px rgba(125, 211, 252, 0.03);
+            padding: 0.6rem 1.2rem;
             z-index: 1050;
-            padding: 0.75rem 1.5rem;
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-            min-height: 72px;
+            transition: background var(--transition-theme), border var(--transition-theme), box-shadow var(--transition-theme);
         }
 
         .navbar-custom .navbar-brand {
             font-weight: 800;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .navbar-custom .navbar-brand i {
-            -webkit-text-fill-color: var(--primary);
-            margin-right: 6px;
+            -webkit-text-fill-color: var(--accent-blue);
+            font-size: 1.4rem;
         }
 
         .navbar-custom .nav-link {
@@ -148,12 +161,13 @@
             border-radius: 40px;
             transition: color 0.3s ease, background 0.3s ease;
             position: relative;
+            font-size: 0.95rem;
         }
 
         .navbar-custom .nav-link:hover,
         .navbar-custom .nav-link.active {
-            color: var(--primary) !important;
-            background: rgba(108, 99, 255, 0.08);
+            color: var(--text-primary) !important;
+            background: var(--bg-surface-hover);
         }
 
         .navbar-custom .nav-link::after {
@@ -163,8 +177,8 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.3s ease, left 0.3s ease;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             border-radius: 4px;
         }
         .navbar-custom .nav-link:hover::after,
@@ -173,87 +187,78 @@
             left: 20%;
         }
 
-        /* Toggle switch */
+        /* Theme toggle */
         .theme-toggle {
-            width: 48px;
-            height: 26px;
-            background: var(--bg-surface-solid);
-            border: 1px solid var(--border-glass);
+            width: 52px;
+            height: 28px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
             border-radius: 40px;
             display: flex;
             align-items: center;
             padding: 3px;
             cursor: pointer;
-            transition: background 0.4s ease, border 0.3s ease;
+            transition: background var(--transition-theme), border var(--transition-theme);
             position: relative;
             flex-shrink: 0;
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-
-        .theme-toggle .toggle-track {
-            width: 100%;
-            height: 100%;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 4px;
-            position: relative;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-left: 8px;
         }
 
         .theme-toggle .toggle-thumb {
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             border-radius: 50%;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
             position: absolute;
             top: 2px;
             left: 2px;
-            box-shadow: 0 2px 8px rgba(108, 99, 255, 0.35);
+            box-shadow: 0 2px 12px rgba(125, 211, 252, 0.3);
         }
 
-        [data-bs-theme="dark"] .theme-toggle .toggle-thumb {
-            transform: translateX(22px);
-            background: var(--secondary);
+        [data-bs-theme="light"] .theme-toggle .toggle-thumb {
+            transform: translateX(24px);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
         }
 
         .theme-toggle .toggle-icon {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             z-index: 1;
             transition: color 0.3s ease;
-            line-height: 1;
             pointer-events: none;
+            display: flex;
+            justify-content: center;
+            width: 50%;
         }
-
         .theme-toggle .toggle-icon:first-child {
-            margin-left: 2px;
+            padding-left: 4px;
         }
         .theme-toggle .toggle-icon:last-child {
-            margin-right: 2px;
+            padding-right: 4px;
         }
 
         [data-bs-theme="dark"] .theme-toggle .toggle-icon:first-child {
             color: #fbbf24;
         }
         [data-bs-theme="light"] .theme-toggle .toggle-icon:last-child {
-            color: #6366f1;
+            color: #f59e0b;
         }
 
-        /* Mobile menu */
+        /* Mobile hamburger */
         .navbar-toggler {
             border: none;
-            padding: 0.4rem 0.6rem;
-            color: var(--text-primary);
+            padding: 0.3rem 0.6rem;
             border-radius: 40px;
             background: var(--bg-surface);
             backdrop-filter: blur(8px);
-            border: 1px solid var(--border-glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 1.2rem;
         }
-
         .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.2);
         }
 
         .navbar-toggler-icon {
@@ -261,22 +266,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            color: var(--text-primary);
         }
 
         /* ============================================================
-                   HERO
-                   ============================================================ */
+           HERO
+           ============================================================ */
         .hero {
-            min-height: 100vh;
+            min-height: calc(100vh - 80px);
             display: flex;
             align-items: center;
-            padding: 100px 0 80px;
+            padding: 60px 0 80px;
             position: relative;
             overflow: hidden;
-            background: var(--bg-body);
-            transition: background 0.5s ease;
         }
 
         .hero::before {
@@ -284,182 +285,137 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at 20% 50%, rgba(108, 99, 255, 0.12) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 101, 132, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(108, 99, 255, 0.06) 0%, transparent 40%);
+                radial-gradient(ellipse at 20% 50%, rgba(125, 211, 252, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(192, 132, 252, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(244, 114, 182, 0.06) 0%, transparent 40%);
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            animation: glowPulse 12s infinite alternate ease-in-out;
         }
 
-        [data-bs-theme="dark"] .hero::before {
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(108, 99, 255, 0.18) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 101, 132, 0.14) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(108, 99, 255, 0.10) 0%, transparent 40%);
-        }
-
-        /* Particules flottantes (purement CSS) */
-        .hero-particles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(108, 99, 255, 0.15);
-            animation: floatParticle 18s infinite alternate ease-in-out;
-        }
-
-        .particle:nth-child(1) {
-            width: 280px;
-            height: 280px;
-            top: -60px;
-            left: -60px;
-            animation-duration: 22s;
-            background: radial-gradient(circle, rgba(108, 99, 255, 0.10), transparent 70%);
-        }
-        .particle:nth-child(2) {
-            width: 360px;
-            height: 360px;
-            bottom: -100px;
-            right: -80px;
-            animation-duration: 26s;
-            animation-delay: -4s;
-            background: radial-gradient(circle, rgba(255, 101, 132, 0.08), transparent 70%);
-        }
-        .particle:nth-child(3) {
-            width: 160px;
-            height: 160px;
-            top: 40%;
-            right: 10%;
-            animation-duration: 20s;
-            animation-delay: -8s;
-            background: radial-gradient(circle, rgba(108, 99, 255, 0.07), transparent 70%);
-        }
-        .particle:nth-child(4) {
-            width: 200px;
-            height: 200px;
-            bottom: 20%;
-            left: 5%;
-            animation-duration: 24s;
-            animation-delay: -12s;
-            background: radial-gradient(circle, rgba(255, 101, 132, 0.06), transparent 70%);
-        }
-
-        @keyframes floatParticle {
+        @keyframes glowPulse {
             0% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(30px, -40px) scale(1.05);
-            }
-            66% {
-                transform: translate(-20px, 30px) scale(0.95);
+                opacity: 0.6;
+                transform: scale(1);
             }
             100% {
-                transform: translate(20px, -20px) scale(1.02);
+                opacity: 1;
+                transform: scale(1.05);
             }
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
+            text-align: center;
+            max-width: 820px;
+            margin: 0 auto;
         }
 
         .hero-badge {
             display: inline-block;
-            padding: 0.35rem 1.2rem;
+            padding: 0.4rem 1.4rem;
             border-radius: 40px;
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.3px;
-            background: rgba(108, 99, 255, 0.12);
-            color: var(--primary);
-            border: 1px solid rgba(108, 99, 255, 0.15);
-            margin-bottom: 1.5rem;
+            background: var(--hero-badge-bg);
+            color: var(--hero-badge-color);
+            border: 1px solid rgba(125, 211, 252, 0.15);
             backdrop-filter: blur(6px);
+            margin-bottom: 1.8rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.1s;
         }
 
         .hero h1 {
-            font-size: clamp(2.6rem, 8vw, 4.8rem);
+            font-size: clamp(2.8rem, 9vw, 5rem);
             font-weight: 800;
-            line-height: 1.08;
+            line-height: 1.05;
             letter-spacing: -1.5px;
             margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.2s;
         }
 
-        .hero h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .hero h1 .gradient-text {
+            background: var(--gradient-hero);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
-            max-width: 560px;
+            max-width: 600px;
+            margin: 0 auto 2.2rem;
             line-height: 1.7;
-            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.4s;
         }
 
-        .hero .btn-cta {
-            padding: 0.9rem 2.6rem;
+        .hero .btn-group-custom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.6s;
+        }
+
+        .btn-glass {
+            padding: 0.8rem 2.4rem;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 1.05rem;
-            background: linear-gradient(135deg, var(--primary), #8b83ff);
+            font-size: 1rem;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-surface);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: var(--glass-shadow);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(125, 211, 252, 0.15);
+            border-color: var(--accent-blue);
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-gradient {
+            background: var(--gradient-btn);
             border: none;
             color: #fff;
-            box-shadow: 0 8px 28px rgba(108, 99, 255, 0.30);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 28px rgba(125, 211, 252, 0.25);
         }
 
-        .hero .btn-cta:hover {
+        .btn-gradient:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(108, 99, 255, 0.40);
+            box-shadow: 0 12px 40px rgba(125, 211, 252, 0.35);
             color: #fff;
+            background: var(--gradient-btn);
         }
 
-        .hero .btn-cta i {
-            margin-left: 10px;
-            transition: transform 0.3s ease;
-        }
-        .hero .btn-cta:hover i {
-            transform: translateX(6px);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 2.5rem;
-            margin-top: 2.8rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-stats .stat-item {
-            text-align: center;
-        }
-
-        .hero-stats .stat-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            display: block;
-            line-height: 1.2;
-        }
-
-        .hero-stats .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ============================================================
-                   SECTIONS GÉNÉRALES
-                   ============================================================ */
+           SECTIONS GÉNÉRALES
+           ============================================================ */
         .section-padding {
             padding: 80px 0;
         }
@@ -473,7 +429,7 @@
 
         .section-subtitle {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             max-width: 600px;
             margin: 0 auto 3rem;
         }
@@ -481,106 +437,113 @@
         .section-divider {
             width: 60px;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: var(--gradient-hero);
             border-radius: 4px;
             margin: 0.75rem auto 1.5rem;
         }
 
         /* ============================================================
-                   ACCORDION
-                   ============================================================ */
-        .accordion-custom .accordion-item {
-            background: var(--accordion-bg) !important;
+           ACCORDION (Prompts)
+           ============================================================ */
+        .accordion-custom {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .accordion-item-custom {
+            background: var(--bg-surface);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--accordion-border);
-            border-radius: 16px !important;
-            margin-bottom: 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             overflow: hidden;
-            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
-            box-shadow: var(--shadow-glass);
+            transition: background var(--transition-theme), border var(--transition-theme), box-shadow 0.4s ease;
+            box-shadow: var(--glass-shadow);
         }
 
-        .accordion-custom .accordion-item:hover {
-            box-shadow: var(--shadow-glass), 0 0 30px rgba(108, 99, 255, 0.06);
+        .accordion-item-custom:hover {
+            box-shadow: var(--glass-shadow), 0 0 40px rgba(125, 211, 252, 0.04);
         }
 
-        .accordion-custom .accordion-header {
-            border: none;
-            background: transparent;
+        .accordion-header-custom {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.6rem;
+            cursor: pointer;
+            gap: 1rem;
+            transition: background 0.3s ease;
+            user-select: none;
         }
 
-        .accordion-custom .accordion-button {
-            background: transparent !important;
-            color: var(--text-primary) !important;
+        .accordion-header-custom:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .accordion-header-custom .accordion-number {
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            min-width: 32px;
+            opacity: 0.7;
+        }
+
+        .accordion-header-custom .accordion-title {
+            flex: 1;
             font-weight: 600;
             font-size: 1.05rem;
-            padding: 1.2rem 1.6rem;
-            border: none;
-            box-shadow: none !important;
-            transition: color 0.3s ease;
-            border-radius: 16px !important;
+            color: var(--text-primary);
         }
 
-        .accordion-custom .accordion-button:not(.collapsed) {
-            color: var(--primary) !important;
-            background: transparent !important;
-        }
-
-        .accordion-custom .accordion-button::after {
-            background-image: none !important;
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 0.85rem;
+        .accordion-header-custom .accordion-icon {
+            font-size: 1.2rem;
             color: var(--text-muted);
-            transition: transform 0.4s ease, color 0.3s ease;
-            transform: rotate(0deg);
-            width: auto;
-            height: auto;
-            margin-left: auto;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
         }
 
-        .accordion-custom .accordion-button:not(.collapsed)::after {
-            transform: rotate(180deg);
-            color: var(--primary);
+        .accordion-item-custom.active .accordion-icon {
+            transform: rotate(45deg);
+            color: var(--accent-blue);
         }
 
-        .accordion-custom .accordion-button .accordion-icon {
-            margin-right: 14px;
-            color: var(--primary);
-            font-size: 1.1rem;
-            width: 28px;
-            text-align: center;
-        }
-
-        .accordion-custom .accordion-body {
-            padding: 0 1.6rem 1.6rem;
+        .accordion-body-custom {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1), padding 0.4s ease;
+            padding: 0 1.6rem;
             color: var(--text-secondary);
             line-height: 1.7;
-            font-size: 0.98rem;
+            font-size: 0.95rem;
         }
 
-        .accordion-custom .accordion-body strong {
+        .accordion-item-custom.active .accordion-body-custom {
+            max-height: 400px;
+            /* suffisant pour le contenu */
+            padding: 0 1.6rem 1.6rem;
+        }
+
+        .accordion-body-custom strong {
             color: var(--text-primary);
         }
 
         /* ============================================================
-                   SERVICES CARDS
-                   ============================================================ */
+           SERVICES CARDS
+           ============================================================ */
         .service-card {
-            background: var(--bg-surface) !important;
+            background: var(--bg-surface);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border: 1px solid var(--border-glass);
+            border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 2.2rem 1.8rem;
+            padding: 2.4rem 1.8rem;
             height: 100%;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
                 box-shadow 0.4s ease,
-                background 0.4s ease,
-                border 0.4s ease;
-            box-shadow: var(--shadow-card);
+                background var(--transition-theme),
+                border var(--transition-theme);
+            box-shadow: var(--card-shadow);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -592,7 +555,7 @@
             inset: 0;
             border-radius: 24px;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.15), rgba(255, 101, 132, 0.10));
+            background: linear-gradient(135deg, rgba(125, 211, 252, 0.15), rgba(192, 132, 252, 0.10));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
@@ -607,9 +570,9 @@
         }
 
         .service-card:hover {
-            transform: translateY(-10px) scale(1.01);
-            box-shadow: var(--shadow-glass), 0 20px 60px rgba(108, 99, 255, 0.10);
-            border-color: rgba(108, 99, 255, 0.20);
+            transform: translateY(-10px);
+            box-shadow: var(--card-shadow), 0 20px 60px rgba(125, 211, 252, 0.08);
+            border-color: rgba(125, 211, 252, 0.15);
         }
 
         .service-card .icon-wrap {
@@ -622,19 +585,19 @@
             margin: 0 auto 1.2rem;
             font-size: 2rem;
             color: #fff;
-            background: linear-gradient(135deg, var(--primary), #8b83ff);
-            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.25);
+            background: var(--gradient-btn);
+            box-shadow: 0 8px 24px rgba(125, 211, 252, 0.2);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
         .service-card:hover .icon-wrap {
             transform: scale(1.06) rotate(-2deg);
-            box-shadow: 0 12px 32px rgba(108, 99, 255, 0.35);
+            box-shadow: 0 12px 32px rgba(125, 211, 252, 0.3);
         }
 
         .service-card h5 {
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin-bottom: 0.6rem;
             color: var(--text-primary);
         }
@@ -643,7 +606,7 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.2rem;
         }
 
         .service-card .btn-outline-glass {
@@ -651,36 +614,68 @@
             padding: 0.5rem 1.6rem;
             font-weight: 600;
             font-size: 0.9rem;
-            color: var(--primary);
-            border: 1px solid rgba(108, 99, 255, 0.25);
+            color: var(--accent-blue);
+            border: 1px solid rgba(125, 211, 252, 0.2);
             background: transparent;
             transition: all 0.3s ease;
         }
 
         .service-card .btn-outline-glass:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.30);
+            background: var(--accent-blue);
+            color: #0f172a;
+            border-color: var(--accent-blue);
+            box-shadow: 0 6px 20px rgba(125, 211, 252, 0.25);
             transform: translateY(-2px);
         }
 
         /* ============================================================
-                   FOOTER
-                   ============================================================ */
+           OTHER SECTION
+           ============================================================ */
+        .other-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2.5rem;
+        }
+
+        .other-stats .stat-item {
+            text-align: center;
+        }
+
+        .other-stats .stat-number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .other-stats .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
         .footer-custom {
             background: var(--footer-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid var(--border-glass);
+            border-top: 1px solid var(--glass-border);
             padding: 3rem 0 1.5rem;
-            transition: background 0.4s ease, border 0.4s ease;
+            transition: background var(--transition-theme), border var(--transition-theme);
             margin-top: 2rem;
         }
 
         .footer-custom h6 {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 1.2rem;
             color: var(--text-primary);
         }
@@ -688,7 +683,7 @@
         .footer-custom p,
         .footer-custom li {
             color: var(--text-secondary);
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.8;
         }
 
@@ -701,7 +696,7 @@
             border-radius: 50%;
             background: var(--bg-surface);
             backdrop-filter: blur(8px);
-            border: 1px solid var(--border-glass);
+            border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             transition: all 0.3s ease;
             font-size: 1.1rem;
@@ -709,16 +704,16 @@
         }
 
         .footer-custom .social-link:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
+            background: var(--accent-blue);
+            color: #0f172a;
+            border-color: var(--accent-blue);
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.25);
+            box-shadow: 0 6px 20px rgba(125, 211, 252, 0.2);
         }
 
         .footer-custom .footer-divider {
-            border-color: var(--border-glass);
-            opacity: 0.5;
+            border-color: var(--glass-border);
+            opacity: 0.4;
             margin: 1.5rem 0;
         }
 
@@ -729,78 +724,117 @@
         }
 
         /* ============================================================
-                   SCROLL ANIMATIONS (fade-in-up)
-                   ============================================================ */
-        .fade-section {
+           SCROLL REVEAL (fade-in-up)
+           ============================================================ */
+        .reveal {
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .fade-section.visible {
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Stagger children */
-        .fade-stagger>* {
+        .reveal-stagger>* {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.7s ease, transform 0.7s ease;
         }
 
-        .fade-stagger.visible>*:nth-child(1) {
+        .reveal-stagger.visible>*:nth-child(1) {
             transition-delay: 0.05s;
         }
-        .fade-stagger.visible>*:nth-child(2) {
+        .reveal-stagger.visible>*:nth-child(2) {
             transition-delay: 0.12s;
         }
-        .fade-stagger.visible>*:nth-child(3) {
+        .reveal-stagger.visible>*:nth-child(3) {
             transition-delay: 0.19s;
         }
-        .fade-stagger.visible>*:nth-child(4) {
+        .reveal-stagger.visible>*:nth-child(4) {
             transition-delay: 0.26s;
         }
-        .fade-stagger.visible>*:nth-child(5) {
+        .reveal-stagger.visible>*:nth-child(5) {
             transition-delay: 0.33s;
         }
-        .fade-stagger.visible>*:nth-child(6) {
-            transition-delay: 0.40s;
-        }
 
-        .fade-stagger.visible>* {
+        .reveal-stagger.visible>* {
             opacity: 1;
             transform: translateY(0);
         }
 
         /* ============================================================
-                   RESPONSIVE
-                   ============================================================ */
+           PREFERS-REDUCED-MOTION
+           ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .hero-badge,
+            .hero h1,
+            .hero p,
+            .hero .btn-group-custom {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .reveal-stagger>* {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .accordion-body-custom {
+                transition: none !important;
+            }
+            #scroll-progress {
+                display: none;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
         @media (max-width: 991.98px) {
             .navbar-custom {
-                padding: 0.5rem 1rem;
+                top: 12px;
+                width: calc(100% - 24px);
+                padding: 0.4rem 0.8rem;
             }
 
             .navbar-custom .navbar-collapse {
                 background: var(--bg-surface);
-                backdrop-filter: var(--nav-blur);
-                -webkit-backdrop-filter: var(--nav-blur);
-                border-radius: 20px;
-                padding: 1rem 0.5rem;
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-radius: 16px;
+                padding: 1rem;
                 margin-top: 0.5rem;
-                border: 1px solid var(--border-glass);
-                box-shadow: var(--shadow-glass);
+                border: 1px solid var(--glass-border);
+                box-shadow: var(--glass-shadow);
             }
 
             .navbar-custom .nav-link {
-                padding: 0.6rem 1.2rem !important;
+                padding: 0.6rem 1rem !important;
                 border-radius: 12px;
             }
 
+            .navbar-custom .nav-link::after {
+                display: none;
+            }
+
             .hero {
-                padding: 90px 0 60px;
                 min-height: auto;
+                padding: 40px 0 60px;
             }
 
             .hero h1 {
@@ -811,103 +845,133 @@
                 font-size: 1rem;
             }
 
-            .hero-stats {
-                gap: 1.5rem;
-            }
-
             .section-padding {
                 padding: 60px 0;
             }
 
-            .service-card {
-                padding: 1.8rem 1.4rem;
+            .other-stats {
+                gap: 2rem;
+            }
+            .other-stats .stat-number {
+                font-size: 2rem;
+            }
+
+            .footer-custom {
+                text-align: center;
+            }
+            .footer-custom .social-link {
+                margin: 0 4px;
             }
         }
 
         @media (max-width: 575.98px) {
+            body {
+                padding-top: 70px;
+            }
+            .navbar-custom {
+                top: 8px;
+                width: calc(100% - 16px);
+                padding: 0.3rem 0.6rem;
+                border-radius: 16px;
+            }
             .navbar-custom .navbar-brand {
                 font-size: 1.2rem;
             }
+            .navbar-custom .navbar-brand i {
+                font-size: 1.1rem;
+            }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 1.9rem;
             }
-
-            .hero .btn-cta {
-                padding: 0.7rem 1.8rem;
+            .hero p {
                 font-size: 0.95rem;
+            }
+            .hero .btn-glass {
+                padding: 0.6rem 1.6rem;
+                font-size: 0.9rem;
                 width: 100%;
+                justify-content: center;
+            }
+            .hero .btn-group-custom {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
             }
 
-            .hero-stats .stat-number {
-                font-size: 1.4rem;
-            }
-
-            .accordion-custom .accordion-button {
-                font-size: 0.95rem;
+            .accordion-header-custom {
                 padding: 1rem 1.2rem;
+                gap: 0.6rem;
+            }
+            .accordion-header-custom .accordion-title {
+                font-size: 0.95rem;
+            }
+            .accordion-body-custom {
+                font-size: 0.9rem;
+                padding: 0 1.2rem;
+            }
+            .accordion-item-custom.active .accordion-body-custom {
+                padding: 0 1.2rem 1.2rem;
             }
 
-            .accordion-custom .accordion-body {
-                padding: 0 1.2rem 1.2rem;
-                font-size: 0.92rem;
+            .service-card {
+                padding: 1.8rem 1.2rem;
+            }
+            .service-card .icon-wrap {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6rem;
+            }
+
+            .other-stats {
+                gap: 1.5rem;
+                flex-direction: column;
+                align-items: center;
             }
 
             .footer-custom {
                 padding: 2rem 0 1rem;
-                text-align: center;
             }
-        }
-
-        /* ============================================================
-                   UTILITY: smooth transition for theme toggle
-                   ============================================================ */
-        .theme-transition * {
-            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
         }
     </style>
 </head>
 
 <body>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 
     <!-- ============================================================
     NAVBAR
     ============================================================ -->
-    <nav class="navbar navbar-expand-lg navbar-custom glass" id="mainNav" aria-label="Navigation principale">
-        <div class="container-fluid">
-
-            <!-- Brand -->
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-brain"></i> IA<span style="-webkit-text-fill-color:var(--secondary);">+</span>
+    <nav class="navbar navbar-expand-lg navbar-custom" aria-label="Navigation principale">
+        <div class="container-fluid px-0">
+            <a class="navbar-brand" href="#home">
+                <i class="bi bi-stars"></i> IA
             </a>
 
-            <!-- Toggle (mobile) -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
             aria-controls="navMenu" aria-expanded="false" aria-label="Basculer la navigation">
-            <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+            <span class="navbar-toggler-icon"><i class="bi bi-list"></i></span>
         </button>
 
-        <!-- Nav links -->
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#hero">Home</a>
+                    <a class="nav-link active" href="#home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#accordion-section">Services</a>
+                    <a class="nav-link" href="#prompts">Service</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#service-section">Autre</a>
+                    <a class="nav-link" href="#other">Autre</a>
                 </li>
                 <li class="nav-item ms-lg-2">
-                    <!-- Theme toggle -->
                     <div class="theme-toggle" id="themeToggle" role="button" tabindex="0"
                     aria-label="Basculer entre thème clair et sombre">
-                    <div class="toggle-track">
-                        <span class="toggle-icon"><i class="fas fa-sun"></i></span>
-                        <span class="toggle-icon"><i class="fas fa-moon"></i></span>
-                        <span class="toggle-thumb"></span>
-                    </div>
+                    <span class="toggle-icon"><i class="bi bi-sun-fill"></i></span>
+                    <span class="toggle-icon"><i class="bi bi-moon-fill"></i></span>
+                    <span class="toggle-thumb"></span>
                 </div>
             </li>
         </ul>
@@ -916,258 +980,210 @@
 </nav>
 
 <!-- ============================================================
-HERO
+MAIN
 ============================================================ -->
-<section class="hero" id="hero">
-    <!-- Particules décoratives -->
-    <div class="hero-particles" aria-hidden="true">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+<main>
 
-    <div class="container hero-content">
-        <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto text-center">
-                <div class="hero-badge">
-                    <i class="fas fa-sparkles me-1"></i> L'IA à portée de main
-                </div>
-
-                <h1>
-                    L'IA : <br class="d-sm-none" />
-                    <span class="highlight">Révolutionner</span> le Futur
-                </h1>
-
-                <p>
-                    Découvrez comment l'intelligence artificielle transforme notre monde
-                    et ouvre la voie à des possibilités infinies.
-                </p>
-
-                <a href="#accordion-section" class="btn btn-cta">
-                    Explorer maintenant <i class="fas fa-arrow-right"></i>
+    <!-- ============================================================
+    HERO (HOME)
+    ============================================================ -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <i class="bi bi-stars me-1"></i> Artificial Intelligence
+            </div>
+            <h1>
+                L'intelligence artificielle<br />
+                <span class="gradient-text">transforme notre avenir.</span>
+            </h1>
+            <p>
+                L'intelligence artificielle permet aux machines d'analyser des données,
+                d'apprendre de nouvelles informations et d'effectuer des tâches qui
+                nécessitaient autrefois l'intelligence humaine.
+            </p>
+            <div class="btn-group-custom">
+                <a href="#prompts" class="btn btn-glass btn-gradient">
+                    <i class="bi bi-rocket-takeoff"></i> Découvrir
                 </a>
-
-                <div class="hero-stats justify-content-center">
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="120">0</span>
-                        <span class="stat-label">Projets IA</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="45">0</span>
-                        <span class="stat-label">Experts</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="98">0</span>
-                        <span class="stat-label">% Satisfaction</span>
-                    </div>
-                </div>
+                <a href="#services" class="btn btn-glass">
+                    <i class="bi bi-compass"></i> Explorer
+                </a>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============================================================
-ACCORDION SECTION
-============================================================ -->
-<section class="section-padding" id="accordion-section">
-    <div class="container">
-        <div class="text-center fade-section">
-            <span class="hero-badge" style="font-size:0.75rem;">
-                <i class="fas fa-circle-question me-1"></i> FAQ IA
-            </span>
-            <h2 class="section-title">Questions fréquentes</h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">
-                Les réponses aux questions les plus courantes sur l'intelligence artificielle.
-            </p>
-        </div>
+    <!-- ============================================================
+    PROMPTS (ACCORDION)
+    ============================================================ -->
+    <section id="prompts" class="section-padding" style="background: var(--bg-secondary); transition: background var(--transition-theme);">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">Prompts IA</h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle">
+                    Découvrez quelques exemples de prompts utiles pour exploiter l'intelligence artificielle.
+                </p>
+            </div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="accordion accordion-custom fade-section" id="iaAccordion">
-
-                    <!-- Item 1 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#acc1" aria-expanded="true" aria-controls="acc1">
-                            <span class="accordion-icon"><i class="fas fa-robot"></i></span>
-                            Qu'est-ce que l'intelligence artificielle ?
-                        </button>
-                    </h2>
-                    <div id="acc1" class="accordion-collapse collapse show" data-bs-parent="#iaAccordion">
-                        <div class="accordion-body">
-                            <strong>L'intelligence artificielle (IA)</strong> est un domaine de l'informatique qui vise à
-                            créer des systèmes capables d'effectuer des tâches qui nécessitent normalement l'intelligence
-                            humaine. Cela inclut la perception visuelle, la reconnaissance vocale, la prise de décision,
-                            la traduction linguistique et bien plus encore. L'IA s'appuie sur des algorithmes, des
-                            modèles statistiques et des réseaux de neurones pour apprendre à partir des données.
-                        </div>
+            <div class="accordion-custom" id="accordionPrompts">
+                <!-- Item 1 -->
+                <div class="accordion-item-custom active">
+                    <div class="accordion-header-custom" data-target="body1" aria-expanded="true" aria-controls="body1">
+                        <span class="accordion-number">01</span>
+                        <span class="accordion-title">Création de contenu</span>
+                        <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                    <div class="accordion-body-custom" id="body1">
+                        <strong>Prompt :</strong> « Rédige un article de blog sur les tendances de l'IA en 2026, en mettant l'accent sur l'éthique et la transparence. »<br /><br />
+                        L'IA peut générer des textes structurés, des brouillons d'articles, des idées de titres et même des scripts vidéo. Elle permet de gagner un temps précieux dans la production de contenu tout en maintenant une qualité constante.
                     </div>
                 </div>
 
                 <!-- Item 2 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#acc2" aria-expanded="false" aria-controls="acc2">
-                        <span class="accordion-icon"><i class="fas fa-sitemap"></i></span>
-                        Les différentes branches de l'IA
-                    </button>
-                </h2>
-                <div id="acc2" class="accordion-collapse collapse" data-bs-parent="#iaAccordion">
-                    <div class="accordion-body">
-                        L'IA se décline en plusieurs branches complémentaires : <strong>l'apprentissage automatique
-                        (machine learning)</strong> qui permet aux systèmes d'apprendre à partir de données ;
-                        <strong>le traitement du langage naturel (NLP)</strong> pour comprendre et générer du texte ;
-                        <strong>la vision par ordinateur</strong> pour analyser des images et vidéos ;
-                        <strong>la robotique</strong> qui combine l'IA avec des systèmes physiques ; et
-                        <strong>les systèmes experts</strong> qui reproduisent le raisonnement d'un spécialiste
-                        dans un domaine spécifique.
+                <div class="accordion-item-custom">
+                    <div class="accordion-header-custom" data-target="body2" aria-expanded="false" aria-controls="body2">
+                        <span class="accordion-number">02</span>
+                        <span class="accordion-title">Analyse de données</span>
+                        <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                    <div class="accordion-body-custom" id="body2">
+                        <strong>Prompt :</strong> « Analyse ce jeu de données de ventes et identifie les tendances saisonnières ainsi que les produits les plus performants. »<br /><br />
+                        L'IA excelle dans l'extraction d'informations à partir de grandes quantités de données. Elle peut détecter des corrélations, prévoir des comportements et fournir des recommandations actionnables.
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="accordion-item-custom">
+                    <div class="accordion-header-custom" data-target="body3" aria-expanded="false" aria-controls="body3">
+                        <span class="accordion-number">03</span>
+                        <span class="accordion-title">Programmation assistée</span>
+                        <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                    <div class="accordion-body-custom" id="body3">
+                        <strong>Prompt :</strong> « Écris une fonction Python qui trie une liste de dictionnaires par une clé donnée, avec gestion d'erreurs. »<br /><br />
+                        Les modèles d'IA génèrent du code, proposent des corrections, expliquent des concepts complexes et aident à la résolution de bugs. Ils sont de véritables assistants de développement.
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="accordion-item-custom">
+                    <div class="accordion-header-custom" data-target="body4" aria-expanded="false" aria-controls="body4">
+                        <span class="accordion-number">04</span>
+                        <span class="accordion-title">Productivité</span>
+                        <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                    <div class="accordion-body-custom" id="body4">
+                        <strong>Prompt :</strong> « Rédige un résumé exécutif de ce rapport de 20 pages en mettant en avant les points clés et les recommandations. »<br /><br />
+                        L'IA automatise la synthèse d'informations, la rédaction de comptes rendus et la gestion des emails. Elle libère du temps pour des tâches à plus forte valeur ajoutée.
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="accordion-item-custom">
+                    <div class="accordion-header-custom" data-target="body5" aria-expanded="false" aria-controls="body5">
+                        <span class="accordion-number">05</span>
+                        <span class="accordion-title">Idées créatives</span>
+                        <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                    <div class="accordion-body-custom" id="body5">
+                        <strong>Prompt :</strong> « Propose 10 concepts de campagnes marketing innovantes pour une marque de mode écoresponsable. »<br /><br />
+                        L'IA est une source inépuisable d'inspiration. Elle génère des idées originales, des noms de produits, des slogans et même des scénarios pour des vidéos ou des jeux.
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Item 3 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#acc3" aria-expanded="false" aria-controls="acc3">
-                    <span class="accordion-icon"><i class="fas fa-microchip"></i></span>
-                    Applications concrètes de l'IA
-                </button>
-            </h2>
-            <div id="acc3" class="accordion-collapse collapse" data-bs-parent="#iaAccordion">
-                <div class="accordion-body">
-                    L'IA est déjà partout dans notre quotidien : <strong>assistants vocaux</strong> (Siri, Alexa),
-                    <strong>moteurs de recherche</strong> (Google, Bing), <strong>systèmes de recommandation</strong>
-                    (Netflix, Amazon), <strong>voitures autonomes</strong>, <strong>diagnostic médical</strong> assisté
-                    par ordinateur, <strong>traduction automatique</strong> (DeepL, Google Translate),
-                    <strong>détection de fraudes</strong> bancaires, et <strong>optimisation logistique</strong>
-                    dans la supply chain. Chaque jour, de nouveaux cas d'usage émergent dans tous les secteurs.
-                </div>
+    <!-- ============================================================
+    SERVICES
+    ============================================================ -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">Nos Services</h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle">
+                    Des solutions sur mesure pour intégrer l'IA dans votre activité.
+                </p>
             </div>
-        </div>
 
-        <!-- Item 4 -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#acc4" aria-expanded="false" aria-controls="acc4">
-                <span class="accordion-icon"><i class="fas fa-scale-balanced"></i></span>
-                L'IA et l'éthique
-            </button>
-        </h2>
-        <div id="acc4" class="accordion-collapse collapse" data-bs-parent="#iaAccordion">
-            <div class="accordion-body">
-                L'éthique de l'IA est un enjeu majeur : <strong>biais algorithmiques</strong>, <strong>vie privée</strong>,
-                <strong>transparence</strong> des décisions, <strong>responsabilité</strong> en cas d'erreur, et
-                <strong>impact sur l'emploi</strong>. Des initiatives comme le RGPD en Europe ou les principes
-                d'IA responsable de l'UNESCO visent à encadrer le développement de l'IA pour qu'elle reste
-                au service de l'humain, avec des systèmes justes, explicables et respectueux des droits
-                fondamentaux.
-            </div>
-        </div>
-    </div>
-
-    <!-- Item 5 -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#acc5" aria-expanded="false" aria-controls="acc5">
-            <span class="accordion-icon"><i class="fas fa-rocket"></i></span>
-            L'avenir de l'IA
-        </button>
-    </h2>
-    <div id="acc5" class="accordion-collapse collapse" data-bs-parent="#iaAccordion">
-        <div class="accordion-body">
-            L'avenir de l'IA s'annonce fascinant : <strong>IA générale</strong> (AGI) capable de réaliser
-            n'importe quelle tâche intellectuelle humaine, <strong>informatique quantique</strong> qui
-            démultipliera les capacités de calcul, <strong>IA explicable</strong> pour des décisions
-            transparentes, <strong>collaboration homme-machine</strong> renforcée, et <strong>IA durable</strong>
-            avec une empreinte énergétique maîtrisée. Les prochaines décennies verront l'IA s'intégrer
-            encore plus profondément dans notre vie, transformant la médecine, l'éducation, l'industrie
-            et la recherche scientifique.
-        </div>
-    </div>
-</div>
-
-</div>
-</div>
-</div>
-</section>
-
-<!-- ============================================================
-SERVICES SECTION
-============================================================ -->
-<section class="section-padding" id="service-section" style="padding-top:0;">
-    <div class="container">
-        <div class="text-center fade-section">
-            <span class="hero-badge" style="font-size:0.75rem;">
-                <i class="fas fa-cubes me-1"></i> Nos services
-            </span>
-            <h2 class="section-title">Des solutions IA sur mesure</h2>
-            <div class="section-divider"></div>
-            <p class="section-subtitle">
-                Accompagnement, développement et formation pour maîtriser l'IA.
-            </p>
-        </div>
-
-        <div class="row g-4 fade-stagger" id="serviceCards">
-            <!-- Carte 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="service-card glass">
-                    <div class="icon-wrap">
-                        <i class="fas fa-handshake"></i>
+            <div class="row g-4 reveal-stagger" id="serviceCards">
+                <!-- Carte 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-sparkles"></i>
+                        </div>
+                        <h5>Création IA</h5>
+                        <p>Utilisez l'intelligence artificielle pour créer rapidement du contenu moderne et pertinent.</p>
+                        <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur Création IA')">
+                            En savoir plus <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
                     </div>
-                    <h5>Consulting IA</h5>
-                    <p>
-                        Accompagnement stratégique pour intégrer l'IA dans vos processus
-                        métier, avec une analyse personnalisée de vos besoins.
-                    </p>
-                    <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur le Consulting IA')">
-                        En savoir plus <i class="fas fa-arrow-right ms-1"></i>
-                    </button>
                 </div>
-            </div>
 
-            <!-- Carte 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="service-card glass">
-                    <div class="icon-wrap" style="background:linear-gradient(135deg, #FF6584, #ff8a9e);">
-                        <i class="fas fa-code"></i>
+                <!-- Carte 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <div class="icon-wrap" style="background: linear-gradient(135deg, #f472b6, #fb923c);">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                        <h5>Automatisation</h5>
+                        <p>Automatisez vos tâches répétitives et améliorez votre productivité grâce à l'IA.</p>
+                        <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur Automatisation')">
+                            En savoir plus <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
                     </div>
-                    <h5>Développement IA</h5>
-                    <p>
-                        Création de solutions sur mesure : chatbots, modèles prédictifs,
-                        vision par ordinateur, traitement du langage naturel et plus.
-                    </p>
-                    <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur le Développement IA')">
-                        En savoir plus <i class="fas fa-arrow-right ms-1"></i>
-                    </button>
                 </div>
-            </div>
 
-            <!-- Carte 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="service-card glass">
-                    <div class="icon-wrap" style="background:linear-gradient(135deg, #6C63FF, #a78bfa);">
-                        <i class="fas fa-graduation-cap"></i>
+                <!-- Carte 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <div class="icon-wrap" style="background: linear-gradient(135deg, #a78bfa, #7dd3fc);">
+                            <i class="bi bi-brain"></i>
+                        </div>
+                        <h5>Analyse intelligente</h5>
+                        <p>Transformez vos données en informations utiles grâce à des outils d'analyse assistés par IA.</p>
+                        <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur Analyse intelligente')">
+                            En savoir plus <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
                     </div>
-                    <h5>Formation IA</h5>
-                    <p>
-                        Sensibilisation et formation à l'IA pour vos équipes :
-                        ateliers pratiques, conférences et parcours certifiants.
-                    </p>
-                    <button class="btn btn-outline-glass" onclick="alert('🔍 En savoir plus sur la Formation IA')">
-                        En savoir plus <i class="fas fa-arrow-right ms-1"></i>
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!-- ============================================================
+    OTHER SECTION
+    ============================================================ -->
+    <section id="other" class="section-padding" style="background: var(--bg-secondary); transition: background var(--transition-theme);">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">L'IA ouvre de nouvelles possibilités</h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle">
+                    Des capacités infinies pour repousser les limites de l'innovation.
+                </p>
+            </div>
+
+            <div class="other-stats reveal">
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Possibilités</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Assistance</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">⚡</span>
+                    <span class="stat-label">Productivité</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
 
 <!-- ============================================================
 FOOTER
@@ -1175,54 +1191,51 @@ FOOTER
 <footer class="footer-custom" id="footer">
     <div class="container">
         <div class="row g-4">
-
-            <!-- Brand + desc -->
+            <!-- Brand + social -->
             <div class="col-lg-4">
-                <a class="navbar-brand" href="#" style="font-size:1.6rem;display:inline-block;margin-bottom:0.5rem;">
-                    <i class="fas fa-brain"></i> IA<span style="-webkit-text-fill-color:var(--secondary);">+</span>
+                <a class="navbar-brand" href="#home" style="font-size:1.8rem;display:inline-block;margin-bottom:0.5rem;">
+                    <i class="bi bi-stars"></i> IA
                 </a>
-                <p style="max-width:300px;">
-                    Révolutionner le futur grâce à l'intelligence artificielle.
-                    Innover, former, accompagner.
+                <p style="max-width:300px; color: var(--text-secondary);">
+                    L'intelligence artificielle au service de l'innovation.
                 </p>
                 <div class="mt-3">
-                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="social-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                    <a href="#" class="social-link" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
 
             <!-- Contact -->
             <div class="col-md-4 col-lg-3">
-                <h6><i class="fas fa-address-card me-2" style="color:var(--primary);"></i>Contact</h6>
+                <h6><i class="bi bi-envelope me-2" style="color:var(--accent-blue);"></i>Contact</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-envelope me-2" style="color:var(--text-muted);width:20px;"></i> contact@ia-solutions.com</li>
-                    <li><i class="fas fa-phone me-2" style="color:var(--text-muted);width:20px;"></i> +33 1 23 45 67 89</li>
-                    <li><i class="fas fa-location-dot me-2" style="color:var(--text-muted);width:20px;"></i> 123 Avenue de l'Innovation, 75000 Paris</li>
+                    <li><i class="bi bi-envelope me-2" style="color:var(--text-muted);"></i> contact@ia-solutions.com</li>
+                    <li><i class="bi bi-phone me-2" style="color:var(--text-muted);"></i> +33 1 23 45 67 89</li>
+                    <li><i class="bi bi-geo-alt me-2" style="color:var(--text-muted);"></i> 123 Avenue de l'Innovation, 75000 Paris</li>
                 </ul>
             </div>
 
-            <!-- Liens rapides -->
+            <!-- Navigation -->
             <div class="col-md-4 col-lg-2">
-                <h6><i class="fas fa-link me-2" style="color:var(--primary);"></i>Liens</h6>
+                <h6><i class="bi bi-link-45deg me-2" style="color:var(--accent-blue);"></i>Liens</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#hero">Accueil</a></li>
-                    <li><a href="#accordion-section">Services</a></li>
-                    <li><a href="#service-section">Autre</a></li>
-                    <li><a href="#footer">Contact</a></li>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#prompts">Service</a></li>
+                    <li><a href="#other">Autre</a></li>
                 </ul>
             </div>
 
-            <!-- Newsletter / CTA -->
+            <!-- Petit extra -->
             <div class="col-md-4 col-lg-3">
-                <h6><i class="fas fa-newspaper me-2" style="color:var(--primary);"></i>Restez informé</h6>
-                <p style="font-size:0.88rem;">Recevez nos actualités sur l'IA et les innovations.</p>
+                <h6><i class="bi bi-rss me-2" style="color:var(--accent-blue);"></i>Restez informé</h6>
+                <p style="font-size:0.88rem;">Abonnez-vous à notre newsletter IA.</p>
                 <div class="input-group" style="backdrop-filter:blur(8px);">
                     <input type="email" class="form-control" placeholder="Votre email" aria-label="Email"
-                    style="background:var(--bg-surface);border:1px solid var(--border-glass);color:var(--text-primary);border-radius:40px 0 0 40px;padding:0.6rem 1.2rem;">
-                    <button class="btn" style="background:var(--primary);color:#fff;border-radius:0 40px 40px 0;padding:0.6rem 1.2rem;border:none;">
-                        <i class="fas fa-paper-plane"></i>
+                    style="background:var(--bg-surface);border:1px solid var(--glass-border);color:var(--text-primary);border-radius:40px 0 0 40px;padding:0.6rem 1.2rem;">
+                    <button class="btn" style="background:var(--accent-blue);color:#0f172a;border-radius:0 40px 40px 0;padding:0.6rem 1.2rem;border:none;">
+                        <i class="bi bi-send-fill"></i>
                     </button>
                 </div>
             </div>
@@ -1230,15 +1243,13 @@ FOOTER
 
         <hr class="footer-divider" />
         <div class="copyright">
-            &copy; 2026 IA<sup>+</sup> Solutions — Tous droits réservés.
-            <span class="d-inline-block ms-2">Fait avec <i class="fas fa-heart" style="color:var(--secondary);"></i></span>
+            &copy; 2026 — Tous droits réservés. <span class="d-inline-block ms-2">Fait avec <i class="bi bi-heart-fill" style="color:var(--accent-pink);"></i></span>
         </div>
     </div>
 </footer>
 
-
 <!-- ============================================================
-BOOTSTRAP JS (pour accordéon & collapse)
+BOOTSTRAP JS (pour la collapse du menu)
 ============================================================ -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
 </script>
@@ -1247,16 +1258,17 @@ BOOTSTRAP JS (pour accordéon & collapse)
 JAVASCRIPT PERSO
 ============================================================ -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    (function() {
+        'use strict';
 
-        // ------------------------------------------------------------
-        // 1. THEME TOGGLE
-        // ------------------------------------------------------------
+        // ============================================================
+        // THEME
+        // ============================================================
         const toggle = document.getElementById('themeToggle');
         const html = document.documentElement;
 
-        // Récupère le thème stocké ou utilise 'light' par défaut
-        let storedTheme = localStorage.getItem('ia-theme') || 'light';
+        // Récupère le thème stocké
+        let storedTheme = localStorage.getItem('ia-theme') || 'dark';
         html.setAttribute('data-bs-theme', storedTheme);
 
         toggle.addEventListener('click', function(e) {
@@ -1265,12 +1277,9 @@ JAVASCRIPT PERSO
             const next = current === 'light' ? 'dark' : 'light';
             html.setAttribute('data-bs-theme', next);
             localStorage.setItem('ia-theme', next);
-            // Ajoute une classe temporaire pour la transition
-            document.body.classList.add('theme-transition');
-            setTimeout(() => document.body.classList.remove('theme-transition'), 500);
         });
 
-        // Accessibilité : touche Entrée / Espace sur le toggle
+        // Accessibilité : Enter / Space
         toggle.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -1278,134 +1287,12 @@ JAVASCRIPT PERSO
             }
         });
 
-        // ------------------------------------------------------------
-        // 2. SCROLL ANIMATIONS (fade-in)
-        // ------------------------------------------------------------
-        const fadeElements = document.querySelectorAll('.fade-section');
-        const fadeStaggers = document.querySelectorAll('.fade-stagger');
-
-        const observerOptions = {
-            threshold: 0.12,
-            rootMargin: '0px 0px -30px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // Si c'est un conteneur stagger, on s'assure que les enfants deviennent visibles
-                    if (entry.target.classList.contains('fade-stagger')) {
-                        entry.target.querySelectorAll('*').forEach(el => {
-                            el.style.opacity = '1';
-                            el.style.transform = 'translateY(0)';
-                        });
-                    }
-                }
-            });
-        }, observerOptions);
-
-        fadeElements.forEach(el => observer.observe(el));
-        fadeStaggers.forEach(el => observer.observe(el));
-
-        // Pour les éléments qui sont déjà visibles au chargement
-        setTimeout(() => {
-            fadeElements.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight * 0.85) {
-                    el.classList.add('visible');
-                }
-            });
-            fadeStaggers.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight * 0.85) {
-                    el.classList.add('visible');
-                    el.querySelectorAll('*').forEach(child => {
-                        child.style.opacity = '1';
-                        child.style.transform = 'translateY(0)';
-                    });
-                }
-            });
-        }, 200);
-
-        // ------------------------------------------------------------
-        // 3. ANIMATION DES STATS (compteur)
-        // ------------------------------------------------------------
-        const statNumbers = document.querySelectorAll('.stat-number');
-
-        function animateStats() {
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-count'), 10);
-                if (isNaN(target)) return;
-                let current = 0;
-                const increment = Math.ceil(target / 45);
-                const duration = 1600;
-                const stepTime = Math.floor(duration / 45);
-
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    stat.textContent = current;
-                }, stepTime);
-            });
-        }
-
-        // Lance le compteur quand la section hero est visible
-        const heroObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateStats();
-                    heroObserver.disconnect();
-                }
-            });
-        }, { threshold: 0.3 });
-
-        const heroSection = document.querySelector('#hero');
-        if (heroSection) heroObserver.observe(heroSection);
-
-        // ------------------------------------------------------------
-        // 4. NAVBAR ACTIVE LINK (highlight au scroll)
-        // ------------------------------------------------------------
-        const navLinks = document.querySelectorAll('.navbar-custom .nav-link');
-        const sections = [
-            document.getElementById('hero'),
-            document.getElementById('accordion-section'),
-            document.getElementById('service-section')
-        ];
-
-        function updateActiveLink() {
-            let current = '';
-            const scrollPos = window.scrollY + 120;
-
-            sections.forEach((sec, idx) => {
-                if (!sec) return;
-                const top = sec.offsetTop;
-                const height = sec.offsetHeight;
-                if (scrollPos >= top && scrollPos < top + height) {
-                    current = idx === 0 ? '#hero' :
-                        idx === 1 ? '#accordion-section' : '#service-section';
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === current) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', updateActiveLink);
-        window.addEventListener('resize', updateActiveLink);
-        updateActiveLink();
-
-        // ------------------------------------------------------------
-        // 5. FERMER LE MENU MOBILE APRÈS CLIC
-        // ------------------------------------------------------------
+        // ============================================================
+        // MOBILE NAV : fermeture automatique après clic
+        // ============================================================
         const navCollapse = document.getElementById('navMenu');
         const bsCollapse = new bootstrap.Collapse(navCollapse, { toggle: false });
+        const navLinks = document.querySelectorAll('.navbar-custom .nav-link');
 
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
@@ -1415,9 +1302,119 @@ JAVASCRIPT PERSO
             });
         });
 
-        // ------------------------------------------------------------
-        // 6. SMOOTH SCROLL POUR LES LIENS INTERNES (amélioration)
-        // ------------------------------------------------------------
+        // ============================================================
+        // ACCORDION (personnalisé)
+        // ============================================================
+        const accordionItems = document.querySelectorAll('.accordion-item-custom');
+
+        function closeAllExcept(activeItem) {
+            accordionItems.forEach(item => {
+                if (item !== activeItem) {
+                    item.classList.remove('active');
+                    const header = item.querySelector('.accordion-header-custom');
+                    if (header) header.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header-custom');
+            header.addEventListener('click', function(e) {
+                const isActive = item.classList.contains('active');
+
+                if (isActive) {
+                    // Fermer celui-ci
+                    item.classList.remove('active');
+                    header.setAttribute('aria-expanded', 'false');
+                } else {
+                    // Fermer les autres et ouvrir celui-ci
+                    closeAllExcept(item);
+                    item.classList.add('active');
+                    header.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // Initialiser : s'assurer que le premier est ouvert par défaut (déjà class active)
+        // mais on met à jour les aria-expanded
+        document.querySelectorAll('.accordion-item-custom.active .accordion-header-custom').forEach(h => {
+            h.setAttribute('aria-expanded', 'true');
+        });
+
+        // ============================================================
+        // SCROLL PROGRESS BAR
+        // ============================================================
+        const progressBar = document.getElementById('scroll-progress');
+
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+        }
+
+        window.addEventListener('scroll', updateProgress);
+
+        // ============================================================
+        // SCROLL REVEAL (IntersectionObserver)
+        // ============================================================
+        const revealElements = document.querySelectorAll('.reveal');
+        const staggerElements = document.querySelectorAll('.reveal-stagger');
+
+        const revealObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+        staggerElements.forEach(el => revealObserver.observe(el));
+
+        // ============================================================
+        // ACTIVE NAV LINK (mise à jour au scroll)
+        // ============================================================
+        const sections = [
+            document.getElementById('home'),
+            document.getElementById('prompts'),
+            document.getElementById('services'),
+            document.getElementById('other')
+        ];
+        const navLinkItems = document.querySelectorAll('.navbar-custom .nav-link');
+
+        function updateActiveLink() {
+            let currentId = '';
+            const scrollPos = window.scrollY + 150;
+
+            sections.forEach((sec) => {
+                if (!sec) return;
+                const top = sec.offsetTop;
+                const height = sec.offsetHeight;
+                if (scrollPos >= top && scrollPos < top + height) {
+                    currentId = '#' + sec.id;
+                }
+            });
+
+            navLinkItems.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('resize', updateActiveLink);
+        updateActiveLink();
+
+        // ============================================================
+        // SMOOTH SCROLL pour les ancres (amélioration)
+        // ============================================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const targetId = this.getAttribute('href');
@@ -1425,7 +1422,7 @@ JAVASCRIPT PERSO
                 const targetEl = document.querySelector(targetId);
                 if (targetEl) {
                     e.preventDefault();
-                    const offsetTop = targetEl.offsetTop - 80;
+                    const offsetTop = targetEl.offsetTop - 90; // hauteur navbar + marge
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
@@ -1434,7 +1431,24 @@ JAVASCRIPT PERSO
             });
         });
 
-    });
+        // ============================================================
+        // PREVENT DEFAULT SUR LES BOUTONS SERVICES (déjà géré)
+        // ============================================================
+
+        // ============================================================
+        // INIT : si la page est chargée avec un hash, on ajuste
+        // ============================================================
+        if (window.location.hash) {
+            setTimeout(() => {
+                const target = document.querySelector(window.location.hash);
+                if (target) {
+                    const offset = target.offsetTop - 90;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
+                }
+            }, 300);
+        }
+
+    })();
 </script>
 
 </body>
