@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>MySite — Frosted Glass Edition</title>
+
+<!-- Typography: Syne (display) + Manrope (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ============ Design tokens ============ */
+:root{
+  --font-display:"Syne",sans-serif;
+  --font-body:"Manrope",sans-serif;
+  --radius:1.15rem;
+  --btn-a:#4fd9f2; --btn-b:#7c8bff; --btn-ink:#071019; /* stable across themes */
+}
+[data-bs-theme="dark"]{
+  --bg-0:#05070f; --bg-1:#0a1122; --bg-2:#111b38;
+  --ink:#edf1ff; --muted:#9fabce;
+  --glass:rgba(255,255,255,.055); --glass-strong:rgba(255,255,255,.10);
+  --glass-border:rgba(255,255,255,.13); --glass-hi:rgba(255,255,255,.10);
+  --accent-text:#7deeff; --accent-glow:rgba(99,232,255,.45);
+  --danger:#ff8fa3; --danger-bg:rgba(255,99,125,.12); --danger-border:rgba(255,99,125,.4);
+  --nav-bg:rgba(7,10,22,.55); --menu-bg:rgba(5,7,15,.78);
+  --orb-a:rgba(99,140,255,.32); --orb-b:rgba(99,232,255,.20);
+}
+[data-bs-theme="light"]{
+  --bg-0:#eef2ff; --bg-1:#e4ebff; --bg-2:#dbe6ff;
+  --ink:#101a33; --muted:#4d5c85;
+  --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.85);
+  --glass-border:rgba(16,26,51,.12); --glass-hi:rgba(255,255,255,.9);
+  --accent-text:#0b7ea0; --accent-glow:rgba(15,143,176,.35);
+  --danger:#b3123a; --danger-bg:rgba(179,18,58,.08); --danger-border:rgba(179,18,58,.35);
+  --nav-bg:rgba(255,255,255,.55); --menu-bg:rgba(238,242,255,.82);
+  --orb-a:rgba(124,140,255,.35); --orb-b:rgba(79,217,242,.30);
+}
+
+/* ============ Base & background depth ============ */
+*{scrollbar-width:thin}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body); color:var(--ink); min-height:100vh;
+  background:
+    radial-gradient(1100px 700px at 85% -10%, var(--bg-2), transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0) 55%);
+  background-attachment:fixed;
+}
+::selection{background:color-mix(in srgb,var(--accent-text) 30%,transparent)}
+:focus-visible{outline:2px solid var(--accent-text);outline-offset:3px;border-radius:8px}
+section{scroll-margin-top:96px}
+h1,h2,.font-display{font-family:var(--font-display)}
+
+.orb{position:fixed;z-index:-1;border-radius:50%;filter:blur(110px);pointer-events:none}
+.orb-a{width:46vw;height:46vw;background:var(--orb-a);top:-12vw;right:-10vw;animation:drift 22s ease-in-out infinite alternate}
+.orb-b{width:38vw;height:38vw;background:var(--orb-b);bottom:-14vw;left:-8vw;animation:drift 26s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate3d(4vw,3vw,0) scale(1.08)}}
+
+/* ============ Glass primitives ============ */
+.glass{
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 24px 60px -32px rgba(0,0,0,.55), inset 0 1px 0 var(--glass-hi);
+  position:relative; overflow:hidden;
+}
+.glass::before{ /* hairline glow on top edge */
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--accent-text) 55%,transparent),transparent);
+  opacity:.7;
+}
+.glass-hover{transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease}
+.glass-hover:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent-text) 35%,var(--glass-border));
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.6), 0 0 40px -18px var(--accent-glow), inset 0 1px 0 var(--glass-hi)}
+
+/* ============ Navbar ============ */
+.glass-nav{background:var(--nav-bg);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--glass-border);padding:.85rem 0}
+.brand{font-family:var(--font-display);font-weight:800;letter-spacing:.02em;display:flex;gap:.6rem;align-items:center;color:var(--ink);text-decoration:none;font-size:1.15rem}
+.brand .dot{width:.65rem;height:.65rem;border-radius:50%;background:linear-gradient(135deg,var(--btn-a),var(--btn-b));
+  box-shadow:0 0 12px var(--accent-glow),0 0 32px var(--accent-glow);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.nav-a{position:relative;color:var(--muted);text-decoration:none;font-weight:600;letter-spacing:.02em;padding:.5rem .15rem;margin:0 .55rem;transition:color .25s}
+.nav-a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--btn-a),var(--btn-b));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.nav-a:hover,.nav-a:focus-visible{color:var(--ink)}
+.nav-a:hover::after,.nav-a:focus-visible::after{transform:scaleX(1)}
+
+.icon-btn{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--glass-border);
+  background:var(--glass);color:var(--ink);cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent-text) 40%,transparent);box-shadow:0 0 22px -8px var(--accent-glow)}
+[data-bs-theme="dark"] .ico-moon{display:none}
+[data-bs-theme="light"] .ico-sun{display:none}
+
+/* Animated hamburger */
+.burger{display:inline-flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;
+  border-radius:12px;border:1px solid var(--glass-border);background:var(--glass);color:var(--ink);cursor:pointer;transition:border-color .25s}
+.burger:hover{border-color:color-mix(in srgb,var(--accent-text) 40%,transparent)}
+.burger span{width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s cubic-bezier(.65,.05,.36,1),opacity .25s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(.4)}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Full-screen mobile menu */
+.mobile-menu{position:fixed;inset:0;z-index:1075;display:flex;flex-direction:column;justify-content:center;gap:.35rem;
+  padding:2rem 2.25rem;background:var(--menu-bg);backdrop-filter:blur(28px) saturate(140%);-webkit-backdrop-filter:blur(28px) saturate(140%);
+  opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.mobile-menu.open{opacity:1;visibility:visible}
+.m-link{display:flex;align-items:center;gap:1rem;font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,6vw,2.4rem);
+  color:var(--muted);text-decoration:none;padding:.55rem 0;opacity:0;transform:translateY(18px);
+  transition:opacity .4s ease,transform .4s ease,color .25s;transition-delay:0s}
+.m-link svg{width:.9em;height:.9em;color:var(--accent-text)}
+.m-link:hover,.m-link:focus-visible{color:var(--ink)}
+.mobile-menu.open .m-link{opacity:1;transform:none;transition-delay:calc(90ms + var(--i)*70ms)}
+.m-note{margin-top:2rem;color:var(--muted);font-size:.85rem;letter-spacing:.14em;text-transform:uppercase}
+@media (min-width:992px){.mobile-menu{display:none}}
+body.menu-open{overflow:hidden}
+
+/* ============ Hero ============ */
+.hero{padding:118px 0 3.5rem}
+.badge-pill{display:inline-flex;align-items:center;gap:.55rem;padding:.45rem .95rem;border-radius:999px;font-size:.8rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--glass);border:1px solid var(--glass-border)}
+.badge-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-text);box-shadow:0 0 10px var(--accent-glow)}
+.hero h1{font-weight:800;font-size:clamp(2.3rem,5.2vw,3.6rem);line-height:1.08;letter-spacing:-.01em}
+.hero h1 .grad{background:linear-gradient(92deg,var(--btn-a),var(--btn-b));-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px var(--accent-glow))}
+.lede{color:var(--muted);font-size:1.06rem;max-width:34rem}
+
+/* ============ Fields & inputs ============ */
+.field{position:relative}
+.field-ico{position:absolute;left:1rem;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
+.glass-input{background:var(--glass)!important;border:1px solid var(--glass-border)!important;color:var(--ink)!important;
+  border-radius:.9rem!important;padding:.85rem 1rem .85rem 2.85rem;font-weight:500;transition:border-color .25s,box-shadow .25s}
+.glass-input::placeholder{color:color-mix(in srgb,var(--muted) 75%,transparent)}
+.glass-input:focus{border-color:var(--accent-text)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent-text) 18%,transparent)!important}
+.field-help{display:block;margin-top:.55rem;color:var(--muted);font-size:.82rem}
+.field .invalid-feedback{color:var(--danger)}
+
+/* ============ Buttons ============ */
+.btn{font-weight:700;letter-spacing:.01em;border-radius:.85rem;padding:.7rem 1.25rem;display:inline-flex;align-items:center;gap:.55rem;
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease,border-color .25s ease,color .25s ease}
+.btn svg{width:1.05em;height:1.05em}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn-glow{color:var(--btn-ink);background:linear-gradient(135deg,var(--btn-a),var(--btn-b));border:1px solid transparent;
+  box-shadow:0 10px 28px -12px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-glow:hover{color:var(--btn-ink);transform:translateY(-2px);box-shadow:0 16px 38px -12px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-glass{color:var(--ink);background:var(--glass);border:1px solid var(--glass-border)}
+.btn-glass:hover{color:var(--ink);background:var(--glass-strong);border-color:color-mix(in srgb,var(--accent-text) 35%,transparent);transform:translateY(-2px)}
+.btn-danger-glass{color:var(--danger);background:var(--danger-bg);border:1px solid var(--danger-border)}
+.btn-danger-glass:hover{color:var(--danger);transform:translateY(-2px);box-shadow:0 12px 30px -16px var(--danger)}
+.btn.is-success{box-shadow:0 0 0 1px rgba(52,211,153,.55),0 12px 32px -14px rgba(52,211,153,.5)}
+.btn:disabled{opacity:.75;cursor:wait}
+.spin{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ============ Cards & states ============ */
+.card-h{display:flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-weight:700;font-size:1.05rem;margin-bottom:1rem}
+.ico-chip{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:var(--accent-text);
+  background:color-mix(in srgb,var(--accent-text) 13%,transparent);border:1px solid color-mix(in srgb,var(--accent-text) 28%,transparent);
+  box-shadow:0 0 18px -6px var(--accent-glow)}
+.ico-chip svg{width:18px;height:18px}
+.card-copy{color:var(--muted)}
+
+.empty-state,.hit-state{display:flex;align-items:center;gap:.8rem;margin-top:1.15rem;padding:.8rem 1rem;border-radius:.9rem;
+  border:1px dashed var(--glass-border);color:var(--muted);font-size:.9rem;animation:rise .5s ease both}
+.empty-state svg,.hit-state svg{flex:none;width:18px;height:18px;color:var(--accent-text)}
+.empty-state strong,.hit-state strong{display:block;color:var(--ink);font-size:.92rem}
+.hit-state{border-style:solid;border-color:color-mix(in srgb,var(--accent-text) 35%,transparent);
+  box-shadow:0 0 24px -12px var(--accent-glow)}
+
+.form-note{min-height:1.3rem;margin:.75rem 0 0;font-size:.85rem;color:var(--accent-text)}
+
+/* ============ Footer ============ */
+footer{padding:3rem 0 2.5rem;color:var(--muted);font-size:.9rem;
+  border-top:1px solid var(--glass-border)}
+footer .sep{margin:0 .5rem;color:var(--accent-text)}
+
+/* ============ Scroll reveal (pure CSS when supported) ============ */
+@keyframes rise{from{opacity:0;transform:translateY(28px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@supports (animation-timeline: view()){
+  .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 5% entry 42%}
+}
+.no-scroll-timeline .reveal{opacity:0;transform:translateY(26px);filter:blur(6px)}
+.no-scroll-timeline .reveal.in-view{animation:rise .7s cubic-bezier(.22,.61,.36,1) forwards}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .reveal{opacity:1!important;transform:none!important;filter:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient depth -->
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+
+<!-- ===== Fixed glass navbar ===== -->
+<nav class="navbar glass-nav fixed-top" aria-label="Primary">
+  <div class="container">
+    <a class="brand" href="#home"><span class="dot" aria-hidden="true"></span>MySite</a>
+
+    <div class="d-none d-lg-flex align-items-center ms-auto me-3">
+      <a href="#" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#demo">offcanvas</a>
+      <a class="nav-a" href="#home">Home</a>
+      <a class="nav-a" href="#features">Features</a>
+      <a class="nav-a" href="#subscribe">Pricing</a>
+      <a class="nav-a" href="#about">About</a>
+</button>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 ms-auto ms-lg-0">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle color theme">
+        <i data-lucide="sun" class="ico-sun"></i>
+        <i data-lucide="moon" class="ico-moon"></i>
+      </button>
+      <button class="burger d-lg-none" id="menuToggle" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Full-screen mobile menu ===== -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <nav aria-label="Mobile" class="d-flex flex-column">
+    <a href="#home" class="m-link" style="--i:0"><i data-lucide="home"></i>Home</a>
+    <a href="#features" class="m-link" style="--i:1"><i data-lucide="layout-grid"></i>Features</a>
+    <a href="#subscribe" class="m-link" style="--i:2"><i data-lucide="tag"></i>Pricing</a>
+    <a href="#about" class="m-link" style="--i:3"><i data-lucide="circle-user"></i>About</a>
+  </nav>
+  <p class="m-note">Frosted glass · Bootstrap 5</p>
+</div>
+
+<main class="container">
+
+  <!-- ===== Hero + input field ===== -->
+  <section class="hero" id="home">
+  <!-- Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-start" id="demo">
+  <div class="offcanvas-header">
+    <h1 class="offcanvas-title">Heading</h1>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>Some text lorem ipsum.</p>
+    <p>Some text lorem ipsum.</p>
+    <button class="btn btn-secondary" type="button">A Button</button>
+  </div>
+</div>
+
+  </section>
+
+<!-- ------------------------------->
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6 reveal">
+        <div class="glass glass-hover p-4 p-md-5">
+          <div class="card-h"><span class="ico-chip"><i data-lucide="pen-line"></i></span>Input field</div>
+          <label for="nameInput" class="form-label fw-semibold">Your name</label>
+          <div class="field">
+            <i data-lucide="user" class="field-ico"></i>
+            <input type="text" class="form-control glass-input" id="nameInput"
+                   placeholder="Ada Lovelace" autocomplete="name">
+          </div>
+          <small class="field-help">We'll never share your data.</small>
+        </div>
+      </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+(function () {
+  "use strict";
+  const root = document.documentElement;
+
+  /* ---------- Theme (persisted + system-aware) ---------- */
+  const saved = localStorage.getItem("glass-theme");
+  const prefersLight = matchMedia("(prefers-color-scheme: light)").matches;
+  setTheme(saved || (prefersLight ? "light" : "dark"));
+  function setTheme(t) {
+    root.setAttribute("data-bs-theme", t);
+    localStorage.setItem("glass-theme", t);
+    document.getElementById("themeToggle").setAttribute("aria-label",
+      t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  }
+  document.getElementById("themeToggle").addEventListener("click", () =>
+    setTheme(root.getAttribute("data-bs-theme") === "dark" ? "light" : "dark"));
+
+  /* ---------- Animated hamburger → full-screen menu ---------- */
+  const burger = document.getElementById("menuToggle");
+  const menu = document.getElementById("mobileMenu");
+  function toggleMenu(force) {
+    const open = force !== undefined ? force : !menu.classList.contains("open");
+    menu.classList.toggle("open", open);
+    burger.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", open);
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.setAttribute("aria-hidden", !open);
+    document.body.classList.toggle("menu-open", open);
+  }
+  burger.addEventListener("click", () => toggleMenu());
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => toggleMenu(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape") toggleMenu(false); });
+
+  /* ---------- Scroll reveal: JS fallback when scroll-timeline unsupported ---------- */
+  if (!(window.CSS && CSS.supports("animation-timeline: view()"))) {
+    document.body.classList.add("no-scroll-timeline");
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("in-view"); io.unobserve(e.target); }
+    }), { threshold: 0.15 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  }
+
+  /* ---------- Async buttons: default → loading → success ---------- */
+  function runAsync(btn, loading, done, cb) {
+    if (btn.dataset.busy) return;
+    btn.dataset.busy = "1";
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i>${loading}`;
+    lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = `<i data-lucide="check"></i>${done}`;
+      btn.classList.add("is-success");
+      lucide.createIcons();
+      if (cb) cb();
+      setTimeout(() => {
+        btn.innerHTML = orig; btn.classList.remove("is-success");
+        btn.disabled = false; delete btn.dataset.busy;
+      }, 1500);
+    }, 1300);
+  }
+  document.getElementById("submitBtn").addEventListener("click", e =>
+    runAsync(e.currentTarget, "Submitting", "Submitted"));
+  document.getElementById("deleteBtn").addEventListener("click", e =>
+    runAsync(e.currentTarget, "Deleting", "Deleted"));
+
+  /* ---------- Click counter with empty state ---------- */
+  let count = 0;
+  const status = document.getElementById("clickStatus");
+  function renderStatus() {
+    status.innerHTML = count === 0
+      ? `<div class="empty-state"><i data-lucide="inbox"></i>
+           <div><strong>No clicks yet.</strong><span>Be the first to press it.</span></div></div>`
+      : `<div class="hit-state"><i data-lucide="mouse-pointer-click"></i>
+           <div><strong>${count} click${count > 1 ? "s" : ""} registered.</strong><span>Micro-interaction confirmed.</span></div></div>`;
+    lucide.createIcons();
+  }
+  renderStatus();
+  document.getElementById("clickMeBtn").addEventListener("click", () => { count++; renderStatus(); });
+  document.getElementById("cancelBtn").addEventListener("click", () => { count = 0; renderStatus(); });
+
+  /* ---------- Name → live greeting ---------- */
+  const greet = document.getElementById("greet");
+  document.getElementById("nameInput").addEventListener("input", e => {
+    greet.textContent = e.target.value.trim() ? e.target.value.trim().split(/\s+/)[0] : "friend";
+  });
+
+  /* ---------- Subscribe form: validation + loading ---------- */
+  const form = document.getElementById("subscribeForm");
+  const email = document.getElementById("emailInput");
+  const note = document.getElementById("subscribeNote");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (!email.checkValidity()) {
+      email.classList.add("is-invalid");
+      note.textContent = "";
+      email.focus();
+      return;
+    }
+    email.classList.remove("is-invalid");
+    runAsync(document.getElementById("subscribeBtn"), "Subscribing", "Subscribed",
+      () => { note.textContent = "You're on the list — welcome aboard ✨"; });
+  });
+  email.addEventListener("input", () => { email.classList.remove("is-invalid"); note.textContent = ""; });
+
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>
