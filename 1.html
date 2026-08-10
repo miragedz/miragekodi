@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap 5.3 Accordion Example</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-dark.min.css" rel="stylesheet">
+</head>
+<style>    
+body {
+            background-color: #000000;
+            padding: 50px 0;
+        }
+        .accordion-item {
+            border: none;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+</style>
+<body class="p-4">
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#Prompt" type="button" role="tab" aria-controls="home" aria-selected="true">Prompt</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">kodi</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Ai Website</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="Prompt" role="tabpanel" aria-labelledby="home-tab">
+
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Prompt Engineering 
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Agis en tant qu'expert en intelligence artificielle et spécialiste en ingénierie des prompts. Je souhaite obtenir le meilleur résultat possible pour la tâche suivante :
+<code>.creer un script bash qui verifie lletat de gpio et lance un autre script.e </code>.
+Analyse ma demande, pose-moi des questions pour clarifier le contexte, puis propose-moi 3 versions optimisées et plus performantes de mon prompt, en précisant pourquoi chaque version est meilleure.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        document restoration
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+     High-fidelity document restoration, ultra-sharp text enhancement, clean white paper background, deep black ink contrast, FHD resolution, micro-details reconstruction. Remove scanner noise, eliminate motion blur, remove yellow tint and shadows. Professional digital document archiving quality, maximum legibility, photorealistic. --no artistic distortion, --no cursive alterations.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        OCR
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Act en tant qu'expert en OCR (Reconnaissance Optique de Caractères) et restauration de documents. Je vais te fournir l'image d'un document scanné dont la lisibilité est altérée.
+​Ta mission :
+​Transcris l'intégralité du texte visible sans modifier le sens original.
+​Si un mot est partiellement illisible, utilise le contexte pour le déduire et place-le entre crochets [comme ceci] pour m'avertir.
+​Corrige la mise en page en utilisant le format Markdown (titres, listes, paragraphes) pour maximiser la lisibilité.
+​Ignore les artefacts de scan (tâches, ombres, plis).
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFore" aria-expanded="false" aria-controls="collapseThree">
+        GPIO Monitor Script
+      </button>
+    </h2>
+    <div id="collapseFore" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <p>
+Act as an embedded Linux expert. You are assisting with code generation for a Raspberry Pi 5 . Optimize all code for Python 3.11+.<br>
+write python script to running python script.py with aruments after button presse/release <br>
+# inclut :<br>
+* gpiod<br>
+* case<br>
+* gpiochip0<br>
+* Raspberry Pi OS/Trixie's<br>
+* GPIO21<br>
+* path script.py = /home/<br>
+* argument 1 ="on"<br>
+* argument 2 = "off"<br>
+# functions not used :<br>
+* Error Handling<br>
+* path file check<br>
+</p>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+        old Photo restoration
+      </button>
+    </h2>
+    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+      <p>
+1- Act as a professional image editor. <br>
+2- Delivering studio-quality results. <br>
+3- Advanced color correction (balance, contrast, saturation).<br> 
+4- Noise reduction and sharpening. <br>
+5- Meticulous removal of cracks, tears, and blemishes. <br>
+7- Realistic lighting adjustments (shadows, highlights). <br>
+8- Professional composition and cropping.<br> 
+9- Styling options: natural, cinematic, vibrant, minimalist, portrait, product. <br>
+10- Restoration of clothing and background with modern clarity.<br>
+11- Strictly preserves the geometry, facial expression, and lighting of the source.<br>
+12- A clean, ultra-sharp, photorealistic image, provided without any structural modifications<br>
+</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+<p>
+<a href="repository.dregs-2.36.zip">repository.dregs-2.36.zip</a><br>
+<a href="repository.officerkd637-1.0.zip">repository.officerkd637-1.0.zip</a><br>
+<a href="repository.diggz-28.zip">repository.diggz-28.zip</a><br>
+<a href="repository.vstream-0.0.6.zip">repository.vstream-0.0.6.zip</a><br>
+<a href="vstream.db">vstream.db</a><br>
+</p>
+</div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+<a href="https://aitmpl.com">aitmpl.com</a><br>
+<a href="https://www.meigen.ai/">Meigen.ai</a><br>
+<a href="https://console.mistral.ai/">Mistral Studio</a><br>
+<a href="https://www.bananaprompts.xyz/">Bananaprompts</a><br>
+<a href="https://app.mcpmarket.com/">mcpmarket.com<a/><br>
+<a href="https://chat.qwen.ai/">Qwen.ai</a><br>
+</div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
