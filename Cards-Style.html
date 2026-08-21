@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Styles de Cartes CSS Modernes</title>
+    <style>
+        /* Base & Disposition de la page */
+        :root {
+            --bg-color: #f4f6f9;
+            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: #333;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title span {
+            background: #2563eb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* --------------------------------------------------
+           1. Classic Card
+        -------------------------------------------------- */
+        .card-1 {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card-1:hover { transform: translateY(-5px); }
+        .card-1 img { width: 100%; height: 180px; object-fit: cover; }
+        .card-1 .content { padding: 20px; }
+        .card-1 h3 { margin-bottom: 8px; font-size: 1.2rem; }
+        .card-1 p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+        .card-1 .link { color: #2563eb; text-decoration: none; font-weight: 600; }
+
+        /* --------------------------------------------------
+           2. Gradient Card
+        -------------------------------------------------- */
+        .card-2 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            text-align: center;
+        }
+        .card-2 .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .card-2 h3 { margin-bottom: 10px; }
+        .card-2 p { font-size: 0.9rem; opacity: 0.9; margin-bottom: 20px; }
+        .card-2 .btn { background: #fff; color: #764ba2; border-radius: 20px; padding: 8px 24px; }
+
+        /* --------------------------------------------------
+           3. Glassmorphism Card
+        -------------------------------------------------- */
+        .glass-bg {
+            background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+            border-radius: 16px;
+            padding: 15px;
+        }
+        .card-3 {
+            background: rgba(255, 255, 255, 0.15);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+        }
+        .card-3 .profile { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .card-3 .avatar { width: 45px; height: 45px; border-radius: 50%; }
+        .card-3 .quote { font-style: italic; font-size: 0.85rem; margin-bottom: 15px; opacity: 0.9; }
+        .card-3 .stats { display: flex; justify-content: space-around; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 10px; text-align: center; }
+        .card-3 .stats div span { display: block; font-weight: bold; }
+        .card-3 .stats div label { font-size: 0.75rem; opacity: 0.8; }
+
+        /* --------------------------------------------------
+           4. Neumorphism Card
+        -------------------------------------------------- */
+        .neumorphism-bg { background: #e0e5ec; padding: 15px; border-radius: 20px; }
+        .card-4 {
+            background: #e0e5ec;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 12px 12px 24px #a3b1c6, -12px -12px 24px #ffffff;
+            text-align: center;
+            color: #444;
+        }
+        .card-4 .icon { font-size: 2rem; color: #3b82f6; margin-bottom: 10px; }
+        .card-4 h3 { margin-bottom: 8px; }
+        .card-4 p { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
+        .card-4 .btn { background: #3b82f6; color: white; border-radius: 20px; }
+
+        /* --------------------------------------------------
+           5. Border Gradient Card
+        -------------------------------------------------- */
+        .card-5 {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            background-clip: padding-box;
+            border: 2px solid transparent;
+        }
+        .card-5::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c, #6a11cb);
+        }
+        .card-5 .icon { font-size: 2rem; color: #ff758c; margin-bottom: 10px; }
+        .card-5 h3 { margin-bottom: 8px; }
+        .card-5 p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+        .card-5 .link { color: #6a11cb; text-decoration: none; font-weight: 600; }
+
+        /* --------------------------------------------------
+           6. Dark Card
+        -------------------------------------------------- */
+        .card-6 {
+            background: #1e1e1e;
+            color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+        }
+        .card-6:hover { transform: translateY(-5px); }
+        .card-6 img { width: 100%; height: 160px; object-fit: cover; }
+        .card-6 .content { padding: 20px; }
+        .card-6 h3 { margin-bottom: 8px; }
+        .card-6 p { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; }
+        .card-6 .btn { background: #2563eb; color: #fff; }
+
+        /* --------------------------------------------------
+           7. Hover Lift Card
+        -------------------------------------------------- */
+        .card-7 {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        .card-7:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        .card-7 img { width: 100%; height: 180px; object-fit: cover; }
+        .card-7 .content { padding: 20px; }
+        .card-7 h3 { margin-bottom: 8px; }
+        .card-7 p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+        .card-7 .link { color: #10b981; text-decoration: none; font-weight: 600; }
+
+        /* --------------------------------------------------
+           8. Split Card
+        -------------------------------------------------- */
+        .card-8 {
+            display: flex;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            min-height: 180px;
+        }
+        .card-8 .left {
+            background: #6a11cb;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40%;
+        }
+        .card-8 .left img { max-width: 100%; height: auto; }
+        .card-8 .right { padding: 20px; width: 60%; display: flex; flex-direction: column; justify-content: center; }
+        .card-8 h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .card-8 p { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
+        .card-8 .price { font-size: 1.2rem; font-weight: bold; color: #6a11cb; margin-bottom: 10px; }
+        .card-8 .btn { background: #6a11cb; color: #fff; align-self: flex-start; padding: 6px 12px; font-size: 0.8rem; }
+
+        /* --------------------------------------------------
+           9. Blog Card
+        -------------------------------------------------- */
+        .card-9 {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .card-9:hover { transform: translateY(-5px); }
+        .card-9 img { width: 100%; height: 160px; object-fit: cover; }
+        .card-9 .content { padding: 16px; }
+        .card-9 .meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-bottom: 8px; }
+        .card-9 .tag { color: #10b981; font-weight: 600; }
+        .card-9 h3 { font-size: 1rem; margin-bottom: 8px; }
+        .card-9 p { font-size: 0.85rem; color: #666; margin-bottom: 12px; }
+        .card-9 .link { color: #2563eb; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+
+        /* --------------------------------------------------
+           10. Minimal Card
+        -------------------------------------------------- */
+        .card-10 {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+        .card-10 .icon {
+            width: 48px;
+            height: 48px;
+            background: #e0f2fe;
+            color: #0284c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 1.2rem;
+        }
+        .card-10 h3 { font-size: 1.1rem; margin-bottom: 6px; }
+        .card-10 p { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; }
+        .card-10 .btn { background: #0284c7; color: white; border-radius: 8px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>10 Styles de Cartes CSS Modernes</h1>
+    </div>
+
+    <div class="cards-grid">
+
+        <!-- 1. Classic Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>1</span> Classic Card</div>
+            <div class="card-1">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80" alt="Mountain">
+                <div class="content">
+                    <h3>Mountain View</h3>
+                    <p>Beautiful view of the mountains with clear blue sky.</p>
+                    <a href="#" class="link">Read More &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Gradient Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>2</span> Gradient Card</div>
+            <div class="card-2">
+                <div class="icon">&#9889;</div>
+                <h3>Boost Performance</h3>
+                <p>Optimized for speed and performance to deliver the best experience.</p>
+                <button class="btn">Learn More</button>
+            </div>
+        </div>
+
+        <!-- 3. Glassmorphism Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>3</span> Glassmorphism Card</div>
+            <div class="glass-bg">
+                <div class="card-3">
+                    <div class="profile">
+                        <img class="avatar" src="https://i.pravatar.cc/100?img=33" alt="Avatar">
+                        <div>
+                            <h4 style="margin:0;">John Doe</h4>
+                            <span style="font-size:0.75rem; opacity:0.8;">UI/UX Designer</span>
+                        </div>
+                    </div>
+                    <p class="quote">"Design is not just what it looks like and feels like. Design is how it works."</p>
+                    <div class="stats">
+                        <div><span>120</span><label>Projects</label></div>
+                        <div><span>2.5k</span><label>Followers</label></div>
+                        <div><span>80</span><label>Following</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Neumorphism Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>4</span> Neumorphism Card</div>
+            <div class="neumorphism-bg">
+                <div class="card-4">
+                    <div class="icon">&#9829;</div>
+                    <h3>Healthy Life</h3>
+                    <p>A healthy outside starts from the inside.</p>
+                    <button class="btn">Explore</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Border Gradient Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>5</span> Border Gradient Card</div>
+            <div class="card-5">
+                <div class="icon">&#9889;</div>
+                <h3>Fast Delivery</h3>
+                <p>We deliver your products as fast as possible.</p>
+                <a href="#" class="link">Read More &rarr;</a>
+            </div>
+        </div>
+
+        <!-- 6. Dark Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>6</span> Dark Card</div>
+            <div class="card-6">
+                <img src="https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=500&q=80" alt="Starry Sky">
+                <div class="content">
+                    <h3>Starry Night</h3>
+                    <p>The night sky is full of stars and endless possibilities.</p>
+                    <button class="btn">Explore More &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Hover Lift Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>7</span> Hover Lift Card</div>
+            <div class="card-7">
+                <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=500&q=80" alt="Plant">
+                <div class="content">
+                    <h3>Indoor Plant</h3>
+                    <p>A small plant can change your space.</p>
+                    <a href="#" class="link">Read More &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Split Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>8</span> Split Card</div>
+            <div class="card-8">
+                <div class="left">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80" alt="Headphones">
+                </div>
+                <div class="right">
+                    <h3>Wireless Headphones</h3>
+                    <p>High quality sound with noise cancellation.</p>
+                    <div class="price">$89.99</div>
+                    <button class="btn">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Blog Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>9</span> Blog Card</div>
+            <div class="card-9">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=500&q=80" alt="Code">
+                <div class="content">
+                    <div class="meta">
+                        <span class="tag">Web Design</span>
+                        <span>May 20, 2024</span>
+                    </div>
+                    <h3>How to Build Modern Websites</h3>
+                    <p>Learn the best practices to build modern and responsive websites.</p>
+                    <a href="#" class="link">Read More &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Minimal Card -->
+        <div class="card-wrapper">
+            <div class="card-title"><span>10</span> Minimal Card</div>
+            <div class="card-10">
+                <div class="icon">&#10004;</div>
+                <h3>Task Completed</h3>
+                <p>Congratulations! You have completed the task.</p>
+                <button class="btn">View Details</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
