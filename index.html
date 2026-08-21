@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Bootstrap 5 Single Page</title>
+  <title>MirageDZ — AI Prompt Engineering Hub</title>
 
   <!-- Bootstrap 5 CSS -->
   <link
@@ -155,14 +155,44 @@
     /* =========================================================
        NAVBAR
     ========================================================= */
-    header{ position: sticky; top: 0; z-index: 1030; }
+    header{
+      position: fixed;
+      top: 1.1rem;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+      pointer-events: none; /* let clicks pass through the empty side margins */
+    }
+    header .navbar{ pointer-events: auto; }
     .navbar{
+      width: 100%;
+      max-width: 960px;
       background: var(--navbar-bg) !important;
       backdrop-filter: blur(var(--blur-strong)) saturate(160%);
       -webkit-backdrop-filter: blur(var(--blur-strong)) saturate(160%);
-      border-bottom: 1px solid var(--glass-border);
-      transition: background var(--transition-slow), border-color var(--transition-slow);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      box-shadow: var(--glass-shadow);
+      padding-top: .35rem;
+      padding-bottom: .35rem;
+      transition: background var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow), max-width var(--transition-med);
     }
+    /* subtle top highlight, consistent with the .glass recipe */
+    .navbar::before{
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 1px;
+      border-radius: 999px 999px 0 0;
+      background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+      opacity: .5;
+      pointer-events: none;
+    }
+    /* Content no longer flows behind the fixed header, so push it down */
+    main{ padding-top: calc(1.1rem + 72px + 1.5rem); }
     .navbar-brand{ font-size: 1.15rem; }
     .navbar .nav-link{
       color: var(--text-1) !important;
@@ -198,10 +228,21 @@
     .theme-toggle:hover{ transform: translateY(-1px) scale(1.05); box-shadow: var(--glow); }
     .theme-toggle:active{ transform: translateY(0) scale(.96); }
     .theme-toggle .icon-sun{ display: none; }
-    html[data-theme="dark"] .theme-toggle .icon-moon{ display: inline; }
+    html[data-theme="dark"] .theme-toggle .icon-moon{ display: inline-flex; }
     html[data-theme="dark"] .theme-toggle .icon-sun{ display: none; }
-    html[data-theme="light"] .theme-toggle .icon-sun{ display: inline; }
+    html[data-theme="light"] .theme-toggle .icon-sun{ display: inline-flex; }
     html[data-theme="light"] .theme-toggle .icon-moon{ display: none; }
+
+    /* Lucide icons: inherit color, sit flush at their container's font-size */
+    [data-lucide]{
+      width: 1em;
+      height: 1em;
+      stroke-width: 2;
+      vertical-align: -0.125em;
+    }
+    .theme-toggle [data-lucide]{ width: 18px; height: 18px; }
+    .service-icon [data-lucide]{ width: 34px; height: 34px; }
+    .navbar-toggler [data-lucide]{ width: 20px; height: 20px; }
 
     /* Animated hamburger: morphs ☰ -> ✕ */
     .navbar-toggler{
@@ -271,6 +312,12 @@
       box-shadow: var(--glass-shadow), var(--glow) !important;
     }
     .card-title{ color: var(--text-0); font-weight: 600; }
+    .service-icon{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
 
     /* Buttons: primary glow */
     .btn-primary{
@@ -332,21 +379,7 @@
     .accordion-body{
       color: var(--text-1);
       background: transparent;
-    }
-    .accordion-body ul[data-faq-answer],
-    .accordion-body div[data-faq-answer] ul{
-      margin: 0;
-      padding-left: 1.2rem;
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-    .accordion-body ul[data-faq-answer] li,
-    .accordion-body div[data-faq-answer] ul li{
-      line-height: 1.5;
-    }
-    .accordion-body div[data-faq-answer] p{
-      color: var(--text-0);
+      line-height: 1.6;
     }
 
     /* =========================================================
@@ -481,10 +514,6 @@
 
     /* =========================================================
        SIDE-DRAWER MOBILE MENU
-       Below the sm breakpoint (where navbar-expand-sm collapses),
-       the collapse panel becomes a glass drawer that slides in
-       from the right edge of the screen, with a dimmed backdrop
-       behind it.
     ========================================================= */
     body.menu-open{ overflow: hidden; }
 
@@ -607,12 +636,12 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
       <div class="container">
 
-        <a class="navbar-brand fw-bold" href="#">MyWebsite</a>
+        <a class="navbar-brand fw-bold" href="#">MirageDZ</a>
 
         <div class="d-flex align-items-center order-sm-2">
           <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
-            <span class="icon-sun" aria-hidden="true">&#9728;&#65039;</span>
-            <span class="icon-moon" aria-hidden="true">&#127769;</span>
+            <span class="icon-sun" aria-hidden="true"><i data-lucide="sun"></i></span>
+            <span class="icon-moon" aria-hidden="true"><i data-lucide="moon"></i></span>
           </button>
 
           <button
@@ -643,7 +672,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#contact">Contact</a>
+              <a class="nav-link" href="#prompts">Prompts</a>
             </li>
           </ul>
         </div>
@@ -656,7 +685,7 @@
   <!-- =========================
        SECTION 1 - 3 CARDS
   ========================== -->
-  <main>
+  <main id="home">
 
     <section id="services" class="py-5 bg-light">
       <div class="container">
@@ -664,7 +693,7 @@
         <div class="text-center mb-5 reveal">
           <h1 class="fw-bold">Our Services</h1>
           <p class="text-muted">
-            Discover our professional services.
+            Discover our professional image editing and AI engineering capabilities.
           </p>
         </div>
 
@@ -674,17 +703,16 @@
           <div class="col-md-4 reveal">
             <div class="card h-100 shadow-sm border-0">
               <div class="card-body text-center p-4">
-                <div class="fs-1 mb-3">🚀</div>
+                <div class="service-icon mb-3"><i data-lucide="file-text"></i></div>
 
-                <h3 class="card-title">Web Development</h3>
+                <h3 class="card-title">Document Restoration</h3>
 
                 <p class="card-text text-muted">
-                  Modern and responsive websites built with
-                  clean and efficient technologies.
+                  High-fidelity scanning cleanup, sharp text enhancement, and OCR extraction.
                 </p>
 
-                <a href="#" class="btn btn-primary">
-                  Learn More
+                <a href="#prompts" class="btn btn-primary">
+                  View Specs
                 </a>
               </div>
             </div>
@@ -694,17 +722,16 @@
           <div class="col-md-4 reveal">
             <div class="card h-100 shadow-sm border-0">
               <div class="card-body text-center p-4">
-                <div class="fs-1 mb-3">🎨</div>
+                <div class="service-icon mb-3"><i data-lucide="image"></i></div>
 
-                <h3 class="card-title">UI / UX Design</h3>
+                <h3 class="card-title">Photo Restoration</h3>
 
                 <p class="card-text text-muted">
-                  Elegant and intuitive interfaces designed
-                  for a better user experience.
+                  Studio-quality restoration, scratch removal, noise reduction, and lighting tuning.
                 </p>
 
-                <a href="#" class="btn btn-primary">
-                  Learn More
+                <a href="#prompts" class="btn btn-primary">
+                  View Specs
                 </a>
               </div>
             </div>
@@ -714,17 +741,16 @@
           <div class="col-md-4 reveal">
             <div class="card h-100 shadow-sm border-0">
               <div class="card-body text-center p-4">
-                <div class="fs-1 mb-3">⚡</div>
+                <div class="service-icon mb-3"><i data-lucide="shirt"></i></div>
 
-                <h3 class="card-title">Performance</h3>
+                <h3 class="card-title">Virtual Outfit Swap</h3>
 
                 <p class="card-text text-muted">
-                  Fast, optimized and reliable applications
-                  designed for excellent performance.
+                  Seamless clothing modification with 100% facial and pose preservation.
                 </p>
 
-                <a href="#" class="btn btn-primary">
-                  Learn More
+                <a href="#prompts" class="btn btn-primary">
+                  View Specs
                 </a>
               </div>
             </div>
@@ -736,28 +762,28 @@
 
 
     <!-- =========================
-         SECTION 2 - 4 ACCORDIONS
+         SECTION 2 - 5 ACCORDIONS
     ========================== -->
-    <section id="home" class="py-5">
+    <section id="prompts" class="py-5">
       <div class="container">
 
         <div class="text-center mb-5 reveal">
-          <h2 class="fw-bold">Frequently Asked Questions</h2>
+          <h2 class="fw-bold">Prompt Repository &amp; Editing Specs</h2>
           <p class="text-muted">
-            Find answers to the most common questions.
+            Explore and copy production-ready prompts and technical specifications.
           </p>
         </div>
 
         <div class="faq-search reveal">
-          <span class="faq-search-icon" aria-hidden="true">&#128269;</span>
+          <span class="faq-search-icon" aria-hidden="true"><i data-lucide="search"></i></span>
           <input
             type="text"
             id="faqSearchInput"
             class="faq-search-input"
-            placeholder="Search questions and answers..."
-            aria-label="Search frequently asked questions"
+            placeholder="Search prompts and specifications..."
+            aria-label="Search prompt specifications"
           >
-          <button type="button" id="faqSearchClear" class="faq-search-clear" aria-label="Clear search">&#10005;</button>
+          <button type="button" id="faqSearchClear" class="faq-search-clear" aria-label="Clear search"><i data-lucide="x"></i></button>
         </div>
 
         <div class="accordion reveal" id="mainAccordion">
@@ -784,18 +810,20 @@
               data-bs-parent="#mainAccordion"
             >
               <div class="accordion-body">
-                <ul data-faq-answer>
-                  <li>High-fidelity document restoration</li>
-                  <li>Ultra-sharp text enhancement</li>
-                  <li>Clean white paper background</li>
-                  <li>Deep black ink contrast</li>
-                  <li>Remove scanner noise, eliminate motion blur, remove yellow tint and shadows, no artistic distortion</li>
-                  <li>Professional digital document archiving quality</li>
-                  <li>FHD resolution, micro-details reconstruction, maximum legibility, photorealistic</li>
-                </ul>
+                <div data-faq-answer>
+                  <ul class="mb-0 ps-3">
+                    <li>High-fidelity document restoration</li>
+                    <li>Ultra-sharp text enhancement</li>
+                    <li>Clean white paper background</li>
+                    <li>Deep black ink contrast</li>
+                    <li>Remove scanner noise, eliminate motion blur, remove yellow tint and shadows, no artistic distortion</li>
+                    <li>Professional digital document archiving quality</li>
+                    <li>FHD resolution, micro-details reconstruction, maximum legibility, photorealistic</li>
+                  </ul>
+                </div>
                 <button type="button" class="copy-btn" aria-label="Copy answer to clipboard">
-                  <span class="copy-icon" aria-hidden="true">&#128203;</span>
-                  <span class="check-icon" aria-hidden="true">&#10003;</span>
+                  <span class="copy-icon" aria-hidden="true"><i data-lucide="copy"></i></span>
+                  <span class="check-icon" aria-hidden="true"><i data-lucide="check"></i></span>
                 </button>
               </div>
             </div>
@@ -824,15 +852,17 @@
               data-bs-parent="#mainAccordion"
             >
               <div class="accordion-body">
-                <ul data-faq-answer>
-                  <li>Act en tant qu'expert en OCR (Reconnaissance Optique de Caractères) et restauration de documents</li>
-                  <li>Transcris l'intégralité du texte visible sans modifier le sens original</li>
-                  <li>Si un mot est partiellement illisible Déduis-le du contexte et place-le entre crochets [comme ceci]</li>
-                  <li>Ignore les artefacts de scan (tâches, ombres, plis)</li>
-                </ul>
+                <div data-faq-answer>
+                  <ul class="mb-0 ps-3">
+                    <li>Act en tant qu'expert en OCR (Reconnaissance Optique de Caractères) et restauration de documents</li>
+                    <li>Transcris l'intégralité du texte visible sans modifier le sens original</li>
+                    <li>Si un mot est partiellement illisible Déduis-le du contexte et place-le entre crochets [comme ceci]</li>
+                    <li>Ignore les artefacts de scan (tâches, ombres, plis)</li>
+                  </ul>
+                </div>
                 <button type="button" class="copy-btn" aria-label="Copy answer to clipboard">
-                  <span class="copy-icon" aria-hidden="true">&#128203;</span>
-                  <span class="check-icon" aria-hidden="true">&#10003;</span>
+                  <span class="copy-icon" aria-hidden="true"><i data-lucide="copy"></i></span>
+                  <span class="check-icon" aria-hidden="true"><i data-lucide="check"></i></span>
                 </button>
               </div>
             </div>
@@ -861,17 +891,19 @@
               data-bs-parent="#mainAccordion"
             >
               <div class="accordion-body">
-                <ul data-faq-answer>
-                  <li>Act as a professional image editor delivering studio-quality results</li>
-                  <li>Noise reduction and sharpening, meticulous removal of cracks/tears/blemishes</li>
-                  <li>Realistic lighting adjustments, professional composition and cropping</li>
-                  <li>Styling options (natural, cinematic, vibrant, minimalist, portrait, product)</li>
-                  <li>Restoration of clothing and background with modern clarity</li>
-                  <li>Strictly preserving the geometry, facial expression, and lighting of the source, with no structural modifications</li>
-                </ul>
+                <div data-faq-answer>
+                  <ul class="mb-0 ps-3">
+                    <li>Act as a professional image editor delivering studio-quality results</li>
+                    <li>Noise reduction and sharpening, meticulous removal of cracks/tears/blemishes</li>
+                    <li>Realistic lighting adjustments, professional composition and cropping</li>
+                    <li>Styling options (natural, cinematic, vibrant, minimalist, portrait, product)</li>
+                    <li>Restoration of clothing and background with modern clarity</li>
+                    <li>Strictly preserving the geometry, facial expression, and lighting of the source, with no structural modifications</li>
+                  </ul>
+                </div>
                 <button type="button" class="copy-btn" aria-label="Copy answer to clipboard">
-                  <span class="copy-icon" aria-hidden="true">&#128203;</span>
-                  <span class="check-icon" aria-hidden="true">&#10003;</span>
+                  <span class="copy-icon" aria-hidden="true"><i data-lucide="copy"></i></span>
+                  <span class="check-icon" aria-hidden="true"><i data-lucide="check"></i></span>
                 </button>
               </div>
             </div>
@@ -901,7 +933,7 @@
             >
               <div class="accordion-body">
                 <div data-faq-answer>
-                  <ul>
+                  <ul class="mb-0 ps-3">
                     <li>Act as a professional image editor</li>
                     <li>Keep the face, identity, pose, body shape, background, camera angle, and lighting exactly the same</li>
                     <li>Change only the outfit</li>
@@ -910,9 +942,44 @@
                     <li>Make it ultra-realistic with natural folds and perfect blending, with 100% face accuracy</li>
                     <li>Advanced color correction (balance, contrast, saturation)</li>
                   </ul>
+                </div>
                 <button type="button" class="copy-btn" aria-label="Copy answer to clipboard">
-                  <span class="copy-icon" aria-hidden="true">&#128203;</span>
-                  <span class="check-icon" aria-hidden="true">&#10003;</span>
+                  <span class="copy-icon" aria-hidden="true"><i data-lucide="copy"></i></span>
+                  <span class="check-icon" aria-hidden="true"><i data-lucide="check"></i></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Accordion 5 -->
+          <div class="accordion-item" data-faq-item>
+            <h2 class="accordion-header" id="headingFive">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseFive"
+                aria-expanded="false"
+                aria-controls="collapseFive"
+              >
+                <span data-faq-question>Website to prompt</span>
+              </button>
+            </h2>
+
+            <div
+              id="collapseFive"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingFive"
+              data-bs-parent="#mainAccordion"
+            >
+              <div class="accordion-body">
+                <div data-faq-answer>
+                  analyser la page cible afin ecrire un prompt detailler structurer décrive fedelement sa structure, son style visuel, ses composants et ses interactions
+                </div>
+                <button type="button" class="copy-btn" aria-label="Copy answer to clipboard">
+                  <span class="copy-icon" aria-hidden="true"><i data-lucide="copy"></i></span>
+                  <span class="check-icon" aria-hidden="true"><i data-lucide="check"></i></span>
                 </button>
               </div>
             </div>
@@ -920,24 +987,27 @@
 
         </div>
 
-        <p class="faq-no-results" id="faqNoResults">No questions match your search.</p>
+        <p class="faq-no-results" id="faqNoResults">No prompts match your search.</p>
 
       </div>
     </section>
 
+
   </main>
-
-  <div>
-
-
 
   <!-- Bootstrap 5 JS Bundle -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
   ></script>
 
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
   <script>
     (function () {
+      // ---- Render Lucide icons ----
+      if (window.lucide) { window.lucide.createIcons(); }
+
       // ---- Theme toggle, persisted via localStorage ----
       var root = document.documentElement;
       var toggle = document.getElementById('themeToggle');
@@ -1006,44 +1076,22 @@
       var noResults = document.getElementById('faqNoResults');
       var faqItems = Array.prototype.slice.call(document.querySelectorAll('[data-faq-item]'));
 
-      // Cache the original markup of each question/answer so highlights can be reset
-      // without destroying nested markup (e.g. bullet lists) in the answer.
+      // Cache the original markup of each question/answer so highlights can be reset.
       faqItems.forEach(function (item) {
         var q = item.querySelector('[data-faq-question]');
         var a = item.querySelector('[data-faq-answer]');
-        if (q) {
-          item.dataset.faqQuestionText = q.textContent.trim();
-          item.dataset.faqQuestionHtml = q.innerHTML;
-        }
-        if (a) {
-          item.dataset.faqAnswerText = a.textContent.trim().replace(/\s+/g, ' ');
-          item.dataset.faqAnswerHtml = a.innerHTML;
-        }
+        if (q) item.dataset.faqQuestionText = q.textContent.trim();
+        if (a) item.dataset.faqAnswerText = a.textContent.trim();
       });
 
       function escapeRegExp(str) {
         return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       }
 
-      // Highlights only within text nodes, leaving any nested tags (like <ul><li>) intact.
-      function highlightNode(el, term) {
-        if (!term) return;
+      function highlight(text, term) {
+        if (!term) return text;
         var re = new RegExp('(' + escapeRegExp(term) + ')', 'ig');
-        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
-        var textNodes = [];
-        var node;
-        while ((node = walker.nextNode())) {
-          if (re.test(node.nodeValue)) textNodes.push(node);
-          re.lastIndex = 0;
-        }
-        textNodes.forEach(function (tn) {
-          var span = document.createElement('span');
-          span.innerHTML = tn.nodeValue.replace(re, '<mark class="faq-highlight">$1</mark>');
-          tn.parentNode.replaceChild(span, tn);
-          // Unwrap the temporary span, keeping its children in place.
-          while (span.firstChild) span.parentNode.insertBefore(span.firstChild, span);
-          span.parentNode.removeChild(span);
-        });
+        return text.replace(re, '<mark class="faq-highlight">$1</mark>');
       }
 
       function applyFaqFilter() {
@@ -1064,11 +1112,8 @@
 
           var qEl = item.querySelector('[data-faq-question]');
           var aEl = item.querySelector('[data-faq-answer]');
-          // Restore original markup first, then re-apply highlights on top of it.
-          if (qEl) qEl.innerHTML = item.dataset.faqQuestionHtml || qEl.innerHTML;
-          if (aEl) aEl.innerHTML = item.dataset.faqAnswerHtml || aEl.innerHTML;
-          if (qEl) highlightNode(qEl, term);
-          if (aEl) highlightNode(aEl, term);
+          if (qEl) qEl.innerHTML = highlight(qText, term);
+          if (aEl) aEl.innerHTML = highlight(aText, term);
 
           // Auto-expand matches while searching, collapse again once cleared.
           var collapseEl = item.querySelector('.accordion-collapse');
@@ -1100,31 +1145,7 @@
         btn.addEventListener('click', function () {
           var body = btn.closest('.accordion-body');
           var answerEl = body ? body.querySelector('[data-faq-answer]') : null;
-          var text = '';
-          if (answerEl) {
-            var listItems = answerEl.querySelectorAll('li');
-            if (listItems.length) {
-              var parts = [];
-              answerEl.childNodes.forEach(function (node) {
-                if (node.nodeType === 1 && node.tagName === 'P') {
-                  parts.push(node.textContent.trim());
-                } else if (node.nodeType === 1 && node.tagName === 'UL') {
-                  node.querySelectorAll('li').forEach(function (li) {
-                    parts.push('- ' + li.textContent.trim());
-                  });
-                }
-              });
-              // Fallback for a plain <ul data-faq-answer> with no wrapper <div>.
-              if (!parts.length) {
-                listItems.forEach(function (li) {
-                  parts.push('- ' + li.textContent.trim());
-                });
-              }
-              text = parts.join('\n');
-            } else {
-              text = answerEl.textContent.trim().replace(/\s+/g, ' ');
-            }
-          }
+          var text = answerEl ? answerEl.textContent.trim().replace(/\s+/g, ' ') : '';
 
           function showCopied() {
             btn.classList.add('copied');
