@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard - نتائج البكالوريا</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #0f4c81;
+    --primary-dark: #08365f;
+    --secondary: #d9a441;
+    --success: #1f9d62;
+    --warning: #e6a817;
+    --danger: #d94b4b;
+    --bg: #f3f6f9;
+    --card: #ffffff;
+    --text: #1d2939;
+    --muted: #667085;
+    --border: #e4e7ec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Cairo", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ================= HEADER ================= */
+
+.topbar {
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 15px rgba(0,0,0,.15);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 44px;
+    height: 44px;
+    background: var(--secondary);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.brand small {
+    opacity: .75;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,.12);
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* ================= LAYOUT ================= */
+
+.dashboard {
+    max-width: 1500px;
+    margin: auto;
+    padding: 30px;
+}
+
+/* ================= TITLE ================= */
+
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-title h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.page-title p {
+    margin: 5px 0 0;
+    color: var(--muted);
+}
+
+.date-box {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border-radius: 12px;
+    color: var(--muted);
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: .25s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(16,24,40,.08);
+}
+
+.stat-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    background: #eef5fb;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    background: #ecfdf3;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    background: #fff7e8;
+}
+
+.stat-card:nth-child(4) .stat-icon {
+    background: #fff0f0;
+}
+
+.stat-info small {
+    color: var(--muted);
+}
+
+.stat-info h2 {
+    margin: 3px 0 0;
+}
+
+/* ================= INFO CARD ================= */
+
+.info-card {
+    background: linear-gradient(135deg, #0f4c81, #1d6fa9);
+    color: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-card h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.info-card p {
+    margin: 0;
+    opacity: .85;
+}
+
+.school-info {
+    text-align: left;
+    line-height: 2;
+    font-size: 14px;
+}
+
+/* ================= CONTROLS ================= */
+
+.table-card {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.table-toolbar {
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-box {
+    position: relative;
+    width: 320px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 42px 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+}
+
+.search-icon {
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    color: var(--muted);
+}
+
+.filter-group {
+    display: flex;
+    gap: 10px;
+}
+
+select, .btn {
+    border: 1px solid var(--border);
+    background: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+thead {
+    background: #f8fafc;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+tbody tr {
+    transition: .2s;
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+.rank {
+    width: 35px;
+    height: 35px;
+    margin: auto;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #eef5fb;
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.score {
+    font-weight: bold;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.good {
+    background: #eaf8f0;
+    color: var(--success);
+}
+
+.status.average {
+    background: #fff7e5;
+    color: #b57600;
+}
+
+.status.excellent {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* ================= FOOTER / PAGINATION ================= */
+
+.table-footer {
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 6px;
+}
+
+.page-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.page-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* ================= TOAST ================= */
+
+.toast {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: #1d2939;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .school-info {
+        text-align: right;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .brand h2 {
+        font-size: 13px;
+    }
+
+    .dashboard {
+        padding: 15px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .page-title {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-group select,
+    .filter-group button {
+        flex: 1;
+    }
+
+    .table-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="logo">و</div>
+
+        <div>
+            <h2>وزارة التربية الوطنية</h2>
+            <small>الجمهورية الجزائرية الديمقراطية الشعبية</small>
+        </div>
+    </div>
+
+    <div class="header-actions">
+        <button class="icon-btn" onclick="showToast('تم تحديث البيانات')">↻</button>
+        <button class="icon-btn" onclick="toggleTheme()">☾</button>
+    </div>
+
+</header>
+
+
+<main class="dashboard">
+
+    <section class="page-title">
+
+        <div>
+            <h1>لوحة نتائج شهادة البكالوريا 2020</h1>
+            <p>متابعة وتحليل قائمة الناجحين حسب المؤسسة</p>
+        </div>
+
+        <div class="date-box">
+            📅 14 / 10 / 2020
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">👨‍🎓</div>
+
+            <div class="stat-info">
+                <small>إجمالي المترشحين</small>
+                <h2 id="totalStudents">22</h2>
+            </div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-icon">✓</div>
+
+            <div class="stat-info">
+                <small>عدد الناجحين</small>
+                <h2 id="passedStudents">22</h2>
+            </div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-icon">★</div>
+
+            <div class="stat-info">
+                <small>المعدل العام</small>
+                <h2 id="averageScore">12.18</h2>
+            </div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+
+            <div class="stat-info">
+                <small>أعلى معدل</small>
+                <h2 id="highestScore">15.44</h2>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- SCHOOL INFO -->
+
+    <section class="info-card">
+
+        <div>
+            <h2>قائمة الناجحين حسب المؤسسة</h2>
+            <p>شهادة البكالوريا دورة 2020</p>
+        </div>
+
+        <div class="school-info">
+            <div><strong>الولاية:</strong> مديرية التربية لولاية إليزي</div>
+            <div><strong>المؤسسة:</strong> ثانوية محمد بلكبير</div>
+            <div><strong>الشعبة:</strong> العلوم التجريبية</div>
+        </div>
+
+    </section>
+
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="البحث عن مترشح..."
+                    onkeyup="filterTable()"
+                >
+            </div>
+
+
+            <div class="filter-group">
+
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="">كل التقديرات</option>
+                    <option value="جيد جدا">جيد جدا</option>
+                    <option value="جيد">جيد</option>
+                    <option value="مقبول">مقبول</option>
+                    <option value="قريب من الجيد">قريب من الجيد</option>
+                </select>
+
+                <button class="btn" onclick="exportCSV()">
+                    ⬇ تصدير CSV
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table id="studentsTable">
+
+                <thead>
+                    <tr>
+                        <th>الترتيب</th>
+                        <th>رقم التسجيل</th>
+                        <th>اللقب</th>
+                        <th>الاسم</th>
+                        <th>تاريخ الميلاد</th>
+                        <th>المعدل</th>
+                        <th>الملاحظة</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><div class="rank">1</div></td>
+                        <td>37077923</td>
+                        <td>قاسمي</td>
+                        <td>أحلام بومدين</td>
+                        <td>2002-12-02</td>
+                        <td class="score">15.44</td>
+                        <td><span class="status good">جيد</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">2</div></td>
+                        <td>37077937</td>
+                        <td>طالب</td>
+                        <td>أسات حمدي</td>
+                        <td>2002-09-08</td>
+                        <td class="score">10.73</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">3</div></td>
+                        <td>37077932</td>
+                        <td>حسن</td>
+                        <td>إسماعيل</td>
+                        <td>2001-01-05</td>
+                        <td class="score">9.82</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">4</div></td>
+                        <td>37078012</td>
+                        <td>محمد</td>
+                        <td>سيدي محمد</td>
+                        <td>2001-06-27</td>
+                        <td class="score">15.21</td>
+                        <td><span class="status excellent">جيد جدا</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">5</div></td>
+                        <td>38052426</td>
+                        <td>محمود</td>
+                        <td>أمين مريم</td>
+                        <td>2002-09-20</td>
+                        <td class="score">10.96</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">6</div></td>
+                        <td>38052456</td>
+                        <td>علي</td>
+                        <td>أمين فريد</td>
+                        <td>2003-01-01</td>
+                        <td class="score">13.36</td>
+                        <td><span class="status excellent">قريب من الجيد</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">7</div></td>
+                        <td>38052457</td>
+                        <td>سعدي</td>
+                        <td>أميرة سارة</td>
+                        <td>2002-04-13</td>
+                        <td class="score">14.27</td>
+                        <td><span class="status good">جيد</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">8</div></td>
+                        <td>38052468</td>
+                        <td>دليل</td>
+                        <td>أحمد</td>
+                        <td>2002-05-29</td>
+                        <td class="score">9.69</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">9</div></td>
+                        <td>38052477</td>
+                        <td>بوزيد</td>
+                        <td>أيوب</td>
+                        <td>2002-11-07</td>
+                        <td class="score">10.23</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="rank">10</div></td>
+                        <td>38052490</td>
+                        <td>نوري</td>
+                        <td>أكرم</td>
+                        <td>2003-11-06</td>
+                        <td class="score">11.26</td>
+                        <td><span class="status average">مقبول</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="table-footer">
+
+            <div id="resultCount">
+                عرض 10 من أصل 22 مترشح
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn">›</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">‹</button>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ================= SEARCH + FILTER ================= */
+
+function filterTable() {
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const status =
+        document
+        .getElementById("statusFilter")
+        .value;
+
+    const rows =
+        document.querySelectorAll(
+            "#studentsTable tbody tr"
+        );
+
+    let visible = 0;
+
+    rows.forEach(row => {
+
+        const text =
+            row.innerText.toLowerCase();
+
+        const rowStatus =
+            row.querySelector(".status")
+            .innerText;
+
+        const matchSearch =
+            text.includes(search);
+
+        const matchStatus =
+            status === "" ||
+            rowStatus === status;
+
+        if (matchSearch && matchStatus) {
+
+            row.style.display = "";
+            visible++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+    document.getElementById("resultCount").innerText =
+        `عرض ${visible} مترشح`;
+
+}
+
+
+/* ================= CSV EXPORT ================= */
+
+function exportCSV() {
+
+    const table =
+        document.getElementById("studentsTable");
+
+    let csv = [];
+
+    for (let row of table.rows) {
+
+        let cols = [];
+
+        for (let cell of row.cells) {
+
+            cols.push(
+                '"' +
+                cell.innerText.replace(/"/g, '""') +
+                '"'
+            );
+
+        }
+
+        csv.push(cols.join(","));
+
+    }
+
+    const blob =
+        new Blob(
+            ["\uFEFF" + csv.join("\n")],
+            {
+                type: "text/csv;charset=utf-8;"
+            }
+        );
+
+    const link =
+        document.createElement("a");
+
+    link.href =
+        URL.createObjectURL(blob);
+
+    link.download =
+        "نتائج_البكالوريا_2020.csv";
+
+    link.click();
+
+    showToast("تم تصدير البيانات بنجاح");
+
+}
+
+
+/* ================= DARK MODE ================= */
+
+function toggleTheme() {
+
+    const body = document.body;
+
+    if (
+        body.style.background ===
+        "rgb(25, 32, 42)"
+    ) {
+
+        body.style.background = "#f3f6f9";
+        body.style.color = "#1d2939";
+
+    } else {
+
+        body.style.background = "#19202a";
+        body.style.color = "#ffffff";
+
+    }
+
+    showToast("تم تغيير المظهر");
+
+}
+
+
+/* ================= TOAST ================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+
+}
+
+</script>
+
+</body>
+</html>
