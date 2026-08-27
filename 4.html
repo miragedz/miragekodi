@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم نتائج البكالوريا 2020</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jQuery & DataTables CSS/JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+        .dataTables_wrapper .dataTables_length, 
+        .dataTables_wrapper .dataTables_filter, 
+        .dataTables_wrapper .dataTables_info, 
+        .dataTables_wrapper .dataTables_paginate {
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="bg-white rounded-xl shadow-md p-6 border-r-8 border-green-600">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">قوائم الناجحين حسب المؤسسة — شهادة البكالوريا دورة 2020</h1>
+                    <p class="text-gray-600 text-sm mt-1">الولاية: مديرية التربية لولاية البيض | المؤسسة: ثانوية محمد بلخير -البيض- | الشعبة: العلوم التجريبية</p>
+                </div>
+                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-semibold text-sm">
+                    عدد الناجحين: <span id="total-count">22</span> طالب
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <span class="text-gray-500 text-sm">أعلى معدل</span>
+                <p class="text-2xl font-bold text-green-600 mt-1" id="max-grade">15.44</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <span class="text-gray-500 text-sm">متوسط المعدلات</span>
+                <p class="text-2xl font-bold text-blue-600 mt-1" id="avg-grade">11.60</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <span class="text-gray-500 text-sm">أدنى معدل</span>
+                <p class="text-2xl font-bold text-amber-600 mt-1" id="min-grade">9.17</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <span class="text-gray-500 text-sm">نسبة التقديرات الممتازة (جيد فأعلى)</span>
+                <p class="text-2xl font-bold text-purple-600 mt-1" id="good-ratio">13.6%</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">توزيع الملاحظات (التقديرات)</h3>
+                <div class="h-64 flex justify-center">
+                    <canvas id="mentionsChart"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">ترتيب أعلى 10 معدلات</h3>
+                <div class="h-64">
+                    <canvas id="topGradesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">قائمة الطلاب</h3>
+            <div class="overflow-x-auto">
+                <table id="studentsTable" class="w-full text-sm text-right text-gray-700">
+                    <thead class="bg-gray-50 text-gray-900 font-bold border-b">
+                        <tr>
+                            <th class="p-3">الترتيب</th>
+                            <th class="p-3">رقم التسجيل</th>
+                            <th class="p-3">اللقب</th>
+                            <th class="p-3">الاسم</th>
+                            <th class="p-3">تاريخ الميلاد</th>
+                            <th class="p-3">المعدل</th>
+                            <th class="p-3">الملاحظة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic content filled via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data extracted from the document image
+        const rawData = [
+            { rank: 1, id: "37077929", lastName: "الشافعي", firstName: "الحنفي إبراهيم", dob: "2002-12-02", grade: 15.44, mention: "جيد" },
+            { rank: 2, id: "37077933", lastName: "فظلي", firstName: "السالك حمدي", dob: "2002-09-08", grade: 10.73, mention: "مقبول" },
+            { rank: 3, id: "37077934", lastName: "عبد القادر", firstName: "السالك محمد سالم", dob: "2002-01-05", grade: 9.82, mention: "مقبول" },
+            { rank: 4, id: "37078012", lastName: "سيدي محمد", firstName: "سيدي محمد لمين", dob: "2001-06-27", grade: 12.51, mention: "قريب من الجيد" },
+            { rank: 5, id: "38052426", lastName: "بغدادي", firstName: "آية إكرام", dob: "2002-09-20", grade: 10.96, mention: "مقبول" },
+            { rank: 6, id: "38052454", lastName: "عميري", firstName: "أميرة فرج", dob: "2003-01-01", grade: 13.36, mention: "قريب من الجيد" },
+            { rank: 7, id: "38052455", lastName: "ناصري", firstName: "أميرة قطر الندى", dob: "2002-04-13", grade: 14.27, mention: "جيد" },
+            { rank: 8, id: "38052467", lastName: "بالقناديل", firstName: "أيوب", dob: "2002-05-29", grade: 9.69, mention: "مقبول" },
+            { rank: 9, id: "38052477", lastName: "نور", firstName: "إكرام خيرة", dob: "2002-11-07", grade: 10.23, mention: "مقبول" },
+            { rank: 10, id: "38052490", lastName: "بن حداد", firstName: "إخلاص الياقوت إحسان", dob: "2002-11-06", grade: 11.26, mention: "مقبول" },
+            { rank: 11, id: "38052493", lastName: "بوشريط", firstName: "إسلام محمد الصديق", dob: "2003-03-08", grade: 14.27, mention: "جيد" },
+            { rank: 12, id: "38052496", lastName: "قلينش", firstName: "إكرام", dob: "2001-10-29", grade: 9.69, mention: "مقبول" },
+            { rank: 13, id: "38052506", lastName: "بونوة", firstName: "الصديق", dob: "2002-08-10", grade: 12.47, mention: "قريب من الجيد" },
+            { rank: 14, id: "38052533", lastName: "طايل", firstName: "بن عامر", dob: "2002-07-23", grade: 11.84, mention: "مقبول" },
+            { rank: 15, id: "38052534", lastName: "سحيمي", firstName: "بوحفص أمين", dob: "2002-03-28", grade: 9.54, mention: "مقبول" },
+            { rank: 16, id: "38052537", lastName: "خامس", firstName: "ثواب نور الهدى", dob: "2002-10-13", grade: 11.86, mention: "مقبول" },
+            { rank: 17, id: "38052544", lastName: "بوزيد", firstName: "جوهر", dob: "2002-04-07", grade: 11.89, mention: "مقبول" },
+            { rank: 18, id: "38052566", lastName: "منديل", firstName: "خديجة بشرى", dob: "2003-03-05", grade: 13.57, mention: "قريب من الجيد" },
+            { rank: 19, id: "38052578", lastName: "شلالي", firstName: "خيرة", dob: "2002-06-21", grade: 9.17, mention: "مقبول" },
+            { rank: 20, id: "38052579", lastName: "زاوي", firstName: "خيرة أميمة", dob: "2003-01-31", grade: 13.18, mention: "قريب من الجيد" },
+            { rank: 21, id: "38052582", lastName: "مشراوي", firstName: "دعاء", dob: "2003-04-17", grade: 12.03, mention: "قريب من الجيد" },
+            { rank: 22, id: "38052583", lastName: "خيال", firstName: "دعاء خديجة", dob: "2002-09-16", grade: 11.12, mention: "مقبول" }
+        ];
+
+        $(document.getElementById('total-count')).text(rawData.length);
+
+        // Populate Table
+        const tbody = $('#studentsTable tbody');
+        rawData.forEach(item => {
+            const badgeClass = item.mention === 'جيد' ? 'bg-green-100 text-green-800' :
+                               item.mention === 'قريب من الجيد' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
+            
+            tbody.append(`
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-3 font-semibold">${item.rank}</td>
+                    <td class="p-3">${item.id}</td>
+                    <td class="p-3 font-medium">${item.lastName}</td>
+                    <td class="p-3">${item.firstName}</td>
+                    <td class="p-3">${item.dob}</td>
+                    <td class="p-3 font-bold ${item.grade >= 14 ? 'text-green-600' : 'text-gray-800'}">${item.grade}</td>
+                    <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-semibold ${badgeClass}">${item.mention}</span></td>
+                </tr>
+            `);
+        });
+
+        // Initialize DataTable
+        $('#studentsTable').DataTable({
+            language: {
+                search: "بحث:",
+                lengthMenu: "عرض _MENU_ طالب",
+                info: "إظهار _START_ إلى _END_ من أصل _TOTAL_ طالب",
+                paginate: { first: "الأول", last: "الأخير", next: "التالي", previous: "السابق" }
+            },
+            pageLength: 10
+        });
+
+        // Calculate Mention Distribution for Pie Chart
+        const mentionCounts = {};
+        rawData.forEach(d => { mentionCounts[d.mention] = (mentionCounts[d.mention] || 0) + 1; });
+
+        new Chart(document.getElementById('mentionsChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(mentionCounts),
+                datasets: [{
+                    data: Object.values(mentionCounts),
+                    backgroundColor: ['#10B981', '#60A5FA', '#F59E0B']
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Top 10 Bar Chart
+        const top10 = [...rawData].sort((a, b) => b.grade - a.grade).slice(0, 10);
+        new Chart(document.getElementById('topGradesChart'), {
+            type: 'bar',
+            data: {
+                labels: top10.map(d => `${d.firstName} ${d.lastName}`),
+                datasets: [{
+                    label: 'المعدل',
+                    data: top10.map(d => d.grade),
+                    backgroundColor: '#3B82F6',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { min: 8, max: 20 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>
