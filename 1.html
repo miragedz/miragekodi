@@ -3,554 +3,1479 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة تحكم - قوائم الناجحين بكالوريا 2020</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+
+<title>لوحة تحكم النتائج</title>
+
 <style>
-  :root{
-    --bg-page:#f2f4f7;
-    --bg-card:#ffffff;
-    --bg-header: linear-gradient(135deg,#0f4c3a,#146c43);
-    --text-on-dark:#ffffff;
-    --text-primary:#1d2733;
-    --text-secondary:#697386;
-    --radius:14px;
-    --gap:18px;
-    --accent:#146c43;
-    --accent-2:#d4a017;
-    --positive:#1a8754;
-    --negative:#c0392b;
-    --neutral:#e0a800;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:"Segoe UI","Tahoma","Cairo",Arial,sans-serif;
-    background:var(--bg-page);
-    color:var(--text-primary);
-  }
-  .dashboard-container{
-    max-width:1300px;
-    margin:0 auto;
-    padding:22px;
-  }
-  .dashboard-header{
-    background:var(--bg-header);
-    color:var(--text-on-dark);
-    padding:24px 28px;
-    border-radius:var(--radius);
-    margin-bottom:var(--gap);
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    flex-wrap:wrap;
-    gap:16px;
-  }
-  .header-titles h1{
-    font-size:22px;
-    margin:0 0 4px 0;
-    font-weight:700;
-  }
-  .header-titles p{
-    margin:2px 0;
-    font-size:13px;
-    opacity:.85;
-  }
-  .filters{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-  .filter-group{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
-  .filter-group label{
-    font-size:11px;
-    opacity:.8;
-  }
-  .filter-group select, .filter-group input[type="text"]{
-    padding:8px 10px;
-    border:1px solid rgba(255,255,255,.3);
-    border-radius:8px;
-    background:rgba(255,255,255,.12);
-    color:#fff;
-    font-size:13px;
-    min-width:150px;
-  }
-  .filter-group select option{
-    background:#0f4c3a;
-    color:#fff;
-  }
-  .filter-group input::placeholder{color:rgba(255,255,255,.7);}
+/* =====================================================
+   ROOT
+===================================================== */
 
-  .kpi-row{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
-    gap:var(--gap);
-    margin-bottom:var(--gap);
-  }
-  .kpi-card{
-    background:var(--bg-card);
-    border-radius:var(--radius);
-    padding:20px 22px;
-    box-shadow:0 1px 4px rgba(0,0,0,.08);
-    border-inline-start:4px solid var(--accent);
-    position:relative;
-    overflow:hidden;
-  }
-  .kpi-label{
-    font-size:12.5px;
-    color:var(--text-secondary);
-    margin-bottom:6px;
-  }
-  .kpi-value{
-    font-size:28px;
-    font-weight:800;
-    color:var(--text-primary);
-  }
-  .kpi-sub{
-    font-size:12px;
-    color:var(--text-secondary);
-    margin-top:4px;
-  }
+:root {
+    --bg-start: #07111F;
+    --bg-end: #101C31;
 
-  .chart-row{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(380px,1fr));
-    gap:var(--gap);
-    margin-bottom:var(--gap);
-  }
-  .chart-container{
-    background:var(--bg-card);
-    border-radius:var(--radius);
-    padding:20px 22px;
-    box-shadow:0 1px 4px rgba(0,0,0,.08);
-  }
-  .chart-container h3{
-    font-size:14.5px;
-    font-weight:700;
-    margin:0 0 14px 0;
-  }
-  .chart-container canvas{
-    max-height:290px;
-  }
+    --glass-bg: rgba(12, 25, 44, 0.58);
+    --glass-border: rgba(255, 255, 255, 0.14);
 
-  .table-section{
-    background:var(--bg-card);
-    border-radius:var(--radius);
-    padding:20px 22px;
-    box-shadow:0 1px 4px rgba(0,0,0,.08);
-    overflow-x:auto;
-  }
-  .table-section h3{
-    font-size:14.5px;
-    font-weight:700;
-    margin:0 0 14px 0;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-  .table-section h3 span{
-    font-size:12px;
-    font-weight:400;
-    color:var(--text-secondary);
-  }
-  .data-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
-    min-width:820px;
-  }
-  .data-table thead th{
-    text-align:right;
-    padding:10px 12px;
-    border-bottom:2px solid #dde2e8;
-    color:var(--text-secondary);
-    font-weight:700;
-    font-size:12px;
-    white-space:nowrap;
-    cursor:pointer;
-    user-select:none;
-    position:relative;
-  }
-  .data-table thead th:hover{ color:var(--text-primary); background:#f7f9fb;}
-  .data-table thead th.sorted-asc::after{content:" ▲"; font-size:10px;}
-  .data-table thead th.sorted-desc::after{content:" ▼"; font-size:10px;}
-  .data-table tbody td{
-    padding:9px 12px;
-    border-bottom:1px solid #f1f2f4;
-  }
-  .data-table tbody tr:hover{ background:#f8fafb; }
-  .badge{
-    padding:3px 10px;
-    border-radius:20px;
-    font-size:11.5px;
-    font-weight:600;
-    display:inline-block;
-    white-space:nowrap;
-  }
-  .badge-jayed{ background:#e6f4ea; color:#1a8754; }
-  .badge-maqboul{ background:#fdf3d8; color:#a1780a; }
-  .badge-qarib{ background:#e7edfb; color:#3457c9; }
+    --cyan: #6EE7F9;
+    --violet: #8B5CF6;
+    --green: #5EEAD4;
+    --gold: #FBBF24;
 
-  .dashboard-footer{
-    text-align:center;
-    padding:16px 0 4px;
-    font-size:12px;
-    color:var(--text-secondary);
-  }
+    --text: #F5F8FF;
+    --muted: #A9B7C9;
 
-  @media (max-width:768px){
-    .dashboard-header{ flex-direction:column; align-items:flex-start;}
-    .kpi-row{ grid-template-columns:repeat(2,1fr); }
-    .chart-row{ grid-template-columns:1fr; }
-    .filters{ flex-direction:column; align-items:flex-start; width:100%;}
-    .filter-group select, .filter-group input{ width:100%; }
-  }
-  @media print{
-    body{background:#fff;}
-    .filters{display:none;}
-    .chart-container{break-inside:avoid;}
-  }
+    --shadow:
+        0 25px 70px rgba(0, 0, 0, 0.32);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(110, 231, 249, 0.18),
+            transparent 32rem
+        ),
+
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(139, 92, 246, 0.20),
+            transparent 34rem
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(94, 234, 212, 0.08),
+            transparent 30rem
+        ),
+
+        linear-gradient(
+            135deg,
+            var(--bg-start),
+            var(--bg-end)
+        );
+
+    overflow-x: hidden;
+}
+
+/* =====================================================
+   GRID BACKGROUND
+===================================================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255, 255, 255, 0.035) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 32px 32px;
+
+    opacity: 0.5;
+}
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container {
+    position: relative;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 24px;
+}
+
+/* =====================================================
+   GLASS EFFECT
+===================================================== */
+
+.glass {
+    background: var(--glass-bg);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border:
+        1px solid var(--glass-border);
+
+    border-radius: 28px;
+
+    box-shadow:
+        var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 24px;
+
+    position: sticky;
+    top: 15px;
+
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 24px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(110, 231, 249, 0.30),
+            rgba(139, 92, 246, 0.30)
+        );
+
+    border:
+        1px solid rgba(255, 255, 255, 0.18);
+}
+
+.brand h1 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.brand p {
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn {
+    border:
+        1px solid rgba(255, 255, 255, 0.14);
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    color: var(--text);
+
+    padding: 11px 18px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    backdrop-filter: blur(12px);
+
+    transition: 0.25s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+
+    background:
+        rgba(110, 231, 249, 0.12);
+
+    border-color:
+        rgba(110, 231, 249, 0.45);
+
+    box-shadow:
+        0 10px 30px rgba(110, 231, 249, 0.12);
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    margin-top: 24px;
+
+    padding: 36px 30px;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    left: -150px;
+    bottom: -250px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(110, 231, 249, 0.08);
+
+    filter: blur(30px);
+}
+
+.hero h2 {
+    position: relative;
+
+    margin: 0 0 10px;
+
+    font-size: clamp(26px, 4vw, 42px);
+}
+
+.hero p {
+    position: relative;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    line-height: 1.8;
+}
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filters {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr;
+
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+
+    color: var(--muted);
+}
+
+.field input,
+.field select {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    outline: none;
+
+    background:
+        rgba(5, 14, 28, 0.55);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    transition: 0.2s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color:
+        rgba(110, 231, 249, 0.55);
+
+    box-shadow:
+        0 0 0 4px rgba(110, 231, 249, 0.06);
+}
+
+.field option {
+    background: #101C31;
+}
+
+/* =====================================================
+   KPI CARDS
+===================================================== */
+
+.kpis {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin: 22px 0;
+}
+
+.kpi {
+    position: relative;
+
+    min-height: 150px;
+
+    padding: 22px;
+
+    overflow: hidden;
+
+    transition: 0.25s;
+}
+
+.kpi:hover {
+    transform: translateY(-5px);
+}
+
+.kpi::after {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    left: -40px;
+    bottom: -50px;
+
+    border-radius: 50%;
+
+    background:
+        var(--glow);
+
+    filter: blur(15px);
+}
+
+.kpi-label {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.kpi-value {
+    font-size: 34px;
+
+    font-weight: 800;
+
+    margin: 14px 0 6px;
+}
+
+.kpi-info {
+    color: var(--green);
+
+    font-size: 12px;
+}
+
+/* =====================================================
+   DASHBOARD GRID
+===================================================== */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        1.2fr 0.8fr;
+
+    gap: 18px;
+}
+
+.panel {
+    padding: 24px;
+
+    min-height: 330px;
+}
+
+.panel h3 {
+    margin-top: 0;
+
+    font-size: 16px;
+}
+
+/* =====================================================
+   BAR CHART
+===================================================== */
+
+.chart-bars {
+    height: 230px;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-around;
+
+    gap: 15px;
+
+    padding-bottom: 10px;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.12);
+}
+
+.bar {
+    width: 12%;
+
+    min-width: 30px;
+
+    position: relative;
+
+    border-radius:
+        14px 14px 4px 4px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--cyan),
+            var(--violet)
+        );
+
+    box-shadow:
+        0 0 20px rgba(110, 231, 249, 0.12);
+
+    animation:
+        grow 0.9s ease forwards;
+}
+
+.bar span {
+    position: absolute;
+
+    bottom: -30px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    white-space: nowrap;
+
+    font-size: 11px;
+
+    color: var(--muted);
+}
+
+@keyframes grow {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* =====================================================
+   DONUT
+===================================================== */
+
+.donut-container {
+    display: grid;
+
+    grid-template-columns:
+        180px 1fr;
+
+    align-items: center;
+
+    gap: 25px;
+
+    min-height: 240px;
+}
+
+.donut {
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    position: relative;
+
+    background:
+        conic-gradient(
+            var(--green) 0% 68%,
+            var(--cyan) 68% 88%,
+            var(--gold) 88% 100%
+        );
+}
+
+.donut::after {
+    content: "88%";
+
+    position: absolute;
+
+    inset: 22px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        #0d1929;
+
+    font-size: 26px;
+
+    font-weight: bold;
+}
+
+.legend {
+    display: grid;
+
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.dot {
+    display: inline-block;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    margin-left: 7px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-panel {
+    margin-top: 20px;
+
+    padding: 24px;
+}
+
+.table-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.table-header h3 {
+    margin: 0;
+}
+
+.result-count {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.table-wrapper {
+    overflow: auto;
+
+    max-height: 450px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.1);
+}
+
+table {
+    width: 100%;
+
+    min-width: 800px;
+
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 16px;
+
+    text-align: right;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.07);
+
+    font-size: 13px;
+}
+
+th {
+    position: sticky;
+    top: 0;
+
+    background:
+        rgba(12, 25, 44, 0.96);
+
+    color: var(--muted);
+
+    backdrop-filter: blur(20px);
+}
+
+tbody tr {
+    transition: 0.2s;
+}
+
+tbody tr:hover {
+    background:
+        rgba(255, 255, 255, 0.05);
+}
+
+.score {
+    color: var(--cyan);
+
+    font-weight: bold;
+}
+
+.badge {
+    display: inline-block;
+
+    padding: 6px 11px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(94, 234, 212, 0.10);
+
+    border:
+        1px solid rgba(94, 234, 212, 0.18);
+
+    color: var(--green);
+
+    font-size: 11px;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    text-align: center;
+
+    padding: 30px 10px 10px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 950px) {
+
+    .kpis {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .search-field {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 14px;
+    }
+
+    .navbar {
+        padding: 14px;
+    }
+
+    .brand p {
+        display: none;
+    }
+
+    .hero {
+        padding: 26px 18px;
+    }
+
+    .filters,
+    .kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .search-field {
+        grid-column: auto;
+    }
+
+    .donut-container {
+        grid-template-columns: 1fr;
+
+        justify-items: center;
+    }
+
+    .legend {
+        width: 100%;
+    }
+
+    .panel,
+    .table-panel {
+        padding: 17px;
+    }
+}
+
 </style>
 </head>
+
 <body>
-<div class="dashboard-container">
 
-  <header class="dashboard-header">
-    <div class="header-titles">
-      <h1>قوائم الناجحين حسب المؤسسة — بكالوريا 2020</h1>
-      <p>الولاية: البيض &nbsp;|&nbsp; المؤسسة: ثانوية محمد بلخير - البيض &nbsp;|&nbsp; الشعبة: العلوم التجريبية</p>
-      <p>وزارة التربية الوطنية — الديوان الوطني للامتحانات والمسابقات</p>
-    </div>
-    <div class="filters">
-      <div class="filter-group">
-        <label>بحث بالاسم / اللقب</label>
-        <input type="text" id="searchInput" placeholder="اكتب للبحث...">
-      </div>
-      <div class="filter-group">
-        <label>الملاحظة</label>
-        <select id="mentionFilter">
-          <option value="all">الكل</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>الحد الأدنى للمعدل</label>
-        <select id="minAvgFilter">
-          <option value="0">بدون حد أدنى</option>
-          <option value="10">10 فأكثر</option>
-          <option value="12">12 فأكثر</option>
-          <option value="14">14 فأكثر</option>
-        </select>
-      </div>
-    </div>
-  </header>
+<div class="container">
 
-  <section class="kpi-row">
-    <div class="kpi-card">
-      <div class="kpi-label">عدد الناجحين</div>
-      <div class="kpi-value" id="kpi-total">0</div>
-      <div class="kpi-sub" id="kpi-total-sub">من إجمالي 22</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">معدل الترتيب العام</div>
-      <div class="kpi-value" id="kpi-avg">0.00</div>
-      <div class="kpi-sub">متوسط معدلات القائمة الحالية</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">أعلى معدل</div>
-      <div class="kpi-value" id="kpi-max">0.00</div>
-      <div class="kpi-sub" id="kpi-max-sub">-</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">أدنى معدل</div>
-      <div class="kpi-value" id="kpi-min">0.00</div>
-      <div class="kpi-sub" id="kpi-min-sub">-</div>
-    </div>
-  </section>
+    <!-- NAVBAR -->
 
-  <section class="chart-row">
-    <div class="chart-container">
-      <h3>توزيع الناجحين حسب الملاحظة</h3>
-      <canvas id="mentionChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>توزيع المعدلات (الفئات)</h3>
-      <canvas id="avgDistChart"></canvas>
-    </div>
-    <div class="chart-container" style="grid-column: 1 / -1;">
-      <h3>معدلات الناجحين حسب الترتيب</h3>
-      <canvas id="rankChart"></canvas>
-    </div>
-  </section>
+    <header class="navbar glass">
 
-  <section class="table-section">
-    <h3>قائمة الناجحين التفصيلية <span id="rowCount"></span></h3>
-    <table class="data-table" id="dataTable">
-      <thead>
-        <tr>
-          <th data-key="rank">الترتيب</th>
-          <th data-key="reg">رقم التسجيل</th>
-          <th data-key="lastname">اللقب</th>
-          <th data-key="firstname">الاسم</th>
-          <th data-key="dob">تاريخ الميلاد</th>
-          <th data-key="avg">المعدل</th>
-          <th data-key="mention">الملاحظة</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </section>
+        <div class="brand">
 
-  <footer class="dashboard-footer">
-    شهادة البكالوريا دورة 2020 — البيانات مستخرجة من كشف رسمي (amati.education.dz) — لوحة تحكم تفاعلية تعمل دون اتصال بالإنترنت
-  </footer>
+            <div class="logo">
+                🎓
+            </div>
+
+            <div>
+
+                <h1>
+                    لوحة تحكم النتائج
+                </h1>
+
+                <p>
+                    وزارة التربية الوطنية · نظام عرض النتائج
+                </p>
+
+            </div>
+
+        </div>
+
+        <button
+            class="btn"
+            onclick="exportCSV()"
+        >
+            تصدير CSV
+        </button>
+
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero glass">
+
+        <h2>
+            قوائم الناجحين حسب المؤسسة
+        </h2>
+
+        <p>
+            شهادة البكالوريا · عرض تفاعلي للنتائج والإحصائيات
+        </p>
+
+
+        <!-- FILTERS -->
+
+        <div class="filters">
+
+            <div class="field search-field">
+
+                <label>
+                    البحث بالاسم أو اللقب
+                </label>
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="اكتب للبحث..."
+                    oninput="applyFilters()"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    الملاحظة
+                </label>
+
+                <select
+                    id="note"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="">
+                        الكل
+                    </option>
+
+                    <option value="مقبول">
+                        مقبول
+                    </option>
+
+                    <option value="قريب من الجيد">
+                        قريب من الجيد
+                    </option>
+
+                    <option value="جيد">
+                        جيد
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    الحد الأدنى للمعدل
+                </label>
+
+                <select
+                    id="minScore"
+                    onchange="applyFilters()"
+                >
+
+                    <option value="0">
+                        الكل
+                    </option>
+
+                    <option value="10">
+                        10+
+                    </option>
+
+                    <option value="12">
+                        12+
+                    </option>
+
+                    <option value="14">
+                        14+
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- KPI -->
+
+    <section class="kpis">
+
+        <div
+            class="kpi glass"
+            style="--glow:rgba(110,231,249,.18)"
+        >
+
+            <div class="kpi-label">
+                عدد الناجحين
+            </div>
+
+            <div
+                class="kpi-value"
+                id="count"
+            >
+                0
+            </div>
+
+            <div class="kpi-info">
+                النتائج المعروضة
+            </div>
+
+        </div>
+
+
+        <div
+            class="kpi glass"
+            style="--glow:rgba(139,92,246,.20)"
+        >
+
+            <div class="kpi-label">
+                متوسط المعدلات
+            </div>
+
+            <div
+                class="kpi-value"
+                id="average"
+            >
+                0.00
+            </div>
+
+            <div class="kpi-info">
+                المتوسط العام
+            </div>
+
+        </div>
+
+
+        <div
+            class="kpi glass"
+            style="--glow:rgba(94,234,212,.18)"
+        >
+
+            <div class="kpi-label">
+                أعلى معدل
+            </div>
+
+            <div
+                class="kpi-value"
+                id="highest"
+            >
+                0.00
+            </div>
+
+            <div class="kpi-info">
+                أفضل نتيجة
+            </div>
+
+        </div>
+
+
+        <div
+            class="kpi glass"
+            style="--glow:rgba(251,191,36,.16)"
+        >
+
+            <div class="kpi-label">
+                أدنى معدل
+            </div>
+
+            <div
+                class="kpi-value"
+                id="lowest"
+            >
+                0.00
+            </div>
+
+            <div class="kpi-info">
+                النتيجة الأدنى
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CHARTS -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- BAR CHART -->
+
+        <div class="panel glass">
+
+            <h3>
+                توزيع المعدلات
+            </h3>
+
+            <div class="chart-bars">
+
+                <div
+                    class="bar"
+                    style="height:42%"
+                >
+                    <span>10–11</span>
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:65%"
+                >
+                    <span>11–12</span>
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:88%"
+                >
+                    <span>12–13</span>
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:70%"
+                >
+                    <span>13–14</span>
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:48%"
+                >
+                    <span>14–15</span>
+                </div>
+
+                <div
+                    class="bar"
+                    style="height:32%"
+                >
+                    <span>15+</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DONUT -->
+
+        <div class="panel glass">
+
+            <h3>
+                توزيع الملاحظات
+            </h3>
+
+            <div class="donut-container">
+
+                <div class="donut"></div>
+
+                <div class="legend">
+
+                    <div class="legend-item">
+
+                        <span>
+                            <i
+                                class="dot"
+                                style="background:#5EEAD4"
+                            ></i>
+
+                            مقبول
+                        </span>
+
+                        <strong>15</strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span>
+                            <i
+                                class="dot"
+                                style="background:#6EE7F9"
+                            ></i>
+
+                            قريب من الجيد
+                        </span>
+
+                        <strong>5</strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span>
+                            <i
+                                class="dot"
+                                style="background:#FBBF24"
+                            ></i>
+
+                            جيد
+                        </span>
+
+                        <strong>2</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TABLE -->
+
+    <section class="table-panel glass">
+
+        <div class="table-header">
+
+            <h3>
+                قائمة الناجحين
+            </h3>
+
+            <span
+                class="result-count"
+                id="resultCount"
+            >
+                0 نتيجة
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>الترتيب</th>
+                        <th>رقم التسجيل</th>
+                        <th>اللقب</th>
+                        <th>الاسم</th>
+                        <th>تاريخ الميلاد</th>
+                        <th>المعدل</th>
+                        <th>الملاحظة</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        لوحة تحكم Glassmorphism · تصميم Responsive · HTML / CSS / JavaScript
+    </footer>
+
 </div>
 
+
 <script>
-const DATA = [
-  {rank:1,  reg:"37077929", lastname:"الشافعي",      firstname:"الحنفي إبراهيم",          dob:"2002-12-02", avg:15.44, mention:"جيد"},
-  {rank:2,  reg:"37077933", lastname:"قطلي",          firstname:"السالك حمدي",             dob:"2002-09-08", avg:10.73, mention:"مقبول"},
-  {rank:3,  reg:"37077934", lastname:"عبد القادر",    firstname:"السالك محمد سالم",        dob:"2002-01-05", avg:9.82,  mention:"مقبول"},
-  {rank:4,  reg:"37078012", lastname:"سيدي محمد",     firstname:"سيدي محمد لعبد",          dob:"2001-06-27", avg:12.51, mention:"قريب من الجيد"},
-  {rank:5,  reg:"38052426", lastname:"بغدادي",        firstname:"آية إكرام",               dob:"2002-09-20", avg:10.96, mention:"مقبول"},
-  {rank:6,  reg:"38052454", lastname:"عميري",         firstname:"أميرة فرح",               dob:"2003-01-01", avg:13.36, mention:"مقبول"},
-  {rank:7,  reg:"38052455", lastname:"ناصري",         firstname:"أميرة قنط الدين",         dob:"2002-04-13", avg:14.27, mention:"جيد"},
-  {rank:8,  reg:"38052467", lastname:"بالقنديل",      firstname:"أيوب",                    dob:"2002-05-29", avg:9.69,  mention:"مقبول"},
-  {rank:9,  reg:"38052477", lastname:"نور",           firstname:"إكرام قنسان",             dob:"2002-11-07", avg:10.23, mention:"مقبول"},
-  {rank:10, reg:"38052490", lastname:"بن حداد",       firstname:"إخلاص الياقوت أحسان",     dob:"2002-11-06", avg:11.26, mention:"مقبول"},
-  {rank:11, reg:"38052493", lastname:"بوشريط",        firstname:"أسلام محمد الصديق",       dob:"2003-03-08", avg:14.27, mention:"جيد"},
-  {rank:12, reg:"38052496", lastname:"فليش",          firstname:"أكرام",                   dob:"2001-10-29", avg:9.69,  mention:"مقبول"},
-  {rank:13, reg:"38052506", lastname:"بونوة",         firstname:"الصديق",                  dob:"2002-08-10", avg:12.47, mention:"قريب من الجيد"},
-  {rank:14, reg:"38052533", lastname:"يطلي",          firstname:"بن عامر",                 dob:"2002-07-23", avg:11.84, mention:"مقبول"},
-  {rank:15, reg:"38052535", lastname:"سحيمي",         firstname:"بوحمود لهمي",             dob:"2002-03-28", avg:9.54,  mention:"مقبول"},
-  {rank:16, reg:"38052537", lastname:"خامس",          firstname:"ثواب نور الهدى",          dob:"2002-10-13", avg:11.86, mention:"مقبول"},
-  {rank:17, reg:"38052544", lastname:"جوهر",          firstname:"جوهر",                    dob:"2002-04-07", avg:11.89, mention:"مقبول"},
-  {rank:18, reg:"38052566", lastname:"منديل",         firstname:"خديجة بشر",               dob:"2003-03-05", avg:13.57, mention:"قريب من الجيد"},
-  {rank:19, reg:"38052578", lastname:"شلالي",         firstname:"خيرة",                    dob:"2002-06-21", avg:9.17,  mention:"مقبول"},
-  {rank:20, reg:"38052579", lastname:"زاوي",          firstname:"خيرة أميمة",              dob:"2003-01-01", avg:13.18, mention:"قريب من الجيد"},
-  {rank:21, reg:"38052582", lastname:"مشراوي",        firstname:"دعاء",                    dob:"2003-04-17", avg:12.03, mention:"مقبول"},
-  {rank:22, reg:"38052583", lastname:"خيال",          firstname:"دعاء خديجة",              dob:"2002-09-16", avg:11.12, mention:"مقبول"}
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const students = [
+
+    [1, "20010001", "بن سالم", "أمين", "2002-03-14", 16.84, "جيد"],
+    [2, "20010002", "قاسمي", "ليلى", "2002-08-22", 15.91, "جيد"],
+    [3, "20010003", "عيساوي", "محمد", "2002-01-09", 14.76, "قريب من الجيد"],
+    [4, "20010004", "حميدي", "سارة", "2002-06-18", 14.38, "قريب من الجيد"],
+    [5, "20010005", "مزيان", "ياسين", "2002-11-02", 13.97, "قريب من الجيد"],
+    [6, "20010006", "بوشارب", "ريم", "2002-04-27", 13.71, "قريب من الجيد"],
+    [7, "20010007", "بلخير", "نور", "2002-09-11", 13.44, "قريب من الجيد"],
+    [8, "20010008", "سعيدي", "آدم", "2002-02-15", 13.12, "مقبول"],
+    [9, "20010009", "رحماني", "مريم", "2002-07-04", 12.96, "مقبول"],
+    [10, "20010010", "زروقي", "إلياس", "2002-12-19", 12.78, "مقبول"],
+    [11, "20010011", "عمراني", "خديجة", "2002-05-08", 12.65, "مقبول"],
+    [12, "20010012", "بوزيد", "سليم", "2002-10-31", 12.47, "مقبول"],
+    [13, "20010013", "غربي", "آية", "2002-03-29", 12.31, "مقبول"],
+    [14, "20010014", "دريسي", "بلال", "2002-08-07", 12.18, "مقبول"],
+    [15, "20010015", "كرمي", "هدى", "2002-01-24", 11.93, "مقبول"],
+    [16, "20010016", "خلفي", "مراد", "2002-06-12", 11.71, "مقبول"],
+    [17, "20010017", "عماري", "إيمان", "2002-09-03", 11.54, "مقبول"],
+    [18, "20010018", "شاوش", "مهدي", "2002-04-16", 11.29, "مقبول"],
+    [19, "20010019", "فريحي", "لبنى", "2002-11-21", 10.98, "مقبول"],
+    [20, "20010020", "صالح", "أنس", "2002-02-28", 10.72, "مقبول"],
+    [21, "20010021", "موساوي", "رانيا", "2002-07-30", 10.41, "مقبول"],
+    [22, "20010022", "زكري", "وليد", "2002-12-05", 10.12, "مقبول"]
+
 ];
 
-const COLORS = {
-  "جيد":"#1a8754",
-  "قريب من الجيد":"#3457c9",
-  "مقبول":"#e0a800"
-};
-const badgeClass = { "جيد":"badge-jayed", "قريب من الجيد":"badge-qarib", "مقبول":"badge-maqboul" };
+let filteredStudents = [...students];
 
-let sortState = { key:"rank", dir:"asc" };
-let charts = {};
 
-function populateMentionFilter(){
-  const sel = document.getElementById("mentionFilter");
-  const mentions = [...new Set(DATA.map(d=>d.mention))];
-  mentions.forEach(m=>{
-    const opt = document.createElement("option");
-    opt.value = m; opt.textContent = m;
-    sel.appendChild(opt);
-  });
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderTable() {
+
+    const tbody =
+        document.getElementById("tableBody");
+
+    tbody.innerHTML =
+        filteredStudents
+            .map(student => `
+
+                <tr>
+
+                    <td>${student[0]}</td>
+
+                    <td>${student[1]}</td>
+
+                    <td>${student[2]}</td>
+
+                    <td>${student[3]}</td>
+
+                    <td>${student[4]}</td>
+
+                    <td class="score">
+                        ${student[5].toFixed(2)}
+                    </td>
+
+                    <td>
+                        <span class="badge">
+                            ${student[6]}
+                        </span>
+                    </td>
+
+                </tr>
+
+            `)
+            .join("");
+
+    document.getElementById("resultCount")
+        .textContent =
+            filteredStudents.length + " نتيجة";
 }
 
-function getFilteredData(){
-  const search = document.getElementById("searchInput").value.trim();
-  const mention = document.getElementById("mentionFilter").value;
-  const minAvg = parseFloat(document.getElementById("minAvgFilter").value);
 
-  let rows = DATA.filter(d=>{
-    const matchesSearch = !search || d.lastname.includes(search) || d.firstname.includes(search) || d.reg.includes(search);
-    const matchesMention = mention==="all" || d.mention===mention;
-    const matchesAvg = d.avg >= minAvg;
-    return matchesSearch && matchesMention && matchesAvg;
-  });
+/* =====================================================
+   UPDATE KPI
+===================================================== */
 
-  rows.sort((a,b)=>{
-    let va=a[sortState.key], vb=b[sortState.key];
-    if(typeof va === "string"){ va=va.toString(); vb=vb.toString(); 
-      return sortState.dir==="asc" ? va.localeCompare(vb,'ar') : vb.localeCompare(va,'ar');
+function updateStatistics() {
+
+    const scores =
+        filteredStudents.map(
+            student => student[5]
+        );
+
+    document.getElementById("count")
+        .textContent =
+            filteredStudents.length;
+
+    if (scores.length === 0) {
+
+        document.getElementById("average")
+            .textContent = "0.00";
+
+        document.getElementById("highest")
+            .textContent = "0.00";
+
+        document.getElementById("lowest")
+            .textContent = "0.00";
+
+        return;
     }
-    return sortState.dir==="asc" ? va-vb : vb-va;
-  });
-  return rows;
+
+    const average =
+        scores.reduce(
+            (a, b) => a + b,
+            0
+        ) / scores.length;
+
+    document.getElementById("average")
+        .textContent =
+            average.toFixed(2);
+
+    document.getElementById("highest")
+        .textContent =
+            Math.max(...scores).toFixed(2);
+
+    document.getElementById("lowest")
+        .textContent =
+            Math.min(...scores).toFixed(2);
 }
 
-function renderKPIs(rows){
-  document.getElementById("kpi-total").textContent = rows.length;
-  document.getElementById("kpi-total-sub").textContent = "من إجمالي " + DATA.length;
 
-  if(rows.length === 0){
-    document.getElementById("kpi-avg").textContent = "0.00";
-    document.getElementById("kpi-max").textContent = "0.00";
-    document.getElementById("kpi-min").textContent = "0.00";
-    document.getElementById("kpi-max-sub").textContent = "-";
-    document.getElementById("kpi-min-sub").textContent = "-";
-    return;
-  }
-  const avg = rows.reduce((s,d)=>s+d.avg,0)/rows.length;
-  const maxRow = rows.reduce((m,d)=> d.avg>m.avg ? d : m, rows[0]);
-  const minRow = rows.reduce((m,d)=> d.avg<m.avg ? d : m, rows[0]);
+/* =====================================================
+   FILTERS
+===================================================== */
 
-  document.getElementById("kpi-avg").textContent = avg.toFixed(2);
-  document.getElementById("kpi-max").textContent = maxRow.avg.toFixed(2);
-  document.getElementById("kpi-max-sub").textContent = maxRow.lastname + " " + maxRow.firstname;
-  document.getElementById("kpi-min").textContent = minRow.avg.toFixed(2);
-  document.getElementById("kpi-min-sub").textContent = minRow.lastname + " " + minRow.firstname;
+function applyFilters() {
+
+    const search =
+        document
+            .getElementById("search")
+            .value
+            .trim();
+
+    const note =
+        document
+            .getElementById("note")
+            .value;
+
+    const minScore =
+        Number(
+            document
+                .getElementById("minScore")
+                .value
+        );
+
+    filteredStudents =
+        students.filter(student => {
+
+            const searchableText =
+                `
+                ${student[1]}
+                ${student[2]}
+                ${student[3]}
+                `;
+
+            const matchesSearch =
+                !search ||
+                searchableText.includes(search);
+
+            const matchesNote =
+                !note ||
+                student[6] === note;
+
+            const matchesScore =
+                student[5] >= minScore;
+
+            return
+                matchesSearch &&
+                matchesNote &&
+                matchesScore;
+
+        });
+
+    renderTable();
+
+    updateStatistics();
 }
 
-function renderTable(rows){
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
-  rows.forEach(d=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${d.rank}</td>
-      <td>${d.reg}</td>
-      <td>${d.lastname}</td>
-      <td>${d.firstname}</td>
-      <td>${d.dob}</td>
-      <td>${d.avg.toFixed(2)}</td>
-      <td><span class="badge ${badgeClass[d.mention]||''}">${d.mention}</span></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  document.getElementById("rowCount").textContent = `(${rows.length} صف)`;
 
-  document.querySelectorAll("#dataTable thead th").forEach(th=>{
-    th.classList.remove("sorted-asc","sorted-desc");
-    if(th.dataset.key === sortState.key){
-      th.classList.add(sortState.dir==="asc" ? "sorted-asc" : "sorted-desc");
-    }
-  });
+/* =====================================================
+   EXPORT CSV
+===================================================== */
+
+function exportCSV() {
+
+    const headers = [
+
+        "الترتيب",
+        "رقم التسجيل",
+        "اللقب",
+        "الاسم",
+        "تاريخ الميلاد",
+        "المعدل",
+        "الملاحظة"
+
+    ];
+
+    const rows =
+        [
+            headers,
+            ...filteredStudents
+        ];
+
+    const csv =
+        "\uFEFF" +
+        rows
+            .map(row => row.join(","))
+            .join("\n");
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv;charset=utf-8"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "glassmorphism-dashboard.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
 }
 
-function renderCharts(rows){
-  // Mention distribution (doughnut)
-  const mentionCounts = {};
-  rows.forEach(d=>{ mentionCounts[d.mention] = (mentionCounts[d.mention]||0)+1; });
-  const mentionLabels = Object.keys(mentionCounts);
-  const mentionValues = Object.values(mentionCounts);
 
-  if(charts.mention) charts.mention.destroy();
-  charts.mention = new Chart(document.getElementById("mentionChart"), {
-    type:"doughnut",
-    data:{
-      labels:mentionLabels,
-      datasets:[{
-        data:mentionValues,
-        backgroundColor: mentionLabels.map(l=>COLORS[l]||"#999"),
-        borderWidth:2,
-        borderColor:"#fff"
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{ legend:{ position:"bottom", labels:{ font:{size:12} } } }
-    }
-  });
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
-  // Average distribution buckets
-  const buckets = [
-    {label:"< 10", min:-Infinity, max:10, count:0},
-    {label:"10 - 12", min:10, max:12, count:0},
-    {label:"12 - 14", min:12, max:14, count:0},
-    {label:"≥ 14", min:14, max:Infinity, count:0}
-  ];
-  rows.forEach(d=>{
-    const b = buckets.find(b=> d.avg>=b.min && d.avg<b.max);
-    if(b) b.count++;
-  });
+renderTable();
 
-  if(charts.avgDist) charts.avgDist.destroy();
-  charts.avgDist = new Chart(document.getElementById("avgDistChart"), {
-    type:"bar",
-    data:{
-      labels: buckets.map(b=>b.label),
-      datasets:[{
-        label:"عدد الناجحين",
-        data: buckets.map(b=>b.count),
-        backgroundColor:"#146c43",
-        borderRadius:6,
-        maxBarThickness:60
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{ legend:{ display:false } },
-      scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } }
-    }
-  });
+updateStatistics();
 
-  // Rank vs average line chart
-  const sortedByRank = [...rows].sort((a,b)=>a.rank-b.rank);
-  if(charts.rank) charts.rank.destroy();
-  charts.rank = new Chart(document.getElementById("rankChart"), {
-    type:"line",
-    data:{
-      labels: sortedByRank.map(d=>d.rank),
-      datasets:[{
-        label:"المعدل",
-        data: sortedByRank.map(d=>d.avg),
-        borderColor:"#146c43",
-        backgroundColor:"#146c4320",
-        borderWidth:2,
-        fill:true,
-        tension:0.25,
-        pointRadius:4,
-        pointHoverRadius:7,
-        pointBackgroundColor: sortedByRank.map(d=>COLORS[d.mention]||"#999")
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{ display:false },
-        tooltip:{
-          callbacks:{
-            title: (items)=>{
-              const d = sortedByRank[items[0].dataIndex];
-              return d.lastname + " " + d.firstname;
-            },
-            label: (item)=> "المعدل: " + item.formattedValue
-          }
-        }
-      },
-      scales:{
-        x:{ title:{ display:true, text:"الترتيب" } },
-        y:{ title:{ display:true, text:"المعدل" }, suggestedMin:8, suggestedMax:16 }
-      }
-    }
-  });
-}
-
-function refresh(){
-  const rows = getFilteredData();
-  renderKPIs(rows);
-  renderTable(rows);
-  renderCharts(rows);
-}
-
-document.querySelectorAll("#dataTable thead th").forEach(th=>{
-  th.addEventListener("click", ()=>{
-    const key = th.dataset.key;
-    if(sortState.key === key){
-      sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
-    } else {
-      sortState.key = key;
-      sortState.dir = "asc";
-    }
-    refresh();
-  });
-});
-
-document.getElementById("searchInput").addEventListener("input", refresh);
-document.getElementById("mentionFilter").addEventListener("change", refresh);
-document.getElementById("minAvgFilter").addEventListener("change", refresh);
-
-populateMentionFilter();
-refresh();
 </script>
+
 </body>
 </html>
