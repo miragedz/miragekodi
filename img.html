@@ -27,29 +27,63 @@ body:before{
   background-size:40px 40px;
 }
 header{
-  position:sticky;top:0;z-index:10;padding:18px 24px;
-  backdrop-filter:blur(20px);background:rgba(4,12,22,.72);
+  position:sticky;top:0;z-index:100;padding:14px 24px;
+  backdrop-filter:blur(20px);background:rgba(4,12,22,.85);
   border-bottom:1px solid var(--border);
 }
-.top{max-width:1400px;margin:auto;display:flex;align-items:center;gap:16px}
+.top{
+  max-width:1400px;margin:auto;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.header-left{display:flex;align-items:center;gap:12px}
 .logo{font-size:20px;font-weight:800;white-space:nowrap}
 .logo span{color:var(--cyan)}
+
+/* Search Bar Responsive */
 .search{
-  flex:1;display:flex;align-items:center;gap:10px;background:var(--panel);
-  border:1px solid var(--border);border-radius:14px;padding:11px 14px;
+  flex:1;max-width:500px;display:flex;align-items:center;gap:10px;background:var(--panel);
+  border:1px solid var(--border);border-radius:14px;padding:9px 14px;
 }
 .search input{width:100%;background:none;border:0;outline:0;color:white;font-size:15px}
 kbd{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:6px;padding:3px 7px;color:var(--muted)}
+
+/* Menu Toggle Button (Mobile) */
+.menu-toggle{
+  display:none;background:var(--panel);border:1px solid var(--border);
+  color:var(--text);font-size:15px;padding:8px 14px;border-radius:10px;cursor:pointer;
+  align-items:center;gap:6px;
+}
+
+/* Side Drawer (Side Menu Mobile) */
+.side-drawer{
+  position:fixed;top:0;left:0;bottom:0;width:280px;background:#081722;
+  border-right:1px solid var(--border);z-index:200;padding:20px;
+  transform:translateX(-100%);transition:transform .3s ease;overflow-y:auto;
+  box-shadow:10px 0 30px rgba(0,0,0,.5);
+}
+.side-drawer.open{transform:translateX(0)}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.drawer-header h3{margin:0;font-size:16px;color:var(--cyan)}
+.drawer-close{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
+.drawer-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  z-index:150;opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+
 main{max-width:1400px;margin:0 auto;padding:28px 24px 60px}
 .hero{margin-bottom:26px}
 .hero h1{margin:0 0 8px;font-size:clamp(28px,4vw,46px)}
 .hero p{color:var(--muted);margin:0;max-width:760px}
+
+/* Toolbar Responsive */
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
-button,.filter{
+button,.filter,.drawer-cat{
   cursor:pointer;color:var(--text);background:var(--panel);border:1px solid var(--border);
-  border-radius:11px;padding:9px 13px;transition:.2s;
+  border-radius:11px;padding:9px 13px;transition:.2s;text-align:left;
 }
-button:hover,.filter:hover,.filter.active{border-color:rgba(110,231,249,.55);background:rgba(110,231,249,.09)}
+button:hover,.filter:hover,.filter.active,.drawer-cat:hover,.drawer-cat.active{border-color:rgba(110,231,249,.55);background:rgba(110,231,249,.09)}
+
 .layout{display:grid;grid-template-columns:250px 1fr;gap:20px}
 .sidebar,.content,.command{
   background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);
@@ -78,17 +112,37 @@ button:hover,.filter:hover,.filter.active{border-color:rgba(110,231,249,.55);bac
 .copy{font-size:12px;padding:6px 9px}
 .empty{padding:50px;text-align:center;color:var(--muted);display:none}
 footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
-@media(max-width:800px){
- .layout{grid-template-columns:1fr}.sidebar{position:static}
- .sidebar .cats{display:grid;grid-template-columns:repeat(2,1fr)}
- .top{flex-wrap:wrap}.search{order:3;flex-basis:100%}
+
+/* Breakpoint Mobile & Tablette */
+@media(max-width:850px){
+  .menu-toggle{display:flex}
+  .search{order:3;max-width:100%;flex-basis:100%}
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  kbd{display:none}
 }
 </style>
 </head>
 <body>
+
+<!-- Overlay pour le Side Menu -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<!-- Side Menu Coulissant -->
+<aside class="side-drawer" id="sideDrawer">
+  <div class="drawer-header">
+    <h3>Catégories</h3>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="cats" id="drawerCategories"></div>
+</aside>
+
 <header>
   <div class="top">
-    <div class="logo">✨ <span>AI</span> Image Editor</div>
+    <div class="header-left">
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰ <span>Menu</span></button>
+      <div class="logo">✨ <span>AI</span> Image Editor</div>
+    </div>
     <div class="search">⌕
       <input id="search" placeholder="Rechercher une commande…  ex. remove, upscale, portrait">
       <kbd>/</kbd>
@@ -219,9 +273,7 @@ const sections = [
 ["Restauration","restore",[
 ["/restore","Restaurer","/restore high"],["/restore-photo","Restaurer une photo","/restore-photo"],
 ["/restore-color","Restaurer les couleurs","/restore-color"],["/colorize","Coloriser","/colorize natural"],
-["/upscale","Upscaling","/upscale 4x"],["/superres","Super-résolution","/superres 4x"],
-["/enhance","Améliorer","/enhance detail"],["/face-enhance","Améliorer un visage","/face-enhance 30"],
-["/detail","Récupérer les détails","/detail +25"],["/recover","Récupérer les zones","/recover shadows"]
+["/upscale","Upscaling","/upscale 4x"],["/superres","Super-résolution","/superres 4x"],["/enhance","Améliorer","/enhance detail"],["/face-enhance","Améliorer un visage","/face-enhance 30"],["/detail","Récupérer les détails","/detail +25"],["/recover","Récupérer les zones","/recover shadows"]
 ]],
 ["Design / Canva","design",[
 ["/design","Créer une composition","/design poster moderne"],["/layout","Mise en page","/layout balanced"],
@@ -230,8 +282,7 @@ const sections = [
 ["/spacing","Espacement","/spacing 20"],["/guides","Guides","/guides on"],
 ["/safe-area","Zone sûre","/safe-area social"],["/template","Appliquer un modèle","/template instagram"],
 ["/brand","Identité de marque","/brand mybrand"],["/mockup","Créer un mockup","/mockup smartphone"],
-["/poster","Créer une affiche","/poster event"],["/flyer","Créer un flyer","/flyer promotion"],
-["/banner","Créer une bannière","/banner website"]
+["/poster","Créer une affiche","/poster event"],["/flyer","Créer un flyer","/flyer promotion"],["/banner","Créer une bannière","/banner website"]
 ]],
 ["Texte","text",[
 ["/text","Ajouter du texte","/text \"Summer Sale\""],["/font","Changer la police","/font Inter"],
@@ -246,8 +297,7 @@ const sections = [
 ["/rename-layer","Renommer","/rename-layer Background"],["/hide-layer","Masquer","/hide-layer Background"],
 ["/show-layer","Afficher","/show-layer Background"],["/lock-layer","Verrouiller","/lock-layer Logo"],
 ["/opacity","Opacité","/opacity 75"],["/blend","Mode de fusion","/blend multiply"],
-["/group","Grouper","/group layer1 layer2"],["/ungroup","Dégrouper","/ungroup group1"],
-["/move-layer","Déplacer un calque","/move-layer up"],["/merge-down","Fusionner vers le bas","/merge-down"]
+["/group","Grouper","/group layer1 layer2"],["/ungroup","Dégrouper","/ungroup group1"],["/move-layer","Déplacer un calque","/move-layer up"],["/merge-down","Fusionner vers le bas","/merge-down"]
 ]],
 ["Effets","effects",[
 ["/blur","Flou","/blur 20px"],["/gaussian-blur","Flou gaussien","/gaussian-blur 15"],
@@ -289,11 +339,30 @@ let n=0;
 sections.forEach(([name,cat,items])=>items.forEach(x=>commands.push({name,cat,id:++n,cmd:x[0],desc:x[1],example:x[2]})));
 
 const categories=document.getElementById("categories");
+const drawerCategories=document.getElementById("drawerCategories");
 const grid=document.getElementById("grid");
 const search=document.getElementById("search");
 const title=document.getElementById("title");
 const count=document.getElementById("count");
 const empty=document.getElementById("empty");
+
+const sideDrawer=document.getElementById("sideDrawer");
+const drawerOverlay=document.getElementById("drawerOverlay");
+const menuToggle=document.getElementById("menuToggle");
+const drawerClose=document.getElementById("drawerClose");
+
+function openDrawer(){
+  sideDrawer.classList.add("open");
+  drawerOverlay.classList.add("open");
+}
+function closeDrawer(){
+  sideDrawer.classList.remove("open");
+  drawerOverlay.classList.remove("open");
+}
+
+menuToggle.onclick=openDrawer;
+drawerClose.onclick=closeDrawer;
+drawerOverlay.onclick=closeDrawer;
 
 function render(){
   const q=search.value.toLowerCase().trim();
@@ -318,22 +387,35 @@ function render(){
 }
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 
-categories.innerHTML=`<button class="cat active" data-cat="all">✨ Toutes (${commands.length})</button>`+
+const categoriesHTML=`<button class="cat active" data-cat="all">✨ Toutes (${commands.length})</button>`+
   sections.map(s=>`<button class="cat" data-cat="${s[1]}">${s[0]} (${s[2].length})</button>`).join("");
 
-categories.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{
-  categories.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");current=b.dataset.cat;render();
-});
+categories.innerHTML=categoriesHTML;
+drawerCategories.innerHTML=categoriesHTML;
+
+function setupCategoryClick(container){
+  container.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{
+    document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(`.cat[data-cat="${b.dataset.cat}"]`).forEach(x=>x.classList.add("active"));
+    current=b.dataset.cat;
+    render();
+    closeDrawer();
+  });
+}
+
+setupCategoryClick(categories);
+setupCategoryClick(drawerCategories);
+
 document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");current=b.dataset.filter;render();
-  categories.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===current));
+  document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===current));
 });
+
 search.oninput=render;
 document.addEventListener("keydown",e=>{
   if(e.key==="/" && document.activeElement!==search){e.preventDefault();search.focus();}
-  if(e.key==="Escape"){search.value="";search.blur();render();}
+  if(e.key==="Escape"){search.value="";search.blur();closeDrawer();render();}
 });
 render();
 </script>
