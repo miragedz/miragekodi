@@ -1,395 +1,1103 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Image Editor — Command Palette</title>
-<style>
-:root{
-  --bg:#07111f;--panel:rgba(15,28,48,.72);--panel2:rgba(10,20,35,.86);
-  --text:#edf6ff;--muted:#91a5bb;--border:rgba(255,255,255,.12);
-  --cyan:#6ee7f9;--violet:#8b5cf6;--green:#5eead4;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-body{
-  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);
-  background:
-    radial-gradient(ellipse 50% 35% at 50% 5%,rgba(110,231,249,.18),transparent 70%),
-    radial-gradient(circle at 85% 20%,rgba(139,92,246,.14),transparent 30%),
-    linear-gradient(180deg,#081722 0%,#07111f 55%,#030913 100%);
-  min-height:100vh;
-}
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;
-  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-  background-size:40px 40px;
-}
-header{
-  position:sticky;top:0;z-index:100;padding:14px 24px;
-  backdrop-filter:blur(20px);background:rgba(4,12,22,.85);
-  border-bottom:1px solid var(--border);
-}
-.top{
-  max-width:1400px;margin:auto;display:flex;align-items:center;
-  justify-content:space-between;gap:16px;flex-wrap:wrap;
-}
-.header-left{display:flex;align-items:center;gap:12px}
-.logo{font-size:20px;font-weight:800;white-space:nowrap}
-.logo span{color:var(--cyan)}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Editor — Command Palette</title>
+    <style>
+        /* ── reset & base ── */
+        :root {
+            --bg: #07111f;
+            --panel: rgba(15, 28, 48, .72);
+            --panel2: rgba(10, 20, 35, .86);
+            --text: #edf6ff;
+            --muted: #91a5bb;
+            --border: rgba(255, 255, 255, .12);
+            --cyan: #6ee7f9;
+            --violet: #8b5cf6;
+            --green: #5eead4;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .35);
+            --radius: 15px;
+            --radius-sm: 10px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse 50% 35% at 50% 5%, rgba(110, 231, 249, .18), transparent 70%),
+                radial-gradient(circle at 85% 20%, rgba(139, 92, 246, .14), transparent 30%),
+                linear-gradient(180deg, #081722 0%, #07111f 55%, #030913 100%);
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .15;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
 
-/* Search Bar Responsive */
-.search{
-  flex:1;max-width:500px;display:flex;align-items:center;gap:10px;background:var(--panel);
-  border:1px solid var(--border);border-radius:14px;padding:9px 14px;
-}
-.search input{width:100%;background:none;border:0;outline:0;color:white;font-size:15px}
-kbd{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:6px;padding:3px 7px;color:var(--muted)}
+        /* ── header ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+            backdrop-filter: blur(20px);
+            background: rgba(4, 12, 22, .85);
+            border-bottom: 1px solid var(--border);
+        }
+        .top {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .logo span {
+            color: var(--cyan);
+        }
 
-/* Menu Toggle Button (Mobile) */
-.menu-toggle{
-  display:none;background:var(--panel);border:1px solid var(--border);
-  color:var(--text);font-size:15px;padding:8px 14px;border-radius:10px;cursor:pointer;
-  align-items:center;gap:6px;
-}
+        /* search */
+        .search {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 9px 14px;
+        }
+        .search input {
+            width: 100%;
+            background: none;
+            border: 0;
+            outline: 0;
+            color: white;
+            font-size: 15px;
+        }
+        .search input::placeholder {
+            color: var(--muted);
+            opacity: .7;
+        }
+        kbd {
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
 
-/* Side Drawer (Side Menu Mobile) */
-.side-drawer{
-  position:fixed;top:0;left:0;bottom:0;width:280px;background:#081722;
-  border-right:1px solid var(--border);z-index:200;padding:20px;
-  transform:translateX(-100%);transition:transform .3s ease;overflow-y:auto;
-  box-shadow:10px 0 30px rgba(0,0,0,.5);
-}
-.side-drawer.open{transform:translateX(0)}
-.drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
-.drawer-header h3{margin:0;font-size:16px;color:var(--cyan)}
-.drawer-close{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
-.drawer-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-  z-index:150;opacity:0;pointer-events:none;transition:opacity .3s ease;
-}
-.drawer-overlay.open{opacity:1;pointer-events:auto}
+        /* mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 15px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            align-items: center;
+            gap: 6px;
+        }
 
-main{max-width:1400px;margin:0 auto;padding:28px 24px 60px}
-.hero{margin-bottom:26px}
-.hero h1{margin:0 0 8px;font-size:clamp(28px,4vw,46px)}
-.hero p{color:var(--muted);margin:0;max-width:760px}
+        /* ── side drawer ── */
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: #081722;
+            border-right: 1px solid var(--border);
+            z-index: 200;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform .3s ease;
+            overflow-y: auto;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, .5);
+        }
+        .side-drawer.open {
+            transform: translateX(0);
+        }
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--cyan);
+        }
+        .drawer-close {
+            background: none;
+            border: 0;
+            color: var(--muted);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-/* Toolbar Responsive */
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
-button,.filter,.drawer-cat{
-  cursor:pointer;color:var(--text);background:var(--panel);border:1px solid var(--border);
-  border-radius:11px;padding:9px 13px;transition:.2s;text-align:left;
-}
-button:hover,.filter:hover,.filter.active,.drawer-cat:hover,.drawer-cat.active{border-color:rgba(110,231,249,.55);background:rgba(110,231,249,.09)}
+        /* ── main layout ── */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+        .hero {
+            margin-bottom: 26px;
+        }
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: clamp(28px, 4vw, 46px);
+        }
+        .hero p {
+            color: var(--muted);
+            margin: 0;
+            max-width: 760px;
+        }
 
-.layout{display:grid;grid-template-columns:250px 1fr;gap:20px}
-.sidebar,.content,.command{
-  background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);
-}
-.sidebar{border-radius:20px;padding:14px;height:max-content;position:sticky;top:92px}
-.sidebar h3{font-size:12px;text-transform:uppercase;color:var(--muted);margin:10px 10px}
-.cat{display:block;width:100%;text-align:left;border:0;background:transparent;margin:3px 0}
-.cat.active{background:rgba(110,231,249,.1);color:var(--cyan)}
-.content{border-radius:20px;padding:18px}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:4px 4px 16px}
-.section-title h2{margin:0;font-size:20px}
-.count{color:var(--muted);font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:12px}
-.command{
-  border-radius:15px;padding:15px;transition:.2s;background:rgba(7,17,31,.58)
-}
-.command:hover{transform:translateY(-2px);border-color:rgba(110,231,249,.3)}
-.cmd-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.cmd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--cyan);font-weight:700}
-.num{font-size:11px;color:var(--muted)}
-.desc{font-size:13px;color:var(--muted);margin:9px 0}
-.example{
-  font-family:ui-monospace,monospace;font-size:12px;color:#d8e6f3;
-  background:rgba(0,0,0,.25);padding:9px;border-radius:9px;overflow:auto
-}
-.empty{padding:50px;text-align:center;color:var(--muted);display:none}
-footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
 
-/* Breakpoint Mobile & Tablette */
-@media(max-width:850px){
-  .menu-toggle{display:flex}
-  .search{order:3;max-width:100%;flex-basis:100%}
-  .layout{grid-template-columns:1fr}
-  .sidebar{display:none}
-  kbd{display:none}
-}
-</style>
+        /* ── sidebar ── */
+        .sidebar {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 14px;
+            height: max-content;
+            position: sticky;
+            top: 92px;
+        }
+        .sidebar h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 10px 8px;
+            letter-spacing: .5px;
+        }
+        .cat {
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            margin: 3px 0;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            font-size: 14px;
+            cursor: pointer;
+            transition: .15s;
+        }
+        .cat:hover {
+            background: rgba(255, 255, 255, .04);
+            color: var(--text);
+        }
+        .cat.active {
+            background: rgba(110, 231, 249, .1);
+            color: var(--cyan);
+        }
+
+        /* ── content ── */
+        .content {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 18px;
+        }
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 4px 4px 16px;
+        }
+        .section-title h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ── command grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 12px;
+        }
+
+        /* ── command card ── */
+        .command {
+            border-radius: var(--radius);
+            padding: 15px;
+            transition: .2s;
+            background: rgba(7, 17, 31, .58);
+            border: 1px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+        .command:hover {
+            transform: translateY(-2px);
+            border-color: rgba(110, 231, 249, .3);
+        }
+        .command:active {
+            transform: scale(.98);
+        }
+
+        .cmd-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .cmd {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            color: var(--cyan);
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: .2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cmd .copy-badge {
+            font-size: 10px;
+            opacity: 0;
+            color: var(--muted);
+            transition: .2s;
+            font-weight: 400;
+        }
+        .command:hover .cmd .copy-badge {
+            opacity: .6;
+        }
+
+        .cmd-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cmd-actions button {
+            background: transparent;
+            border: 0;
+            color: var(--muted);
+            font-size: 14px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: .15s;
+            line-height: 1;
+        }
+        .cmd-actions button:hover {
+            background: rgba(255, 255, 255, .06);
+            color: var(--text);
+        }
+        .cmd-actions .run-btn {
+            color: var(--green);
+            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(94, 234, 212, .08);
+            border: 1px solid rgba(94, 234, 212, .15);
+            transition: .2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cmd-actions .run-btn:hover {
+            background: rgba(94, 234, 212, .18);
+            border-color: rgba(94, 234, 212, .4);
+        }
+        .cmd-actions .run-btn.running {
+            color: var(--cyan);
+            border-color: var(--cyan);
+            background: rgba(110, 231, 249, .12);
+            pointer-events: none;
+            animation: pulse-btn .8s ease-in-out infinite;
+        }
+        .cmd-actions .run-btn.done {
+            color: var(--green);
+            border-color: var(--green);
+            background: rgba(94, 234, 212, .15);
+            pointer-events: none;
+        }
+
+        @keyframes pulse-btn {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .4;
+            }
+        }
+
+        .num {
+            font-size: 11px;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+        }
+        .desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin: 9px 0 8px;
+            line-height: 1.4;
+        }
+        .example {
+            font-family: ui-monospace, monospace;
+            font-size: 12px;
+            color: #d8e6f3;
+            background: rgba(0, 0, 0, .25);
+            padding: 9px;
+            border-radius: 9px;
+            overflow: auto;
+            opacity: .8;
+        }
+
+        /* ── running state on card ── */
+        .command.executing {
+            border-color: var(--cyan) !important;
+            box-shadow: 0 0 30px rgba(110, 231, 249, .08);
+        }
+        .command.executed {
+            border-color: var(--green) !important;
+            box-shadow: 0 0 30px rgba(94, 234, 212, .1);
+        }
+
+        /* ── empty state ── */
+        .empty {
+            padding: 50px;
+            text-align: center;
+            color: var(--muted);
+            display: none;
+        }
+
+        /* ── toast ── */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--panel2);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
+            min-width: 200px;
+        }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .toast.hide {
+            transform: translateX(60%);
+            opacity: 0;
+        }
+        .toast .icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .toast .msg {
+            font-size: 14px;
+            color: var(--text);
+            flex: 1;
+        }
+        .toast .msg strong {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+        .toast .msg .cmd-highlight {
+            font-family: ui-monospace, monospace;
+            color: var(--cyan);
+            background: rgba(110, 231, 249, .1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .toast.success .icon {
+            color: var(--green);
+        }
+        .toast.copy .icon {
+            color: var(--cyan);
+        }
+
+        /* ── footer ── */
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 25px;
+            opacity: .6;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 850px) {
+            .menu-toggle {
+                display: flex;
+            }
+            .search {
+                order: 3;
+                max-width: 100%;
+                flex-basis: 100%;
+            }
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            kbd {
+                display: none;
+            }
+            #toast-container {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                max-width: none;
+            }
+            .toast {
+                font-size: 13px;
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .cmd {
+                font-size: 14px;
+            }
+            .cmd-actions .run-btn {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="drawer-overlay" id="drawerOverlay"></div>
-
-<aside class="side-drawer" id="sideDrawer">
-  <div class="drawer-header">
-    <h3>Catégories</h3>
-    <button class="drawer-close" id="drawerClose">✕</button>
-  </div>
-  <div class="cats" id="drawerCategories"></div>
-</aside>
-
-<header>
-  <div class="top">
-    <div class="header-left">
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-      <div class="logo">✨ <span>AI</span> Image Editor</div>
-    </div>
-    <div class="search">⌕
-      <input id="search" placeholder="Rechercher une commande…  ex. remove, upscale, portrait">
-      <kbd>/</kbd>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section class="hero">
-    <h1>Command Palette</h1>
-    <p>140 commandes pour un éditeur d’images inspiré de Photoshop, Canva et des outils IA génératifs.</p>
-  </section>
-
-  <div class="layout">
-    <aside class="sidebar">
-      <h3>Catégories</h3>
-      <div class="cats" id="categories"></div>
+    <!-- ─── overlay & drawer ─── -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <h3>Catégories</h3>
+            <button class="drawer-close" id="drawerClose">✕</button>
+        </div>
+        <div class="cats" id="drawerCategories"></div>
     </aside>
 
-    <section class="content">
-      <div class="section-title">
-        <h2 id="title">Toutes les commandes</h2>
-        <span class="count" id="count"></span>
-      </div>
-      <div class="grid" id="grid"></div>
-      <div class="empty" id="empty">Aucune commande trouvée.</div>
-    </section>
-  </div>
+    <!-- ─── header ─── -->
+    <header>
+        <div class="top">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <div class="logo">✨ <span>AI</span> Image Editor</div>
+            </div>
+            <div class="search">⌕
+                <input id="search" placeholder="Rechercher une commande…  ex. remove, upscale, portrait" />
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </header>
 
-  <footer>AI Image Editor Command Palette · /commande cible --paramètre valeur</footer>
-</main>
+    <!-- ─── main ─── -->
+    <main>
+        <section class="hero">
+            <h1>Command Palette</h1>
+            <p>140 commandes pour un éditeur d’images inspiré de Photoshop, Canva et des outils IA génératifs. Cliquez sur une commande pour la copier, ou appuyez sur <strong>▶ Exécuter</strong> pour la simuler.</p>
+        </section>
 
-<script>
-const sections = [
-["Core","core",[
-["/edit","Modifier l’image","/edit améliore l'image"],["/apply","Appliquer une modification","/apply rendu professionnel"],
-["/undo","Annuler","/undo 2"],["/redo","Rétablir","/redo 1"],["/reset","Réinitialiser","/reset image"],
-["/compare","Comparer avant/après","/compare before after"],["/preview","Mode aperçu","/preview split"],
-["/duplicate","Dupliquer un calque","/duplicate layer1"],["/merge","Fusionner","/merge layer1 layer2"],["/flatten","Aplatir","/flatten"]
-]],
-["Crop & Transform","transform",[
-["/crop","Recadrer","/crop 16:9"],["/resize","Redimensionner","/resize 1920x1080"],["/scale","Mettre à l’échelle","/scale 150%"],
-["/rotate","Pivoter","/rotate 90"],["/flip","Retourner","/flip horizontal"],["/straighten","Redresser","/straighten +2.5"],
-["/perspective","Corriger la perspective","/perspective auto"],["/warp","Déformer","/warp subtle"],["/distort","Distorsion","/distort perspective"],
-["/skew","Incliner","/skew 5 0"],["/expand","Étendre","/expand 300"],["/reframe","Recomposer","/reframe 4:5"],
-["/content-aware","Extension intelligente","/content-aware expand-right"]
-]],
-["Ajustement","adjustment",[
-["/retouch","Retouche générale","/retouch portrait naturel"],["/remove","Supprimer un objet","/remove voiture"],
-["/erase","Effacer une zone","/erase arrière-plan"],["/clean","Nettoyer les artefacts","/clean artifacts"],
-["/heal","Corriger une imperfection","/heal imperfection"],["/clone","Cloner une zone","/clone zone1 zone2"],
-["/patch","Réparer une zone","/patch tache"],["/decontaminate","Nettoyer les contours","/decontaminate edges"],
-["/denoise","Réduire le bruit","/denoise 40"],["/deblur","Réduire le flou","/deblur medium"],
-["/sharpen","Accentuer la netteté","/sharpen 25"],["/artifact-remove","Supprimer les artefacts","/artifact-remove jpeg"],
-["/brightness","Luminosité","/brightness +15"],["/contrast","Contraste","/contrast +20"],["/exposure","Exposition","/exposure +0.5"],
-["/saturation","Saturation","/saturation -10"],["/vibrance","Vibrance","/vibrance +25"],["/temperature","Température","/temperature +8"],
-["/tint","Teinte","/tint -5"],["/hue","Rotation de teinte","/hue +15"],["/curves","Courbes","/curves cinematic"],
-["/levels","Niveaux","/levels auto"],["/highlights","Hautes lumières","/highlights -20"],["/shadows","Ombres","/shadows +30"],
-["/whites","Blancs","/whites +10"],["/blacks","Noirs","/blacks -15"],["/colorgrade","Color grading","/colorgrade teal-orange"],
-["/relight","Rééclairer avec IA","/relight sunset"],["/light","Preset lumière","/light softbox"],
-["/rimlight","Lumière de contour","/rimlight right"],["/softlight","Lumière douce","/softlight 50"],
-["/dramatic-light","Lumière dramatique","/dramatic-light medium"],["/shadow","Modifier les ombres","/shadow soften"],
-["/glow","Lueur","/glow subtle"],["/flare","Lens flare","/flare top-left"],
-["/vignette","Vignette","/vignette 20"],["/hdr","Rendu HDR","/hdr 30"],
-["/restore","Restaurer","/restore high"],["/restore-photo","Restaurer une photo","/restore-photo"],
-["/restore-color","Restaurer les couleurs","/restore-color"],["/colorize","Coloriser","/colorize natural"],
-["/upscale","Upscaling","/upscale 4x"],["/superres","Super-résolution","/superres 4x"],["/enhance","Améliorer","/enhance detail"],["/face-enhance","Améliorer un visage","/face-enhance 30"],["/detail","Récupérer les détails","/detail +25"],["/recover","Récupérer les zones","/recover shadows"]
-]],
-["Portrait","portrait",[
-["/portrait","Optimiser un portrait","/portrait professional"],["/face","Améliorer le visage","/face improve details"],
-["/skin","Retouche légère de peau","/skin 20"],["/eyes","Ajuster les yeux","/eyes brighten"],
-["/teeth","Ajustement des dents","/teeth subtle"],["/hair","Améliorer les cheveux","/hair improve detail"],
-["/face-light","Éclairage du visage","/face-light soft-left"],["/headshot","Portrait professionnel","/headshot corporate"],
-["/expression","Modifier l’expression","/expression smile"],["/portrait-light","Éclairage portrait","/portrait-light studio"]
-]],
-["Calque / Arrière-plan","selection_bg",[
-["/select","Sélectionner un objet","/select voiture"],["/select-subject","Sélectionner le sujet","/select-subject"],
-["/select-face","Sélectionner un visage","/select-face"],["/select-color","Sélectionner une couleur","/select-color blue"],
-["/select-sky","Sélectionner le ciel","/select-sky"],["/mask","Créer un masque","/mask subject"],
-["/invert-selection","Inverser la sélection","/invert-selection"],["/feather","Adoucir le contour","/feather 15"],
-["/object","Gérer un objet","/object isolate"],["/isolate","Isoler le sujet","/isolate product"],
-["/remove-bg","Supprimer l’arrière-plan","/remove-bg"],["/change-bg","Changer l’arrière-plan","/change-bg studio blanc"],
-["/replace-bg","Remplacer le décor","/replace-bg plage"],["/blur-bg","Flouter l’arrière-plan","/blur-bg 30"],
-["/extend-bg","Étendre le décor","/extend-bg left"],["/generate-bg","Générer un décor","/generate-bg futuristic city"],
-["/sky","Modifier le ciel","/sky coucher de soleil"],["/sky-replace","Remplacer le ciel","/sky-replace dramatic"],
-["/depth","Profondeur","/depth +30"],["/background-match","Harmoniser le décor","/background-match cinematic"]
-]],
-["IA Générative","ai",[
-["/generate","Générer","/generate futur maison"],["/imagine","Imaginer","/imagine cyberpunk city"],
-["/inpaint","Inpainting","/inpaint zone1 ajoute une lampe"],["/outpaint","Outpainting","/outpaint right 500px"],
-["/fill","Remplissage IA","/fill sélection paysage"],["/generative-fill","Generative Fill","/generative-fill wooden table"],
-["/generative-expand","Generative Expand","/generative-expand top"],["/add","Ajouter un objet","/add vase"],
-["/replace","Remplacer un objet","/replace chair sofa"],["/reconstruct","Reconstruire une zone","/reconstruct missing area"],
-["/variation","Créer des variations","/variation 4"],["/remix","Remixer","/remix futuristic"],
-["/restyle","Restyler","/restyle watercolor"],["/style-transfer","Transfert de style","/style-transfer comic"],
-["/semantic-edit","Édition sémantique","/semantic-edit make it winter"]
-]],
-["Style/Effet","ai",[
-["/anime","Style anime","/anime soft cinematic"],["/cartoon","Style cartoon","/cartoon modern"],
-["/comic","Style comic","/comic superhero"],["/sketch","Croquis","/sketch pencil"],
-["/ink","Encre","/ink black-white"],["/watercolor","Aquarelle","/watercolor soft"],
-["/oilpaint","Peinture à l’huile","/oilpaint classical"],["/pixelart","Pixel art","/pixelart 16bit"],
-["/3d","Rendu 3D","/3d realistic"],["/clay","Rendu clay","/clay render"],
-["/neon","Style néon","/neon cyberpunk"],["/vintage","Vintage","/vintage 1970s"],["/retro","Retro","/retro poster"],["/minimal","Minimaliste","/minimal editorial"],["/cinematic","Cinématique","/cinematic movie still"],
-["/photo","Optimiser une photo","/photo professional"],["/studio","Photo studio","/studio product photography"],
-["/product","Photo produit","/product ecommerce"],["/macro","Macro","/macro detailed"],
-["/landscape","Paysage","/landscape HDR"],["/street","Street photography","/street photography"],
-["/architecture","Architecture","/architecture corrected"],["/night","Photo de nuit","/night photography"],
-["/long-exposure","Pose longue","/long-exposure effect"],["/depth-of-field","Profondeur de champ","/depth-of-field shallow"],
-["/blur","Flou","/blur 20px"],["/gaussian-blur","Flou gaussien","/gaussian-blur 15"],
-["/motion-blur","Flou de mouvement","/motion-blur horizontal"],["/bokeh","Bokeh","/bokeh strong"],
-["/glow","Glow","/glow cyan"],["/shadow","Ombre","/shadow soft"],
-["/drop-shadow","Ombre portée","/drop-shadow 10 10 20"],["/inner-shadow","Ombre interne","/inner-shadow subtle"],
-["/noise","Bruit","/noise 5"],["/grain","Grain photo","/grain film"],
-["/chromatic","Aberration chromatique","/chromatic subtle"],["/duotone","Duo-ton","/duotone blue-orange"],
-["/halftone","Demi-teinte","/halftone comic"],["/pixelate","Pixelliser","/pixelate 10"],["/posterize","Posteriser","/posterize 6"]
-]],
-["Design / Canva","design",[
-["/design","Créer une composition","/design poster moderne"],["/layout","Mise en page","/layout balanced"],
-["/align","Aligner","/align center"],["/distribute","Distribuer","/distribute horizontal"],
-["/grid","Créer une grille","/grid 3x3"],["/margin","Marges","/margin 40"],
-["/spacing","Espacement","/spacing 20"],["/guides","Guides","/guides on"],
-["/safe-area","Zone sûre","/safe-area social"],["/template","Appliquer un modèle","/template instagram"],
-["/brand","Identité de marque","/brand mybrand"],["/mockup","Créer un mockup","/mockup smartphone"],
-["/poster","Créer une affiche","/poster event"],["/flyer","Créer un flyer","/flyer promotion"],["/banner","Créer une bannière","/banner website"]
-]],
-["Texte","text",[
-["/text","Ajouter du texte","/text \"Summer Sale\""],["/font","Changer la police","/font Inter"],
-["/font-size","Taille","/font-size 48"],["/font-weight","Graisse","/font-weight 700"],
-["/tracking","Espacement des lettres","/tracking 2"],["/leading","Interligne","/leading 1.4"],
-["/text-align","Alignement","/text-align center"],["/text-color","Couleur","/text-color #FFFFFF"],
-["/text-shadow","Ombre du texte","/text-shadow soft"],["/outline","Contour","/outline 2px"],
-["/warp-text","Déformer le texte","/warp-text arc"],["/text-effect","Effet texte","/text-effect neon"]
-]],
-["Calques","layers",[
-["/layer","Gérer un calque","/layer subject"],["/new-layer","Nouveau calque","/new-layer"],
-["/rename-layer","Renommer","/rename-layer Background"],["/hide-layer","Masquer","/hide-layer Background"],
-["/show-layer","Afficher","/show-layer Background"],["/lock-layer","Verrouiller","/lock-layer Logo"],
-["/opacity","Opacité","/opacity 75"],["/blend","Mode de fusion","/blend multiply"],
-["/group","Grouper","/group layer1 layer2"],["/ungroup","Dégrouper","/ungroup group1"],["/move-layer","Déplacer un calque","/move-layer up"],["/merge-down","Fusionner vers le bas","/merge-down"]
-]],
-["Réseaux sociaux","social",[
-["/instagram","Optimiser Instagram","/instagram --format 4:5"],["/story","Story 9:16","/story --safe-area on"],
-["/reel","Reel","/reel"],["/post","Post","/post"],["/facebook","Facebook","/facebook"],
-["/youtube","YouTube","/youtube --resolution 1920x1080"],["/thumbnail","Miniature","/thumbnail --style bold"],
-["/tiktok","TikTok","/tiktok"],["/linkedin","LinkedIn","/linkedin"],["/twitter","X/Twitter","/twitter"],
-["/pinterest","Pinterest","/pinterest"],["/whatsapp","WhatsApp","/whatsapp"]
-]],
-["Analyse IA","analysis",[
-["/analyze","Analyser l’image","/analyze"],["/describe","Décrire","/describe"],
-["/detect","Détecter les objets","/detect"],["/detect-faces","Détecter les visages","/detect-faces"],
-["/detect-text","Détecter le texte","/detect-text"],["/ocr","Extraire le texte","/ocr"],
-["/colors","Extraire la palette","/colors"],["/composition","Analyser la composition","/composition"],
-["/quality","Analyser la qualité","/quality"],["/lighting","Analyser l’éclairage","/lighting"],
-["/style","Identifier le style","/style"],["/metadata","Lire les métadonnées","/metadata"],
-["/alt-text","Créer un texte alternatif","/alt-text"]
-]],
-["Export","export",[
-["/export","Exporter","/export png"],["/save","Sauvegarder","/save project"],
-["/download","Télécharger","/download png"],["/jpg","JPEG","/jpg quality=90"],
-["/png","PNG","/png transparent=true"],["/webp","WebP","/webp quality=85"],
-["/pdf","PDF","/pdf print"],["/svg","SVG","/svg"],["/quality","Qualité","/quality 95"],
-["/dpi","Résolution d’impression","/dpi 300"],["/transparent","Transparence","/transparent on"],
-["/print","Impression","/print A4 300dpi"]
-]]
-];
+        <div class="layout">
+            <aside class="sidebar">
+                <h3>Catégories</h3>
+                <div class="cats" id="categories"></div>
+            </aside>
 
-let commands=[], current="all";
-let n=0;
-sections.forEach(([name,cat,items])=>items.forEach(x=>commands.push({name,cat,id:++n,cmd:x[0],desc:x[1],example:x[2]})));
+            <section class="content">
+                <div class="section-title">
+                    <h2 id="title">Toutes les commandes</h2>
+                    <span class="count" id="count"></span>
+                </div>
+                <div class="grid" id="grid"></div>
+                <div class="empty" id="empty">Aucune commande trouvée.</div>
+            </section>
+        </div>
 
-const categories=document.getElementById("categories");
-const drawerCategories=document.getElementById("drawerCategories");
-const grid=document.getElementById("grid");
-const search=document.getElementById("search");
-const title=document.getElementById("title");
-const count=document.getElementById("count");
-const empty=document.getElementById("empty");
+        <footer>AI Image Editor Command Palette · /commande cible --paramètre valeur</footer>
+    </main>
 
-const sideDrawer=document.getElementById("sideDrawer");
-const drawerOverlay=document.getElementById("drawerOverlay");
-const menuToggle=document.getElementById("menuToggle");
-const drawerClose=document.getElementById("drawerClose");
+    <!-- ─── toast container ─── -->
+    <div id="toast-container"></div>
 
-function openDrawer(){
-  sideDrawer.classList.add("open");
-  drawerOverlay.classList.add("open");
-}
-function closeDrawer(){
-  sideDrawer.classList.remove("open");
-  drawerOverlay.classList.remove("open");
-}
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  1.  DATA
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-menuToggle.onclick=openDrawer;
-drawerClose.onclick=closeDrawer;
-drawerOverlay.onclick=closeDrawer;
+        const sections = [
+            ["Core", "core", [
+                ["/edit", "Modifier l’image", "/edit améliore l'image"],
+                ["/apply", "Appliquer une modification", "/apply rendu professionnel"],
+                ["/undo", "Annuler", "/undo 2"],
+                ["/redo", "Rétablir", "/redo 1"],
+                ["/reset", "Réinitialiser", "/reset image"],
+                ["/compare", "Comparer avant/après", "/compare before after"],
+                ["/preview", "Mode aperçu", "/preview split"],
+                ["/duplicate", "Dupliquer un calque", "/duplicate layer1"],
+                ["/merge", "Fusionner", "/merge layer1 layer2"],
+                ["/flatten", "Aplatir", "/flatten"]
+            ]],
+            ["Crop & Transform", "transform", [
+                ["/crop", "Recadrer", "/crop 16:9"],
+                ["/resize", "Redimensionner", "/resize 1920x1080"],
+                ["/scale", "Mettre à l’échelle", "/scale 150%"],
+                ["/rotate", "Pivoter", "/rotate 90"],
+                ["/flip", "Retourner", "/flip horizontal"],
+                ["/straighten", "Redresser", "/straighten +2.5"],
+                ["/perspective", "Corriger la perspective", "/perspective auto"],
+                ["/warp", "Déformer", "/warp subtle"],
+                ["/distort", "Distorsion", "/distort perspective"],
+                ["/skew", "Incliner", "/skew 5 0"],
+                ["/expand", "Étendre", "/expand 300"],
+                ["/reframe", "Recomposer", "/reframe 4:5"],
+                ["/content-aware", "Extension intelligente", "/content-aware expand-right"]
+            ]],
+            ["Ajustement", "adjustment", [
+                ["/retouch", "Retouche générale", "/retouch portrait naturel"],
+                ["/remove", "Supprimer un objet", "/remove voiture"],
+                ["/erase", "Effacer une zone", "/erase arrière-plan"],
+                ["/clean", "Nettoyer les artefacts", "/clean artifacts"],
+                ["/heal", "Corriger une imperfection", "/heal imperfection"],
+                ["/clone", "Cloner une zone", "/clone zone1 zone2"],
+                ["/patch", "Réparer une zone", "/patch tache"],
+                ["/decontaminate", "Nettoyer les contours", "/decontaminate edges"],
+                ["/denoise", "Réduire le bruit", "/denoise 40"],
+                ["/deblur", "Réduire le flou", "/deblur medium"],
+                ["/sharpen", "Accentuer la netteté", "/sharpen 25"],
+                ["/artifact-remove", "Supprimer les artefacts", "/artifact-remove jpeg"],
+                ["/brightness", "Luminosité", "/brightness +15"],
+                ["/contrast", "Contraste", "/contrast +20"],
+                ["/exposure", "Exposition", "/exposure +0.5"],
+                ["/saturation", "Saturation", "/saturation -10"],
+                ["/vibrance", "Vibrance", "/vibrance +25"],
+                ["/temperature", "Température", "/temperature +8"],
+                ["/tint", "Teinte", "/tint -5"],
+                ["/hue", "Rotation de teinte", "/hue +15"],
+                ["/curves", "Courbes", "/curves cinematic"],
+                ["/levels", "Niveaux", "/levels auto"],
+                ["/highlights", "Hautes lumières", "/highlights -20"],
+                ["/shadows", "Ombres", "/shadows +30"],
+                ["/whites", "Blancs", "/whites +10"],
+                ["/blacks", "Noirs", "/blacks -15"],
+                ["/colorgrade", "Color grading", "/colorgrade teal-orange"],
+                ["/relight", "Rééclairer avec IA", "/relight sunset"],
+                ["/light", "Preset lumière", "/light softbox"],
+                ["/rimlight", "Lumière de contour", "/rimlight right"],
+                ["/softlight", "Lumière douce", "/softlight 50"],
+                ["/dramatic-light", "Lumière dramatique", "/dramatic-light medium"],
+                ["/shadow", "Modifier les ombres", "/shadow soften"],
+                ["/glow", "Lueur", "/glow subtle"],
+                ["/flare", "Lens flare", "/flare top-left"],
+                ["/vignette", "Vignette", "/vignette 20"],
+                ["/hdr", "Rendu HDR", "/hdr 30"],
+                ["/restore", "Restaurer", "/restore high"],
+                ["/restore-photo", "Restaurer une photo", "/restore-photo"],
+                ["/restore-color", "Restaurer les couleurs", "/restore-color"],
+                ["/colorize", "Coloriser", "/colorize natural"],
+                ["/upscale", "Upscaling", "/upscale 4x"],
+                ["/superres", "Super-résolution", "/superres 4x"],
+                ["/enhance", "Améliorer", "/enhance detail"],
+                ["/face-enhance", "Améliorer un visage", "/face-enhance 30"],
+                ["/detail", "Récupérer les détails", "/detail +25"],
+                ["/recover", "Récupérer les zones", "/recover shadows"]
+            ]],
+            ["Portrait", "portrait", [
+                ["/portrait", "Optimiser un portrait", "/portrait professional"],
+                ["/face", "Améliorer le visage", "/face improve details"],
+                ["/skin", "Retouche légère de peau", "/skin 20"],
+                ["/eyes", "Ajuster les yeux", "/eyes brighten"],
+                ["/teeth", "Ajustement des dents", "/teeth subtle"],
+                ["/hair", "Améliorer les cheveux", "/hair improve detail"],
+                ["/face-light", "Éclairage du visage", "/face-light soft-left"],
+                ["/headshot", "Portrait professionnel", "/headshot corporate"],
+                ["/expression", "Modifier l’expression", "/expression smile"],
+                ["/portrait-light", "Éclairage portrait", "/portrait-light studio"]
+            ]],
+            ["Calque / Arrière-plan", "selection_bg", [
+                ["/select", "Sélectionner un objet", "/select voiture"],
+                ["/select-subject", "Sélectionner le sujet", "/select-subject"],
+                ["/select-face", "Sélectionner un visage", "/select-face"],
+                ["/select-color", "Sélectionner une couleur", "/select-color blue"],
+                ["/select-sky", "Sélectionner le ciel", "/select-sky"],
+                ["/mask", "Créer un masque", "/mask subject"],
+                ["/invert-selection", "Inverser la sélection", "/invert-selection"],
+                ["/feather", "Adoucir le contour", "/feather 15"],
+                ["/object", "Gérer un objet", "/object isolate"],
+                ["/isolate", "Isoler le sujet", "/isolate product"],
+                ["/remove-bg", "Supprimer l’arrière-plan", "/remove-bg"],
+                ["/change-bg", "Changer l’arrière-plan", "/change-bg studio blanc"],
+                ["/replace-bg", "Remplacer le décor", "/replace-bg plage"],
+                ["/blur-bg", "Flouter l’arrière-plan", "/blur-bg 30"],
+                ["/extend-bg", "Étendre le décor", "/extend-bg left"],
+                ["/generate-bg", "Générer un décor", "/generate-bg futuristic city"],
+                ["/sky", "Modifier le ciel", "/sky coucher de soleil"],
+                ["/sky-replace", "Remplacer le ciel", "/sky-replace dramatic"],
+                ["/depth", "Profondeur", "/depth +30"],
+                ["/background-match", "Harmoniser le décor", "/background-match cinematic"]
+            ]],
+            ["IA Générative", "ai", [
+                ["/generate", "Générer", "/generate futur maison"],
+                ["/imagine", "Imaginer", "/imagine cyberpunk city"],
+                ["/inpaint", "Inpainting", "/inpaint zone1 ajoute une lampe"],
+                ["/outpaint", "Outpainting", "/outpaint right 500px"],
+                ["/fill", "Remplissage IA", "/fill sélection paysage"],
+                ["/generative-fill", "Generative Fill", "/generative-fill wooden table"],
+                ["/generative-expand", "Generative Expand", "/generative-expand top"],
+                ["/add", "Ajouter un objet", "/add vase"],
+                ["/replace", "Remplacer un objet", "/replace chair sofa"],
+                ["/reconstruct", "Reconstruire une zone", "/reconstruct missing area"],
+                ["/variation", "Créer des variations", "/variation 4"],
+                ["/remix", "Remixer", "/remix futuristic"],
+                ["/restyle", "Restyler", "/restyle watercolor"],
+                ["/style-transfer", "Transfert de style", "/style-transfer comic"],
+                ["/semantic-edit", "Édition sémantique", "/semantic-edit make it winter"]
+            ]],
+            ["Style / Effet", "style", [
+                ["/anime", "Style anime", "/anime soft cinematic"],
+                ["/cartoon", "Style cartoon", "/cartoon modern"],
+                ["/comic", "Style comic", "/comic superhero"],
+                ["/sketch", "Croquis", "/sketch pencil"],
+                ["/ink", "Encre", "/ink black-white"],
+                ["/watercolor", "Aquarelle", "/watercolor soft"],
+                ["/oilpaint", "Peinture à l’huile", "/oilpaint classical"],
+                ["/pixelart", "Pixel art", "/pixelart 16bit"],
+                ["/3d", "Rendu 3D", "/3d realistic"],
+                ["/clay", "Rendu clay", "/clay render"],
+                ["/neon", "Style néon", "/neon cyberpunk"],
+                ["/vintage", "Vintage", "/vintage 1970s"],
+                ["/retro", "Retro", "/retro poster"],
+                ["/minimal", "Minimaliste", "/minimal editorial"],
+                ["/cinematic", "Cinématique", "/cinematic movie still"],
+                ["/photo", "Optimiser une photo", "/photo professional"],
+                ["/studio", "Photo studio", "/studio product photography"],
+                ["/product", "Photo produit", "/product ecommerce"],
+                ["/macro", "Macro", "/macro detailed"],
+                ["/landscape", "Paysage", "/landscape HDR"],
+                ["/street", "Street photography", "/street photography"],
+                ["/architecture", "Architecture", "/architecture corrected"],
+                ["/night", "Photo de nuit", "/night photography"],
+                ["/long-exposure", "Pose longue", "/long-exposure effect"],
+                ["/depth-of-field", "Profondeur de champ", "/depth-of-field shallow"],
+                ["/blur", "Flou", "/blur 20px"],
+                ["/gaussian-blur", "Flou gaussien", "/gaussian-blur 15"],
+                ["/motion-blur", "Flou de mouvement", "/motion-blur horizontal"],
+                ["/bokeh", "Bokeh", "/bokeh strong"],
+                ["/drop-shadow", "Ombre portée", "/drop-shadow 10 10 20"],
+                ["/inner-shadow", "Ombre interne", "/inner-shadow subtle"],
+                ["/noise", "Bruit", "/noise 5"],
+                ["/grain", "Grain photo", "/grain film"],
+                ["/chromatic", "Aberration chromatique", "/chromatic subtle"],
+                ["/duotone", "Duo-ton", "/duotone blue-orange"],
+                ["/halftone", "Demi-teinte", "/halftone comic"],
+                ["/pixelate", "Pixelliser", "/pixelate 10"],
+                ["/posterize", "Posteriser", "/posterize 6"]
+            ]],
+            ["Design / Canva", "design", [
+                ["/design", "Créer une composition", "/design poster moderne"],
+                ["/layout", "Mise en page", "/layout balanced"],
+                ["/align", "Aligner", "/align center"],
+                ["/distribute", "Distribuer", "/distribute horizontal"],
+                ["/grid", "Créer une grille", "/grid 3x3"],
+                ["/margin", "Marges", "/margin 40"],
+                ["/spacing", "Espacement", "/spacing 20"],
+                ["/guides", "Guides", "/guides on"],
+                ["/safe-area", "Zone sûre", "/safe-area social"],
+                ["/template", "Appliquer un modèle", "/template instagram"],
+                ["/brand", "Identité de marque", "/brand mybrand"],
+                ["/mockup", "Créer un mockup", "/mockup smartphone"],
+                ["/poster", "Créer une affiche", "/poster event"],
+                ["/flyer", "Créer un flyer", "/flyer promotion"],
+                ["/banner", "Créer une bannière", "/banner website"]
+            ]],
+            ["Texte", "text", [
+                ["/text", "Ajouter du texte", "/text \"Summer Sale\""],
+                ["/font", "Changer la police", "/font Inter"],
+                ["/font-size", "Taille", "/font-size 48"],
+                ["/font-weight", "Graisse", "/font-weight 700"],
+                ["/tracking", "Espacement des lettres", "/tracking 2"],
+                ["/leading", "Interligne", "/leading 1.4"],
+                ["/text-align", "Alignement", "/text-align center"],
+                ["/text-color", "Couleur", "/text-color #FFFFFF"],
+                ["/text-shadow", "Ombre du texte", "/text-shadow soft"],
+                ["/outline", "Contour", "/outline 2px"],
+                ["/warp-text", "Déformer le texte", "/warp-text arc"],
+                ["/text-effect", "Effet texte", "/text-effect neon"]
+            ]],
+            ["Calques", "layers", [
+                ["/layer", "Gérer un calque", "/layer subject"],
+                ["/new-layer", "Nouveau calque", "/new-layer"],
+                ["/rename-layer", "Renommer", "/rename-layer Background"],
+                ["/hide-layer", "Masquer", "/hide-layer Background"],
+                ["/show-layer", "Afficher", "/show-layer Background"],
+                ["/lock-layer", "Verrouiller", "/lock-layer Logo"],
+                ["/opacity", "Opacité", "/opacity 75"],
+                ["/blend", "Mode de fusion", "/blend multiply"],
+                ["/group", "Grouper", "/group layer1 layer2"],
+                ["/ungroup", "Dégrouper", "/ungroup group1"],
+                ["/move-layer", "Déplacer un calque", "/move-layer up"],
+                ["/merge-down", "Fusionner vers le bas", "/merge-down"]
+            ]],
+            ["Réseaux sociaux", "social", [
+                ["/instagram", "Optimiser Instagram", "/instagram --format 4:5"],
+                ["/story", "Story 9:16", "/story --safe-area on"],
+                ["/reel", "Reel", "/reel"],
+                ["/post", "Post", "/post"],
+                ["/facebook", "Facebook", "/facebook"],
+                ["/youtube", "YouTube", "/youtube --resolution 1920x1080"],
+                ["/thumbnail", "Miniature", "/thumbnail --style bold"],
+                ["/tiktok", "TikTok", "/tiktok"],
+                ["/linkedin", "LinkedIn", "/linkedin"],
+                ["/twitter", "X/Twitter", "/twitter"],
+                ["/pinterest", "Pinterest", "/pinterest"],
+                ["/whatsapp", "WhatsApp", "/whatsapp"]
+            ]],
+            ["Analyse IA", "analysis", [
+                ["/analyze", "Analyser l’image", "/analyze"],
+                ["/describe", "Décrire", "/describe"],
+                ["/detect", "Détecter les objets", "/detect"],
+                ["/detect-faces", "Détecter les visages", "/detect-faces"],
+                ["/detect-text", "Détecter le texte", "/detect-text"],
+                ["/ocr", "Extraire le texte", "/ocr"],
+                ["/colors", "Extraire la palette", "/colors"],
+                ["/composition", "Analyser la composition", "/composition"],
+                ["/quality", "Analyser la qualité", "/quality"],
+                ["/lighting", "Analyser l’éclairage", "/lighting"],
+                ["/style", "Identifier le style", "/style"],
+                ["/metadata", "Lire les métadonnées", "/metadata"],
+                ["/alt-text", "Créer un texte alternatif", "/alt-text"]
+            ]],
+            ["Export", "export", [
+                ["/export", "Exporter", "/export png"],
+                ["/save", "Sauvegarder", "/save project"],
+                ["/download", "Télécharger", "/download png"],
+                ["/jpg", "JPEG", "/jpg quality=90"],
+                ["/png", "PNG", "/png transparent=true"],
+                ["/webp", "WebP", "/webp quality=85"],
+                ["/pdf", "PDF", "/pdf print"],
+                ["/svg", "SVG", "/svg"],
+                ["/quality", "Qualité", "/quality 95"],
+                ["/dpi", "Résolution d’impression", "/dpi 300"],
+                ["/transparent", "Transparence", "/transparent on"],
+                ["/print", "Impression", "/print A4 300dpi"]
+            ]]
+        ];
 
-function render(){
-  const q=search.value.toLowerCase().trim();
-  const data=commands.filter(x=>
-    (current==="all"||x.cat===current) &&
-    (!q || [x.cmd,x.desc,x.example,x.name].join(" ").toLowerCase().includes(q))
-  );
-  grid.innerHTML="";
-  data.forEach(x=>{
-    const el=document.createElement("article");
-    el.className="command";
-    el.innerHTML=`<div class="cmd-top"><span class="cmd">${x.cmd}</span>
-      <span class="num">#${String(x.id).padStart(3,"0")}</span></div>
-      <div class="desc">${x.desc} · ${x.name}</div>
-      <div class="example">${escapeHtml(x.example)}</div>`;
-    grid.appendChild(el);
-  });
-  title.textContent=current==="all"?"Toutes les commandes":sections.find(x=>x[1]===current)?.[0]||"Commandes";
-  count.textContent=`${data.length} commande${data.length>1?"s":""}`;
-  empty.style.display=data.length?"none":"block";
-}
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  2.  BUILD COMMANDS LIST
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-const categoriesHTML=`<button class="cat active" data-cat="all">✨ Toutes (${commands.length})</button>`+
-  sections.map(s=>`<button class="cat" data-cat="${s[1]}">${s[0]} (${s[2].length})</button>`).join("");
+        let commands = [];
+        let n = 0;
+        sections.forEach(([name, cat, items]) =>
+            items.forEach(x =>
+                commands.push({ name, cat, id: ++n, cmd: x[0], desc: x[1], example: x[2] })
+            )
+        );
 
-categories.innerHTML=categoriesHTML;
-drawerCategories.innerHTML=categoriesHTML;
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  3.  DOM REFS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-function setupCategoryClick(container){
-  container.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{
-    document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(`.cat[data-cat="${b.dataset.cat}"]`).forEach(x=>x.classList.add("active"));
-    current=b.dataset.cat;
-    render();
-    closeDrawer();
-  });
-}
+        const categories = document.getElementById("categories");
+        const drawerCategories = document.getElementById("drawerCategories");
+        const grid = document.getElementById("grid");
+        const search = document.getElementById("search");
+        const title = document.getElementById("title");
+        const count = document.getElementById("count");
+        const empty = document.getElementById("empty");
+        const sideDrawer = document.getElementById("sideDrawer");
+        const drawerOverlay = document.getElementById("drawerOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+        const drawerClose = document.getElementById("drawerClose");
+        const toastContainer = document.getElementById("toast-container");
 
-setupCategoryClick(categories);
-setupCategoryClick(drawerCategories);
+        let current = "all";
+        let runningTimers = new Map(); // id -> timeout
 
-document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{
-  document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");current=b.dataset.filter;render();
-  document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat===current));
-});
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  4.  TOAST SYSTEM
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-search.oninput=render;
-document.addEventListener("keydown",e=>{
-  if(e.key==="/" && document.activeElement!==search){e.preventDefault();search.focus();}
-  if(e.key==="Escape"){search.value="";search.blur();closeDrawer();render();}
-});
-render();
-</script>
+        function showToast(message, type = "copy", cmd = "") {
+            const icon = type === "copy" ? "📋" : type === "run" ? "▶" : "✓";
+            const cls = type === "copy" ? "copy" : "success";
+            const el = document.createElement("div");
+            el.className = `toast ${cls}`;
+            // highlight the command in the message
+            let msgHtml = message;
+            if (cmd) {
+                msgHtml = message.replace(cmd, `<span class="cmd-highlight">${cmd}</span>`);
+            }
+            el.innerHTML = `
+            <span class="icon">${icon}</span>
+            <span class="msg">${msgHtml}</span>
+          `;
+            toastContainer.appendChild(el);
+            // trigger show
+            requestAnimationFrame(() => {
+                el.classList.add("show");
+            });
+            // auto dismiss after 2.8s
+            const timeout = setTimeout(() => {
+                el.classList.remove("show");
+                el.classList.add("hide");
+                setTimeout(() => el.remove(), 400);
+            }, 2800);
+            // store timeout for cleanup
+            el._timeout = timeout;
+            return el;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  5.  COPY TO CLIPBOARD
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        async function copyCommand(cmdStr, cmdObj) {
+            try {
+                await navigator.clipboard.writeText(cmdStr);
+                const name = cmdObj ? cmdObj.cmd : cmdStr;
+                showToast(`Copié : ${name}`, "copy", name);
+            } catch (_) {
+                // fallback
+                const ta = document.createElement("textarea");
+                ta.value = cmdStr;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                ta.remove();
+                const name = cmdObj ? cmdObj.cmd : cmdStr;
+                showToast(`Copié : ${name}`, "copy", name);
+            }
+        }
+
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  7.  RENDER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function escapeHtml(s) {
+            return s.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;",
+                "'": "&#039;" }[m]));
+        }
+
+        function render() {
+            const q = search.value.toLowerCase().trim();
+            const data = commands.filter(x =>
+                (current === "all" || x.cat === current) &&
+                (!q || [x.cmd, x.desc, x.example, x.name].join(" ").toLowerCase().includes(q))
+            );
+
+            grid.innerHTML = "";
+            data.forEach(x => {
+                const card = document.createElement("article");
+                card.className = "command";
+                card.dataset.cmdId = x.id;
+
+                // ── top row ──
+                const top = document.createElement("div");
+                top.className = "cmd-top";
+
+                const cmdSpan = document.createElement("span");
+                cmdSpan.className = "cmd";
+                cmdSpan.innerHTML = `${x.cmd} <span class="copy-badge">⤵ copier</span>`;
+
+                // click on cmd copies
+                cmdSpan.style.cursor = "pointer";
+                cmdSpan.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    copyCommand(x.cmd, x);
+                });
+
+
+       
+
+                // ── desc ──
+                const desc = document.createElement("div");
+                desc.className = "desc";
+                desc.textContent = `${x.desc} · ${x.name}`;
+
+                // ── example ──
+                const ex = document.createElement("div");
+                ex.className = "example";
+                ex.textContent = x.example;
+
+                card.appendChild(top);
+                card.appendChild(desc);
+                card.appendChild(ex);
+
+                // ── click on card copies ──
+                card.addEventListener("click", () => {
+                    copyCommand(x.cmd, x);
+                });
+
+                grid.appendChild(card);
+            });
+
+            // update title / count
+            const sectionName = current === "all" ?
+                "Toutes les commandes" :
+                (sections.find(s => s[1] === current)?.[0] || "Commandes");
+            title.textContent = sectionName;
+            count.textContent = `${data.length} commande${data.length > 1 ? "s" : ""}`;
+            empty.style.display = data.length ? "none" : "block";
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  8.  CATEGORY BUTTONS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function buildCategoryHTML() {
+            const total = commands.length;
+            let html =
+                `<button class="cat active" data-cat="all">✨ Toutes (${total})</button>`;
+            sections.forEach(s => {
+                html += `<button class="cat" data-cat="${s[1]}">${s[0]} (${s[2].length})</button>`;
+            });
+            return html;
+        }
+
+        function setupCategoryClick(container) {
+            container.querySelectorAll(".cat").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    // update active state in both containers
+                    document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+                    document.querySelectorAll(`.cat[data-cat="${btn.dataset.cat}"]`)
+                        .forEach(b => b.classList.add("active"));
+                    current = btn.dataset.cat;
+                    render();
+                    closeDrawer();
+                });
+            });
+        }
+
+        const catHTML = buildCategoryHTML();
+        categories.innerHTML = catHTML;
+        drawerCategories.innerHTML = catHTML;
+        setupCategoryClick(categories);
+        setupCategoryClick(drawerCategories);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  9.  DRAWER TOGGLE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function openDrawer() {
+            sideDrawer.classList.add("open");
+            drawerOverlay.classList.add("open");
+        }
+
+        function closeDrawer() {
+            sideDrawer.classList.remove("open");
+            drawerOverlay.classList.remove("open");
+        }
+
+        menuToggle.addEventListener("click", openDrawer);
+        drawerClose.addEventListener("click", closeDrawer);
+        drawerOverlay.addEventListener("click", closeDrawer);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  10. SEARCH & KEYBOARD
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        search.addEventListener("input", render);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "/" && document.activeElement !== search) {
+                e.preventDefault();
+                search.focus();
+            }
+            if (e.key === "Escape") {
+                if (search.value) {
+                    search.value = "";
+                    render();
+                }
+                search.blur();
+                closeDrawer();
+            }
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  11. INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        render();
+    </script>
 </body>
 </html>
