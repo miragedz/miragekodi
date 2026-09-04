@@ -32,6 +32,7 @@
             --example-bg: rgba(0, 0, 0, .25);
             --example-text: #d8e6f3;
             --cat-hover: rgba(255, 255, 255, .04);
+            --glow-color: rgba(110, 231, 249, 0.4);
         }
 
         /* Light Theme Overrides */
@@ -58,6 +59,7 @@
             --example-bg: rgba(241, 245, 249, .9);
             --example-text: #1e293b;
             --cat-hover: rgba(0, 0, 0, .04);
+            --glow-color: rgba(2, 132, 199, 0.3);
         }
 
         * {
@@ -350,20 +352,61 @@
         .command {
             border-radius: var(--radius);
             padding: 15px;
-            transition: .2s;
             background: var(--card-bg);
             border: 1px solid var(--border);
             position: relative;
             cursor: pointer;
             user-select: none;
+            overflow: hidden;
+
+            /* Fade-in initial state */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        border-color 0.3s ease, 
+                        box-shadow 0.3s ease;
         }
+
+        /* Fade-in visible state when scrolled into view */
+        .command.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive Glow Hover Overlay */
+        .command::before {
+            content: "";
+            position: absolute;
+            top: var(--mouse-y, -100px);
+            left: var(--mouse-x, -100px);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .command:hover::before {
+            opacity: 1;
+        }
+
         .command:hover {
             transform: translateY(-2px);
             border-color: var(--cyan);
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 30px -10px var(--glow-color);
         }
+
         .command:active {
             transform: scale(.98);
+        }
+
+        .cmd-top, .desc, .example {
+            position: relative;
+            z-index: 2;
         }
 
         .cmd-top {
@@ -965,7 +1008,6 @@
         const toastContainer = document.getElementById("toast-container");
         const themeToggle = document.getElementById("themeToggle");
         const themeIcon = document.getElementById("themeIcon");
-        const themeText = document.getElementById("themeText");
 
         let current = "all";
 
@@ -1046,7 +1088,38 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  7.  RENDER
+        //  7.  FADE-IN OBSERVER & GLOW EFFECTS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("fade-in");
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px 0px -30px 0px"
+        });
+
+        function setupCardEffects(card) {
+            // Track cursor for custom glow effect
+            card.addEventListener("mousemove", (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            });
+
+            // Observe element for fade-in on scroll
+            scrollObserver.observe(card);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  8.  RENDER
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function render() {
@@ -1093,6 +1166,9 @@
                     copyCommand(x.cmd, x);
                 });
 
+                // Attach glow hover and fade-in features
+                setupCardEffects(card);
+
                 grid.appendChild(card);
             });
 
@@ -1105,7 +1181,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  8.  CATEGORY BUTTONS
+        //  9.  CATEGORY BUTTONS
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function buildCategoryHTML() {
@@ -1138,7 +1214,7 @@
         setupCategoryClick(drawerCategories);
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  9.  DRAWER TOGGLE
+        //  10. DRAWER TOGGLE
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function openDrawer() {
@@ -1156,7 +1232,7 @@
         drawerOverlay.addEventListener("click", closeDrawer);
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  10. SEARCH & KEYBOARD
+        //  11. SEARCH & KEYBOARD
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         search.addEventListener("input", render);
@@ -1177,7 +1253,7 @@
         });
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  11. INIT
+        //  12. INIT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         initTheme();
