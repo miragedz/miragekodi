@@ -109,7 +109,6 @@ button:hover,.filter:hover,.filter.active,.drawer-cat:hover,.drawer-cat.active{b
   font-family:ui-monospace,monospace;font-size:12px;color:#d8e6f3;
   background:rgba(0,0,0,.25);padding:9px;border-radius:9px;overflow:auto
 }
-.copy{font-size:12px;padding:6px 9px}
 .empty{padding:50px;text-align:center;color:var(--muted);display:none}
 footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
 
@@ -125,10 +124,8 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
 </head>
 <body>
 
-<!-- Overlay pour le Side Menu -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 
-<!-- Side Menu Coulissant -->
 <aside class="side-drawer" id="sideDrawer">
   <div class="drawer-header">
     <h3>Catégories</h3>
@@ -140,7 +137,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
 <header>
   <div class="top">
     <div class="header-left">
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰ <span>Menu</span></button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
       <div class="logo">✨ <span>AI</span> Image Editor</div>
     </div>
     <div class="search">⌕
@@ -155,17 +152,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
     <h1>Command Palette</h1>
     <p>140 commandes pour un éditeur d’images inspiré de Photoshop, Canva et des outils IA génératifs.</p>
   </section>
-
-  <div class="toolbar">
-    <button class="filter active" data-filter="all">Toutes</button>
-    <button class="filter" data-filter="core">Core</button>
-    <button class="filter" data-filter="transform">Transform</button>
-    <button class="filter" data-filter="retouch">Retouche</button>
-    <button class="filter" data-filter="color">Couleur</button>
-    <button class="filter" data-filter="ai">IA</button>
-    <button class="filter" data-filter="design">Design</button>
-    <button class="filter" data-filter="export">Export</button>
-  </div>
 
   <div class="layout">
     <aside class="sidebar">
@@ -201,13 +187,26 @@ const sections = [
 ["/skew","Incliner","/skew 5 0"],["/expand","Étendre","/expand 300"],["/reframe","Recomposer","/reframe 4:5"],
 ["/content-aware","Extension intelligente","/content-aware expand-right"]
 ]],
-["Retouche","retouch",[
+["Ajustement","adjustment",[
 ["/retouch","Retouche générale","/retouch portrait naturel"],["/remove","Supprimer un objet","/remove voiture"],
 ["/erase","Effacer une zone","/erase arrière-plan"],["/clean","Nettoyer les artefacts","/clean artifacts"],
 ["/heal","Corriger une imperfection","/heal imperfection"],["/clone","Cloner une zone","/clone zone1 zone2"],
 ["/patch","Réparer une zone","/patch tache"],["/decontaminate","Nettoyer les contours","/decontaminate edges"],
 ["/denoise","Réduire le bruit","/denoise 40"],["/deblur","Réduire le flou","/deblur medium"],
-["/sharpen","Accentuer la netteté","/sharpen 25"],["/artifact-remove","Supprimer les artefacts","/artifact-remove jpeg"]
+["/sharpen","Accentuer la netteté","/sharpen 25"],["/artifact-remove","Supprimer les artefacts","/artifact-remove jpeg"],
+["/brightness","Luminosité","/brightness +15"],["/contrast","Contraste","/contrast +20"],["/exposure","Exposition","/exposure +0.5"],
+["/saturation","Saturation","/saturation -10"],["/vibrance","Vibrance","/vibrance +25"],["/temperature","Température","/temperature +8"],
+["/tint","Teinte","/tint -5"],["/hue","Rotation de teinte","/hue +15"],["/curves","Courbes","/curves cinematic"],
+["/levels","Niveaux","/levels auto"],["/highlights","Hautes lumières","/highlights -20"],["/shadows","Ombres","/shadows +30"],
+["/whites","Blancs","/whites +10"],["/blacks","Noirs","/blacks -15"],["/colorgrade","Color grading","/colorgrade teal-orange"],
+["/relight","Rééclairer avec IA","/relight sunset"],["/light","Preset lumière","/light softbox"],
+["/rimlight","Lumière de contour","/rimlight right"],["/softlight","Lumière douce","/softlight 50"],
+["/dramatic-light","Lumière dramatique","/dramatic-light medium"],["/shadow","Modifier les ombres","/shadow soften"],
+["/glow","Lueur","/glow subtle"],["/flare","Lens flare","/flare top-left"],
+["/vignette","Vignette","/vignette 20"],["/hdr","Rendu HDR","/hdr 30"],
+["/restore","Restaurer","/restore high"],["/restore-photo","Restaurer une photo","/restore-photo"],
+["/restore-color","Restaurer les couleurs","/restore-color"],["/colorize","Coloriser","/colorize natural"],
+["/upscale","Upscaling","/upscale 4x"],["/superres","Super-résolution","/superres 4x"],["/enhance","Améliorer","/enhance detail"],["/face-enhance","Améliorer un visage","/face-enhance 30"],["/detail","Récupérer les détails","/detail +25"],["/recover","Récupérer les zones","/recover shadows"]
 ]],
 ["Portrait","portrait",[
 ["/portrait","Optimiser un portrait","/portrait professional"],["/face","Améliorer le visage","/face improve details"],
@@ -216,28 +215,12 @@ const sections = [
 ["/face-light","Éclairage du visage","/face-light soft-left"],["/headshot","Portrait professionnel","/headshot corporate"],
 ["/expression","Modifier l’expression","/expression smile"],["/portrait-light","Éclairage portrait","/portrait-light studio"]
 ]],
-["Couleur","color",[
-["/brightness","Luminosité","/brightness +15"],["/contrast","Contraste","/contrast +20"],["/exposure","Exposition","/exposure +0.5"],
-["/saturation","Saturation","/saturation -10"],["/vibrance","Vibrance","/vibrance +25"],["/temperature","Température","/temperature +8"],
-["/tint","Teinte","/tint -5"],["/hue","Rotation de teinte","/hue +15"],["/curves","Courbes","/curves cinematic"],
-["/levels","Niveaux","/levels auto"],["/highlights","Hautes lumières","/highlights -20"],["/shadows","Ombres","/shadows +30"],
-["/whites","Blancs","/whites +10"],["/blacks","Noirs","/blacks -15"],["/colorgrade","Color grading","/colorgrade teal-orange"]
-]],
-["Lumière","light",[
-["/relight","Rééclairer avec IA","/relight sunset"],["/light","Preset lumière","/light softbox"],
-["/rimlight","Lumière de contour","/rimlight right"],["/softlight","Lumière douce","/softlight 50"],
-["/dramatic-light","Lumière dramatique","/dramatic-light medium"],["/shadow","Modifier les ombres","/shadow soften"],
-["/glow","Lueur","/glow subtle"],["/flare","Lens flare","/flare top-left"],
-["/vignette","Vignette","/vignette 20"],["/hdr","Rendu HDR","/hdr 30"]
-]],
-["Sélection","selection",[
+["Calque / Arrière-plan","selection_bg",[
 ["/select","Sélectionner un objet","/select voiture"],["/select-subject","Sélectionner le sujet","/select-subject"],
 ["/select-face","Sélectionner un visage","/select-face"],["/select-color","Sélectionner une couleur","/select-color blue"],
 ["/select-sky","Sélectionner le ciel","/select-sky"],["/mask","Créer un masque","/mask subject"],
 ["/invert-selection","Inverser la sélection","/invert-selection"],["/feather","Adoucir le contour","/feather 15"],
-["/object","Gérer un objet","/object isolate"],["/isolate","Isoler le sujet","/isolate product"]
-]],
-["Arrière-plan","background",[
+["/object","Gérer un objet","/object isolate"],["/isolate","Isoler le sujet","/isolate product"],
 ["/remove-bg","Supprimer l’arrière-plan","/remove-bg"],["/change-bg","Changer l’arrière-plan","/change-bg studio blanc"],
 ["/replace-bg","Remplacer le décor","/replace-bg plage"],["/blur-bg","Flouter l’arrière-plan","/blur-bg 30"],
 ["/extend-bg","Étendre le décor","/extend-bg left"],["/generate-bg","Générer un décor","/generate-bg futuristic city"],
@@ -254,26 +237,25 @@ const sections = [
 ["/restyle","Restyler","/restyle watercolor"],["/style-transfer","Transfert de style","/style-transfer comic"],
 ["/semantic-edit","Édition sémantique","/semantic-edit make it winter"]
 ]],
-["Styles","styles",[
+["Style/Effet","ai",[
 ["/anime","Style anime","/anime soft cinematic"],["/cartoon","Style cartoon","/cartoon modern"],
 ["/comic","Style comic","/comic superhero"],["/sketch","Croquis","/sketch pencil"],
 ["/ink","Encre","/ink black-white"],["/watercolor","Aquarelle","/watercolor soft"],
 ["/oilpaint","Peinture à l’huile","/oilpaint classical"],["/pixelart","Pixel art","/pixelart 16bit"],
 ["/3d","Rendu 3D","/3d realistic"],["/clay","Rendu clay","/clay render"],
-["/neon","Style néon","/neon cyberpunk"],["/vintage","Vintage","/vintage 1970s"],
-["/retro","Retro","/retro poster"],["/minimal","Minimaliste","/minimal editorial"],["/cinematic","Cinématique","/cinematic movie still"]
-]],
-["Photographie","photo",[
+["/neon","Style néon","/neon cyberpunk"],["/vintage","Vintage","/vintage 1970s"],["/retro","Retro","/retro poster"],["/minimal","Minimaliste","/minimal editorial"],["/cinematic","Cinématique","/cinematic movie still"],
 ["/photo","Optimiser une photo","/photo professional"],["/studio","Photo studio","/studio product photography"],
 ["/product","Photo produit","/product ecommerce"],["/macro","Macro","/macro detailed"],
 ["/landscape","Paysage","/landscape HDR"],["/street","Street photography","/street photography"],
 ["/architecture","Architecture","/architecture corrected"],["/night","Photo de nuit","/night photography"],
-["/long-exposure","Pose longue","/long-exposure effect"],["/depth-of-field","Profondeur de champ","/depth-of-field shallow"]
-]],
-["Restauration","restore",[
-["/restore","Restaurer","/restore high"],["/restore-photo","Restaurer une photo","/restore-photo"],
-["/restore-color","Restaurer les couleurs","/restore-color"],["/colorize","Coloriser","/colorize natural"],
-["/upscale","Upscaling","/upscale 4x"],["/superres","Super-résolution","/superres 4x"],["/enhance","Améliorer","/enhance detail"],["/face-enhance","Améliorer un visage","/face-enhance 30"],["/detail","Récupérer les détails","/detail +25"],["/recover","Récupérer les zones","/recover shadows"]
+["/long-exposure","Pose longue","/long-exposure effect"],["/depth-of-field","Profondeur de champ","/depth-of-field shallow"],
+["/blur","Flou","/blur 20px"],["/gaussian-blur","Flou gaussien","/gaussian-blur 15"],
+["/motion-blur","Flou de mouvement","/motion-blur horizontal"],["/bokeh","Bokeh","/bokeh strong"],
+["/glow","Glow","/glow cyan"],["/shadow","Ombre","/shadow soft"],
+["/drop-shadow","Ombre portée","/drop-shadow 10 10 20"],["/inner-shadow","Ombre interne","/inner-shadow subtle"],
+["/noise","Bruit","/noise 5"],["/grain","Grain photo","/grain film"],
+["/chromatic","Aberration chromatique","/chromatic subtle"],["/duotone","Duo-ton","/duotone blue-orange"],
+["/halftone","Demi-teinte","/halftone comic"],["/pixelate","Pixelliser","/pixelate 10"],["/posterize","Posteriser","/posterize 6"]
 ]],
 ["Design / Canva","design",[
 ["/design","Créer une composition","/design poster moderne"],["/layout","Mise en page","/layout balanced"],
@@ -298,15 +280,6 @@ const sections = [
 ["/show-layer","Afficher","/show-layer Background"],["/lock-layer","Verrouiller","/lock-layer Logo"],
 ["/opacity","Opacité","/opacity 75"],["/blend","Mode de fusion","/blend multiply"],
 ["/group","Grouper","/group layer1 layer2"],["/ungroup","Dégrouper","/ungroup group1"],["/move-layer","Déplacer un calque","/move-layer up"],["/merge-down","Fusionner vers le bas","/merge-down"]
-]],
-["Effets","effects",[
-["/blur","Flou","/blur 20px"],["/gaussian-blur","Flou gaussien","/gaussian-blur 15"],
-["/motion-blur","Flou de mouvement","/motion-blur horizontal"],["/bokeh","Bokeh","/bokeh strong"],
-["/glow","Glow","/glow cyan"],["/shadow","Ombre","/shadow soft"],
-["/drop-shadow","Ombre portée","/drop-shadow 10 10 20"],["/inner-shadow","Ombre interne","/inner-shadow subtle"],
-["/noise","Bruit","/noise 5"],["/grain","Grain photo","/grain film"],
-["/chromatic","Aberration chromatique","/chromatic subtle"],["/duotone","Duo-ton","/duotone blue-orange"],
-["/halftone","Demi-teinte","/halftone comic"],["/pixelate","Pixelliser","/pixelate 10"],["/posterize","Posteriser","/posterize 6"]
 ]],
 ["Réseaux sociaux","social",[
 ["/instagram","Optimiser Instagram","/instagram --format 4:5"],["/story","Story 9:16","/story --safe-area on"],
@@ -377,8 +350,7 @@ function render(){
     el.innerHTML=`<div class="cmd-top"><span class="cmd">${x.cmd}</span>
       <span class="num">#${String(x.id).padStart(3,"0")}</span></div>
       <div class="desc">${x.desc} · ${x.name}</div>
-      <div class="example">${escapeHtml(x.example)} <button class="copy" title="Copier">Copier</button></div>`;
-    el.querySelector(".copy").onclick=()=>navigator.clipboard?.writeText(x.example);
+      <div class="example">${escapeHtml(x.example)}</div>`;
     grid.appendChild(el);
   });
   title.textContent=current==="all"?"Toutes les commandes":sections.find(x=>x[1]===current)?.[0]||"Commandes";
