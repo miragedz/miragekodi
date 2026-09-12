@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -474,18 +475,10 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-title">Categories</div>
             <a href="#all" class="nav-item active" data-category="all">All Commands</a>
-            <a href="#transform" class="nav-item" data-category="transform">Crop & Transform</a>
-            <a href="#color" class="nav-item" data-category="color">Color & Light</a>
-            <a href="#learning" class="nav-item" data-category="learning">Learning & Data</a>
-            <a href="#image-tools" class="nav-item" data-category="image-tools">Retouche & Image Tools</a>
-            <a href="#technical" class="nav-item" data-category="technical">Technical & Engineering</a>
-            <a href="#scientific" class="nav-item" data-category="scientific">Scientific & Medical</a>
-            <a href="#industrial" class="nav-item" data-category="industrial">Industrial & Architecture</a>
-            <a href="#art" class="nav-item" data-category="art">Art & Illustration</a>
-            <a href="#photography" class="nav-item" data-category="photography">Camera & Photography</a>
-            <a href="#rendering" class="nav-item" data-category="rendering">3D & Rendering</a>
-            <a href="#diagrams" class="nav-item" data-category="diagrams">Diagrams & Infographics</a>
-            <a href="#concept" class="nav-item" data-category="concept">Technology & Concept Art</a>
+            <a href="#image-tools" class="nav-item" data-category="image-tools">Image & Camera</a>
+            <a href="#technology" class="nav-item" data-category="technology">Technology</a>
+            <a href="#sci-tech-industrial" class="nav-item" data-category="sci-tech-industrial">Technology, Scientific & Industrial</a>
+            <a href="#art" class="nav-item" data-category="art">Art & 3D Rendering</a>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -497,91 +490,11 @@
 
             <div class="grid" id="commandGrid">
                 
-                <!-- CROP & TRANSFORM -->
-                <div class="card" id="transform">
+                <!-- TECHNOLOGY (merged: Learning & Data + Technical & Engineering + Diagrams & Infographics) -->
+                <div class="card" id="technology">
                     <div class="card-header">
-                        <span class="card-title">Crop & Transform</span>
-                        <span class="badge">Geometry</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/crop</span>
-                                <span class="cmd-desc">Recadrer</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/crop 16:9</span>
-                                <button class="copy-btn" data-copy="/crop">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/perspective</span>
-                                <span class="cmd-desc">Corriger la perspective</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/perspective auto</span>
-                                <button class="copy-btn" data-copy="/perspective">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/content-aware</span>
-                                <span class="cmd-desc">Extension intelligente</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/content-aware expand-right</span>
-                                <button class="copy-btn" data-copy="/content-aware">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- COLOR & LIGHT -->
-                <div class="card" id="color">
-                    <div class="card-header">
-                        <span class="card-title">Couleur & Lumière</span>
-                        <span class="badge">Grade</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/colorgrade</span>
-                                <span class="cmd-desc">Color grading</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/colorgrade teal-orange</span>
-                                <button class="copy-btn" data-copy="/colorgrade">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/relight</span>
-                                <span class="cmd-desc">Rééclairer avec IA</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/relight sunset</span>
-                                <button class="copy-btn" data-copy="/relight">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/dramatic-light</span>
-                                <span class="cmd-desc">Lumière dramatique</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/dramatic-light medium</span>
-                                <button class="copy-btn" data-copy="/dramatic-light">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- LEARNING & DATA -->
-                <div class="card" id="learning">
-                    <div class="card-header">
-                        <span class="card-title">Learning & Data</span>
-                        <span class="badge">Dataset</span>
+                        <span class="card-title">Technology</span>
+                        <span class="badge">Dataset / CAD & Specs / Data</span>
                     </div>
                     <ul class="cmd-list">
                         <li class="cmd-item">
@@ -614,86 +527,6 @@
                                 <button class="copy-btn" data-copy="/auto-tag">Copy</button>
                             </div>
                         </li>
-                    </ul>
-                </div>
-
-                <!-- RETOUCHE & IMAGE TOOLS -->
-                <div class="card" id="image-tools">
-                    <div class="card-header">
-                        <span class="card-title">Retouche & Image Tools</span>
-                        <span class="badge">Utility</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/remove</span>
-                                <span class="cmd-desc">Supprimer un objet</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/remove voiture</span>
-                                <button class="copy-btn" data-copy="/remove">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/portrait</span>
-                                <span class="cmd-desc">Optimiser portrait</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/portrait professional</span>
-                                <button class="copy-btn" data-copy="/portrait">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/face-light</span>
-                                <span class="cmd-desc">Éclairage du visage</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/face-light soft-left</span>
-                                <button class="copy-btn" data-copy="/face-light">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/remove-bg</span>
-                                <span class="cmd-desc">Supprimer l'arrière-plan</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/remove-bg precise</span>
-                                <button class="copy-btn" data-copy="/remove-bg">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/vectorize</span>
-                                <span class="cmd-desc">Convertir en SVG</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/vectorize svg</span>
-                                <button class="copy-btn" data-copy="/vectorize">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/watermark</span>
-                                <span class="cmd-desc">Ajouter un filigrane</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/watermark logo-center</span>
-                                <button class="copy-btn" data-copy="/watermark">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- TECHNICAL & ENGINEERING -->
-                <div class="card" id="technical">
-                    <div class="card-header">
-                        <span class="card-title">Technical & Engineering</span>
-                        <span class="badge">CAD & Specs</span>
-                    </div>
-                    <ul class="cmd-list">
                         <li class="cmd-item">
                             <div class="cmd-name-row">
                                 <span class="cmd-name">/explodedview</span>
@@ -814,26 +647,307 @@
                                 <button class="copy-btn" data-copy="/transparent">Copy</button>
                             </div>
                         </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/infographic</span>
+                                <span class="cmd-desc">Informational layout</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/infographic solar system</span>
+                                <button class="copy-btn" data-copy="/infographic">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/diagram</span>
+                                <span class="cmd-desc">System diagram</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/diagram neural network</span>
+                                <button class="copy-btn" data-copy="/diagram">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/flowchart</span>
+                                <span class="cmd-desc">Process flowchart</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/flowchart RAG pipeline</span>
+                                <button class="copy-btn" data-copy="/flowchart">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/labeled</span>
+                                <span class="cmd-desc">Labeled components</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/labeled car engine</span>
+                                <button class="copy-btn" data-copy="/labeled">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/annotated</span>
+                                <span class="cmd-desc">Annotated technical image</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/annotated aircraft engine</span>
+                                <button class="copy-btn" data-copy="/annotated">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/poster</span>
+                                <span class="cmd-desc">Poster-style layout</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/poster AI architecture</span>
+                                <button class="copy-btn" data-copy="/poster">Copy</button>
+                            </div>
+                        </li>
                     </ul>
                 </div>
 
-                <!-- SCIENTIFIC & MEDICAL -->
-                <div class="card" id="scientific">
+                <!-- IMAGE & EDIT (merged: Crop & Transform + Color & Light + Retouche & Image Tools) -->
+                <div class="card" id="image-tools">
                     <div class="card-header">
-                        <span class="card-title">Scientific & Medical</span>
-                        <span class="badge">Scan & Bio</span>
+                        <span class="card-title">Image & Camera</span>
+                        <span class="badge">Geometry / Grade / Optics / Utility</span>
                     </div>
                     <ul class="cmd-list">
                         <li class="cmd-item">
                             <div class="cmd-name-row">
-                                <span class="cmd-name">/xray</span>
-                                <span class="cmd-desc">X-ray rendering</span>
+                                <span class="cmd-name">/crop</span>
+                                <span class="cmd-desc">Recadrer</span>
                             </div>
                             <div class="cmd-bottom-row">
-                                <span class="cmd-example">/xray human skull</span>
-                                <button class="copy-btn" data-copy="/xray">Copy</button>
+                                <span class="cmd-example">/crop 16:9</span>
+                                <button class="copy-btn" data-copy="/crop">Copy</button>
                             </div>
                         </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/perspective</span>
+                                <span class="cmd-desc">Corriger la perspective</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/perspective auto</span>
+                                <button class="copy-btn" data-copy="/perspective">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/content-aware</span>
+                                <span class="cmd-desc">Extension intelligente</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/content-aware expand-right</span>
+                                <button class="copy-btn" data-copy="/content-aware">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/colorgrade</span>
+                                <span class="cmd-desc">Color grading</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/colorgrade teal-orange</span>
+                                <button class="copy-btn" data-copy="/colorgrade">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/relight</span>
+                                <span class="cmd-desc">Rééclairer avec IA</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/relight sunset</span>
+                                <button class="copy-btn" data-copy="/relight">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/dramatic-light</span>
+                                <span class="cmd-desc">Lumière dramatique</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/dramatic-light medium</span>
+                                <button class="copy-btn" data-copy="/dramatic-light">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/remove</span>
+                                <span class="cmd-desc">Supprimer un objet</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/remove voiture</span>
+                                <button class="copy-btn" data-copy="/remove">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/portrait</span>
+                                <span class="cmd-desc">Optimiser portrait</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/portrait professional</span>
+                                <button class="copy-btn" data-copy="/portrait">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/face-light</span>
+                                <span class="cmd-desc">Éclairage du visage</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/face-light soft-left</span>
+                                <button class="copy-btn" data-copy="/face-light">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/remove-bg</span>
+                                <span class="cmd-desc">Supprimer l'arrière-plan</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/remove-bg precise</span>
+                                <button class="copy-btn" data-copy="/remove-bg">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/vectorize</span>
+                                <span class="cmd-desc">Convertir en SVG</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/vectorize svg</span>
+                                <button class="copy-btn" data-copy="/vectorize">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/watermark</span>
+                                <span class="cmd-desc">Ajouter un filigrane</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/watermark logo-center</span>
+                                <button class="copy-btn" data-copy="/watermark">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/macro</span>
+                                <span class="cmd-desc">Macro shot</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/macro watch mechanism</span>
+                                <button class="copy-btn" data-copy="/macro">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/aerial</span>
+                                <span class="cmd-desc">Aerial perspective</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/aerial New York</span>
+                                <button class="copy-btn" data-copy="/aerial">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/droneview</span>
+                                <span class="cmd-desc">Drone shot</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/droneview smart city</span>
+                                <button class="copy-btn" data-copy="/droneview">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/birdseye</span>
+                                <span class="cmd-desc">Top-down perspective</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/birdseye stadium</span>
+                                <button class="copy-btn" data-copy="/birdseye">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/wormseye</span>
+                                <span class="cmd-desc">Low-angle perspective</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/wormseye skyscraper</span>
+                                <button class="copy-btn" data-copy="/wormseye">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/fisheye</span>
+                                <span class="cmd-desc">Fisheye lens</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/fisheye racing car</span>
+                                <button class="copy-btn" data-copy="/fisheye">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/wideangle</span>
+                                <span class="cmd-desc">Wide field of view</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/wideangle modern interior</span>
+                                <button class="copy-btn" data-copy="/wideangle">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/telephoto</span>
+                                <span class="cmd-desc">Telephoto distance</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/telephoto wildlife</span>
+                                <button class="copy-btn" data-copy="/telephoto">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/cinematic</span>
+                                <span class="cmd-desc">Cinematic framing</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/cinematic futuristic city</span>
+                                <button class="copy-btn" data-copy="/cinematic">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/productphoto</span>
+                                <span class="cmd-desc">Studio product shot</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/productphoto smartwatch</span>
+                                <button class="copy-btn" data-copy="/productphoto">Copy</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- SCIENTIFIC & MEDICAL -->
+                <!-- TECHNOLOGY, SCIENTIFIC & INDUSTRIAL (merged: Scientific & Medical + Industrial & Architecture + Technology & Concept Art) -->
+                <div class="card" id="sci-tech-industrial">
+                    <div class="card-header">
+                        <span class="card-title">Technology, Scientific & Industrial</span>
+                        <span class="badge">Scan / Spatial / Design</span>
+                    </div>
+                    <ul class="cmd-list">
                         <li class="cmd-item">
                             <div class="cmd-name-row">
                                 <span class="cmd-name">/mri</span>
@@ -886,26 +1000,6 @@
                         </li>
                         <li class="cmd-item">
                             <div class="cmd-name-row">
-                                <span class="cmd-name">/crosssection</span>
-                                <span class="cmd-desc">Scientific cross-section</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/crosssection volcano</span>
-                                <button class="copy-btn" data-copy="/crosssection">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- INDUSTRIAL & ARCHITECTURE -->
-                <div class="card" id="industrial">
-                    <div class="card-header">
-                        <span class="card-title">Industrial & Architecture</span>
-                        <span class="badge">Spatial</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
                                 <span class="cmd-name">/floorplan</span>
                                 <span class="cmd-desc">Architectural plan</span>
                             </div>
@@ -946,32 +1040,52 @@
                         </li>
                         <li class="cmd-item">
                             <div class="cmd-name-row">
-                                <span class="cmd-name">/isometric</span>
-                                <span class="cmd-desc">Isometric architectural view</span>
+                                <span class="cmd-name">/conceptart</span>
+                                <span class="cmd-desc">Concept art view</span>
                             </div>
                             <div class="cmd-bottom-row">
-                                <span class="cmd-example">/isometric smart factory</span>
-                                <button class="copy-btn" data-copy="/isometric">Copy</button>
+                                <span class="cmd-example">/conceptart futuristic robot</span>
+                                <button class="copy-btn" data-copy="/conceptart">Copy</button>
                             </div>
                         </li>
                         <li class="cmd-item">
                             <div class="cmd-name-row">
-                                <span class="cmd-name">/cutaway</span>
-                                <span class="cmd-desc">Building cutaway</span>
+                                <span class="cmd-name">/characterdesign</span>
+                                <span class="cmd-desc">Character design sheet</span>
                             </div>
                             <div class="cmd-bottom-row">
-                                <span class="cmd-example">/cutaway nuclear power plant</span>
-                                <button class="copy-btn" data-copy="/cutaway">Copy</button>
+                                <span class="cmd-example">/characterdesign AI robot</span>
+                                <button class="copy-btn" data-copy="/characterdesign">Copy</button>
                             </div>
                         </li>
                         <li class="cmd-item">
                             <div class="cmd-name-row">
-                                <span class="cmd-name">/technicaldrawing</span>
-                                <span class="cmd-desc">Plant engineering drawing</span>
+                                <span class="cmd-name">/environmentdesign</span>
+                                <span class="cmd-desc">Environment concept</span>
                             </div>
                             <div class="cmd-bottom-row">
-                                <span class="cmd-example">/technicaldrawing manufacturing plant</span>
-                                <button class="copy-btn" data-copy="/technicaldrawing">Copy</button>
+                                <span class="cmd-example">/environmentdesign Mars colony</span>
+                                <button class="copy-btn" data-copy="/environmentdesign">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/mech</span>
+                                <span class="cmd-desc">Mechanical/mecha design</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/mech futuristic robot</span>
+                                <button class="copy-btn" data-copy="/mech">Copy</button>
+                            </div>
+                        </li>
+                        <li class="cmd-item">
+                            <div class="cmd-name-row">
+                                <span class="cmd-name">/productdesign</span>
+                                <span class="cmd-desc">Product concept</span>
+                            </div>
+                            <div class="cmd-bottom-row">
+                                <span class="cmd-example">/productdesign futuristic laptop</span>
+                                <button class="copy-btn" data-copy="/productdesign">Copy</button>
                             </div>
                         </li>
                     </ul>
@@ -980,8 +1094,8 @@
                 <!-- ART & ILLUSTRATION -->
                 <div class="card" id="art">
                     <div class="card-header">
-                        <span class="card-title">Art & Illustration</span>
-                        <span class="badge">Style</span>
+                        <span class="card-title">Art & 3D Rendering</span>
+                        <span class="badge">Style / Materials</span>
                     </div>
                     <ul class="cmd-list">
                         <li class="cmd-item">
@@ -1104,126 +1218,6 @@
                                 <button class="copy-btn" data-copy="/steampunk">Copy</button>
                             </div>
                         </li>
-                    </ul>
-                </div>
-
-                <!-- CAMERA & PHOTOGRAPHY -->
-                <div class="card" id="photography">
-                    <div class="card-header">
-                        <span class="card-title">Camera & Photography</span>
-                        <span class="badge">Optics</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/macro</span>
-                                <span class="cmd-desc">Macro shot</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/macro watch mechanism</span>
-                                <button class="copy-btn" data-copy="/macro">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/aerial</span>
-                                <span class="cmd-desc">Aerial perspective</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/aerial New York</span>
-                                <button class="copy-btn" data-copy="/aerial">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/droneview</span>
-                                <span class="cmd-desc">Drone shot</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/droneview smart city</span>
-                                <button class="copy-btn" data-copy="/droneview">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/birdseye</span>
-                                <span class="cmd-desc">Top-down perspective</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/birdseye stadium</span>
-                                <button class="copy-btn" data-copy="/birdseye">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/wormseye</span>
-                                <span class="cmd-desc">Low-angle perspective</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/wormseye skyscraper</span>
-                                <button class="copy-btn" data-copy="/wormseye">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/fisheye</span>
-                                <span class="cmd-desc">Fisheye lens</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/fisheye racing car</span>
-                                <button class="copy-btn" data-copy="/fisheye">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/wideangle</span>
-                                <span class="cmd-desc">Wide field of view</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/wideangle modern interior</span>
-                                <button class="copy-btn" data-copy="/wideangle">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/telephoto</span>
-                                <span class="cmd-desc">Telephoto distance</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/telephoto wildlife</span>
-                                <button class="copy-btn" data-copy="/telephoto">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/cinematic</span>
-                                <span class="cmd-desc">Cinematic framing</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/cinematic futuristic city</span>
-                                <button class="copy-btn" data-copy="/cinematic">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/productphoto</span>
-                                <span class="cmd-desc">Studio product shot</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/productphoto smartwatch</span>
-                                <button class="copy-btn" data-copy="/productphoto">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- 3D & RENDERING -->
-                <div class="card" id="rendering">
-                    <div class="card-header">
-                        <span class="card-title">3D & Rendering</span>
-                        <span class="badge">Materials</span>
-                    </div>
-                    <ul class="cmd-list">
                         <li class="cmd-item">
                             <div class="cmd-name-row">
                                 <span class="cmd-name">/clayrender</span>
@@ -1322,136 +1316,6 @@
                             <div class="cmd-bottom-row">
                                 <span class="cmd-example">/glass smartphone</span>
                                 <button class="copy-btn" data-copy="/glass">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- DIAGRAMS & INFOGRAPHICS -->
-                <div class="card" id="diagrams">
-                    <div class="card-header">
-                        <span class="card-title">Diagrams & Infographics</span>
-                        <span class="badge">Data</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/infographic</span>
-                                <span class="cmd-desc">Informational layout</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/infographic solar system</span>
-                                <button class="copy-btn" data-copy="/infographic">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/diagram</span>
-                                <span class="cmd-desc">System diagram</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/diagram neural network</span>
-                                <button class="copy-btn" data-copy="/diagram">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/flowchart</span>
-                                <span class="cmd-desc">Process flowchart</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/flowchart RAG pipeline</span>
-                                <button class="copy-btn" data-copy="/flowchart">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/labeled</span>
-                                <span class="cmd-desc">Labeled components</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/labeled car engine</span>
-                                <button class="copy-btn" data-copy="/labeled">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/annotated</span>
-                                <span class="cmd-desc">Annotated technical image</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/annotated aircraft engine</span>
-                                <button class="copy-btn" data-copy="/annotated">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/poster</span>
-                                <span class="cmd-desc">Poster-style layout</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/poster AI architecture</span>
-                                <button class="copy-btn" data-copy="/poster">Copy</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- TECHNOLOGY & CONCEPT ART -->
-                <div class="card" id="concept">
-                    <div class="card-header">
-                        <span class="card-title">Technology & Concept Art</span>
-                        <span class="badge">Design</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/conceptart</span>
-                                <span class="cmd-desc">Concept art view</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/conceptart futuristic robot</span>
-                                <button class="copy-btn" data-copy="/conceptart">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/characterdesign</span>
-                                <span class="cmd-desc">Character design sheet</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/characterdesign AI robot</span>
-                                <button class="copy-btn" data-copy="/characterdesign">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/environmentdesign</span>
-                                <span class="cmd-desc">Environment concept</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/environmentdesign Mars colony</span>
-                                <button class="copy-btn" data-copy="/environmentdesign">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/mech</span>
-                                <span class="cmd-desc">Mechanical/mecha design</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/mech futuristic robot</span>
-                                <button class="copy-btn" data-copy="/mech">Copy</button>
-                            </div>
-                        </li>
-                        <li class="cmd-item">
-                            <div class="cmd-name-row">
-                                <span class="cmd-name">/productdesign</span>
-                                <span class="cmd-desc">Product concept</span>
-                            </div>
-                            <div class="cmd-bottom-row">
-                                <span class="cmd-example">/productdesign futuristic laptop</span>
-                                <button class="copy-btn" data-copy="/productdesign">Copy</button>
                             </div>
                         </li>
                     </ul>
@@ -1637,4 +1501,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
