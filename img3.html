@@ -141,7 +141,7 @@ body::after {
   transform: rotate(45deg);
   pointer-events: none;
 }
-.brand .fw-bold { font-family: var(--font-display); letter-spacing: .02em; }
+.brand .fw-bold { font-family: var(--font-display); letter-spacing: .02em; font-size: .95rem; }
 .brand small { color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-size: .58rem; font-family: var(--font-mono); }
 
 .sidebar-content { padding: 1rem .8rem 2rem; }
@@ -167,7 +167,7 @@ body::after {
   align-items: center;
   gap: .65rem;
   text-align: left;
-  font-size: .88rem;
+  font-size: .84rem;
   font-weight: 600;
   letter-spacing: .02em;
   transition: .18s ease;
@@ -183,8 +183,9 @@ body::after {
 .domain-btn.active {
   box-shadow: inset 2px 0 var(--accent), 0 0 18px rgba(0,246,255,.05);
 }
-.domain-icon { width: 20px; text-align: center; color: var(--accent); }
-.domain-count { margin-left: auto; color: #4e687e; font-size: .68rem; font-family: var(--font-mono); }
+.domain-icon { width: 20px; text-align: center; color: var(--accent); flex: 0 0 auto; }
+.domain-label { flex: 1 1 auto; min-width: 0; line-height: 1.15; }
+.domain-count { margin-left: auto; color: #4e687e; font-size: .68rem; font-family: var(--font-mono); flex: 0 0 auto; }
 
 .subnav {
   margin: .1rem 0 .35rem 2.15rem;
@@ -199,13 +200,20 @@ body::after {
   padding: .34rem .5rem;
   text-align: left;
   border-radius: 4px;
-  font-size: .78rem;
+  font-size: .76rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  line-height: 1.2;
 }
+.sub-btn > span:first-child { flex: 1 1 auto; min-width: 0; }
+.sub-btn .sub-count { font-family: var(--font-mono); font-size: .64rem; color: #3f5568; flex: 0 0 auto; }
 .sub-btn:hover, .sub-btn.active {
   color: #ff78e8;
   background: rgba(255,0,212,.06);
 }
+.sub-btn.active .sub-count { color: #ff78e8; }
 
 .main { margin-left: var(--sidebar-w); min-height: 100vh; }
 
@@ -255,6 +263,8 @@ body::after {
 #searchInput:focus {
   border-color: rgba(0,246,255,.72);
   box-shadow: 0 0 0 .15rem rgba(0,246,255,.06), 0 0 24px rgba(0,246,255,.10);
+  background: rgba(3,12,21,.92);
+  color: #fff;
 }
 
 .kbd {
@@ -361,7 +371,7 @@ body::after {
 #sectionTitle { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
 
 /* =========================================================
-   NOUVEAU DESIGN DE CARTE (CONFORME À L'IMAGE)
+   CARTES DE COMMANDE
    ========================================================= */
 .command-card {
   height: 100%;
@@ -413,25 +423,26 @@ body::after {
 
 .command-name {
   font-family: var(--font-mono);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--accent);
   letter-spacing: -0.01em;
-}
-
-.command-card:not(.accent-cyan) .command-name {
-  color: #00d8e6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .command-desc-short {
   font-family: var(--font-mono);
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   color: #8c9ba5;
   text-align: right;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 60%;
+  max-width: 52%;
+  flex: 0 0 auto;
 }
 
 .command-card-body {
@@ -443,11 +454,12 @@ body::after {
 
 .command-prompt-box {
   flex-grow: 1;
+  min-width: 0;
   background: #060911;
   border-radius: 6px;
   padding: 0.45rem 0.8rem;
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #5d7083;
   white-space: nowrap;
   overflow: hidden;
@@ -465,6 +477,7 @@ body::after {
   letter-spacing: 0.08em;
   transition: all 0.15s ease;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .copy-btn:hover {
@@ -524,9 +537,44 @@ body::after {
 #detailCommand { font-family: var(--font-mono) !important; color: var(--accent); }
 #detailDescription { font-size: .95rem; }
 
+.tag {
+  display: inline-block;
+  border: 1px solid rgba(0,246,255,.25);
+  background: rgba(0,246,255,.05);
+  color: #7fd8e3;
+  border-radius: 3px;
+  padding: .18rem .5rem;
+  font: .62rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.70); z-index: 1050; backdrop-filter: blur(2px); }
 .overlay.show { display: block; }
 .mobile-toggle { display: none; }
+
+/* Loader / dropzone */
+.loader-card { max-width: 720px; margin: 0 auto; }
+.loader-card code { color: var(--accent); background: rgba(0,246,255,.07); padding: .1rem .35rem; border-radius: 3px; }
+.file-input {
+  background: rgba(3,12,21,.85);
+  border: 1px solid rgba(0,246,255,.22);
+  color: #b9d6e2;
+  max-width: 460px;
+  margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+}
+.file-input::file-selector-button {
+  background: rgba(0,246,255,.10);
+  color: var(--accent);
+  border: 0;
+  border-right: 1px solid rgba(0,246,255,.22);
+  padding: .45rem .8rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
 
 @media (max-width: 991.98px) {
   :root { --sidebar-w: 280px; }
@@ -544,6 +592,7 @@ body::after {
   .stats { width: 100%; }
   .stat { flex: 1; min-width: 0; }
   .topbar::after { display: none; }
+  .command-name { font-size: 1.05rem; }
 }
 
 /* Cyberpunk light mode */
@@ -601,7 +650,7 @@ body::after {
       <div class="nav-section-title">Navigation</div>
       <button class="domain-btn active" data-domain="all">
         <span class="domain-icon"><i class="bi bi-grid-1x2"></i></span>
-        <span>Aperçu</span>
+        <span class="domain-label">Aperçu</span>
         <span class="domain-count" id="allCount">0</span>
       </button>
 
@@ -682,12 +731,30 @@ body::after {
       <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
         <div>
           <h2 class="h5 mb-1" id="sectionTitle">Toutes les commandes</h2>
-          <div class="small text-secondary" id="sectionMeta">Bibliothèque complète</div>
+          <div class="small text-secondary" id="sectionMeta">Chargement…</div>
         </div>
         <div class="small text-secondary" id="resultCount"></div>
       </div>
 
-      <div id="commandGrid" class="row g-3"></div>
+      <!-- LOADER -->
+      <div id="loader" class="empty-state">
+        <div class="spinner-border text-info mb-3" role="status" aria-hidden="true"></div>
+        <div class="fw-semibold text-light">Chargement de la bibliothèque…</div>
+        <div class="small mt-1">Lecture de <code>commands_by_domain_category.json</code></div>
+      </div>
+
+      <!-- ERREUR DE CHARGEMENT / IMPORT MANUEL -->
+      <div id="loadError" class="empty-state d-none loader-card">
+        <i class="bi bi-plug fs-2 d-block mb-2"></i>
+        <div class="fw-semibold text-light mb-1">Impossible de charger <code>commands_by_domain_category.json</code></div>
+        <div class="small mb-3">
+          Ouvrez la page via un serveur local (ex. <code>python -m http.server</code>) puis rechargez.<br>
+          Vous pouvez aussi importer le fichier manuellement ci-dessous (ou le glisser-déposer sur la page).
+        </div>
+        <input type="file" id="jsonFile" class="form-control file-input" accept="application/json,.json">
+      </div>
+
+      <div id="commandGrid" class="row g-3 d-none"></div>
 
       <div id="emptyState" class="empty-state d-none mt-3">
         <i class="bi bi-search fs-2 d-block mb-2"></i>
@@ -704,7 +771,7 @@ body::after {
         <div class="small text-secondary">DÉTAIL DE LA COMMANDE</div>
         <div class="fw-bold font-monospace" id="detailCommand">/command</div>
       </div>
-      <button class="btn btn-sm btn-outline-secondary" id="closeDetail">
+      <button class="btn btn-sm btn-outline-secondary" id="closeDetail" aria-label="Fermer">
         <i class="bi bi-x-lg"></i>
       </button>
     </div>
@@ -720,8 +787,8 @@ body::after {
       </div>
 
       <div class="detail-section">
-        <h6>Exemple</h6>
-        <div class="detail-code" id="detailExample"></div>
+        <h6>Domaine / Catégorie</h6>
+        <div class="detail-code" id="detailContext"></div>
       </div>
 
       <div class="detail-section">
@@ -739,321 +806,227 @@ body::after {
 </div>
 
 <script>
-const commands = [
-  // CREATE
-  {c:"Create",s:"Generation",i:"bi-stars",cmd:"/imagine",t:"Imagine",d:"Génère une nouvelle image à partir d’une description textuelle.",tags:["AI","Creative"],ex:"/imagine futuristic glassmorphic dashboard"},
-  {c:"Create",s:"Generation",i:"bi-stars",cmd:"/generate",t:"Generate",d:"Génère un nouveau contenu visuel selon des instructions.",tags:["AI","Creative"],ex:"/generate premium product scene"},
-  {c:"Create",s:"Generation",i:"bi-stars",cmd:"/variation",t:"Variation",d:"Crée plusieurs variantes d’une image ou d’un élément.",tags:["AI","Creative"],ex:"/variation 4 cinematic versions"},
-  {c:"Create",s:"Generation",i:"bi-stars",cmd:"/remix",t:"Remix",d:"Réinterprète une image existante en conservant son intention.",tags:["AI","Creative"],ex:"/remix futuristic editorial"},
-  {c:"Create",s:"Composition",i:"bi-layers",cmd:"/together",t:"Together",d:"Assemble plusieurs sujets ou références dans une composition cohérente.",tags:["AI","Creative"],ex:"/together combine the two products"},
-  {c:"Create",s:"Composition",i:"bi-plus-square",cmd:"/add",t:"Add",d:"Ajoute un nouvel élément dans la composition.",tags:["AI","Edit"],ex:"/add a vintage camera"},
-  {c:"Create",s:"Composition",i:"bi-arrow-repeat",cmd:"/replace",t:"Replace",d:"Remplace un élément existant par un nouveau contenu.",tags:["AI","Edit"],ex:"/replace the chair with a leather chair"},
-  {c:"Create",s:"Composition",i:"bi-box-seam",cmd:"/productexplosion",t:"Product Explosion",d:"Crée une composition dynamique avec les éléments du produit autour du sujet principal.",tags:["Creative","Product"],ex:"/productexplosion premium skincare"},
-  {c:"Create",s:"Presentation",i:"bi-window-stack",cmd:"/mockup",t:"Mockup",d:"Place un design dans une présentation réaliste de type mockup.",tags:["Creative","Design"],ex:"/mockup website on smartphone"},
-  {c:"Create",s:"Presentation",i:"bi-megaphone",cmd:"/adsplash",t:"Ad Splash",d:"Crée un visuel publicitaire immédiatement impactant.",tags:["Creative","Marketing"],ex:"/adsplash luxury campaign"},
-  {c:"Create",s:"Presentation",i:"bi-journal-richtext",cmd:"/magazinecover",t:"Magazine Cover",d:"Transforme une image en couverture de magazine professionnelle.",tags:["Creative","Design"],ex:"/magazinecover fashion editorial"},
-  {c:"Create",s:"Presentation",i:"bi-gem",cmd:"/premiumshowcase",t:"Premium Showcase",d:"Présente un produit ou concept avec une direction artistique haut de gamme.",tags:["Creative","Marketing"],ex:"/premiumshowcase luxury watch"},
+/* =========================================================
+   DATA SOURCE
+   ========================================================= */
+const DATA_URL = 'https://yacinedz.vercel.app/cmd.json';
 
-  // EDIT
-  {c:"Edit",s:"Basic",i:"bi-pencil-square",cmd:"/edit",t:"Edit",d:"Effectue une modification générale de l’image.",tags:["Edit"],ex:"/edit improve overall composition"},
-  {c:"Edit",s:"Basic",i:"bi-image",cmd:"/edit-image",t:"Edit Image",d:"Modifie une image à partir d’instructions en langage naturel.",tags:["AI","Edit"],ex:"/edit-image remove the object on the left"},
-  {c:"Edit",s:"Basic",i:"bi-crop",cmd:"/crop",t:"Crop",d:"Recadre l’image selon une zone ou un ratio donné.",tags:["Edit"],ex:"/crop 4:5"},
-  {c:"Edit",s:"Transform",i:"bi-aspect-ratio",cmd:"/resize",t:"Resize",d:"Modifie les dimensions de l’image.",tags:["Edit"],ex:"/resize 2048x2048"},
-  {c:"Edit",s:"Transform",i:"bi-arrows-angle-expand",cmd:"/scale",t:"Scale",d:"Agrandit ou réduit proportionnellement le contenu.",tags:["Edit"],ex:"/scale 150%"},
-  {c:"Edit",s:"Transform",i:"bi-arrow-clockwise",cmd:"/rotate",t:"Rotate",d:"Fait pivoter l’image selon un angle.",tags:["Edit"],ex:"/rotate 90deg"},
-  {c:"Edit",s:"Transform",i:"bi-symmetry-horizontal",cmd:"/flip",t:"Flip",d:"Retourne l’image horizontalement ou verticalement.",tags:["Edit"],ex:"/flip horizontal"},
-  {c:"Edit",s:"Transform",i:"bi-bounding-box",cmd:"/perspective",t:"Perspective",d:"Corrige ou modifie la perspective d’une scène.",tags:["Edit"],ex:"/perspective correct vertical lines"},
-  {c:"Edit",s:"Transform",i:"bi-bezier2",cmd:"/warp",t:"Warp",d:"Déforme librement une partie ou l’ensemble de l’image.",tags:["Edit"],ex:"/warp reshape product"},
-  {c:"Edit",s:"Transform",i:"bi-diagram-3",cmd:"/distort",t:"Distort",d:"Applique une déformation contrôlée au contenu.",tags:["Edit"],ex:"/distort subtle lens effect"},
-  {c:"Edit",s:"Generative",i:"bi-magic",cmd:"/generative-fill",t:"Generative Fill",d:"Remplit une zone sélectionnée avec du contenu généré par IA.",tags:["AI","Edit"],ex:"/generative-fill add a plant"},
-  {c:"Edit",s:"Generative",i:"bi-brush",cmd:"/inpaint",t:"Inpaint",d:"Reconstruit ou modifie précisément une zone de l’image.",tags:["AI","Edit"],ex:"/inpaint replace the logo"},
-  {c:"Edit",s:"Generative",i:"bi-arrows-fullscreen",cmd:"/outpaint",t:"Outpaint",d:"Étend l’image au-delà de ses limites originales.",tags:["AI","Edit"],ex:"/outpaint extend the scene"},
-  {c:"Edit",s:"Generative",i:"bi-arrows-fullscreen",cmd:"/generative-expand",t:"Generative Expand",d:"Étend automatiquement l’image avec du contenu généré.",tags:["AI","Edit"],ex:"/generative-expand wider landscape"},
+let ALL = [];            // liste plate de toutes les commandes
+let DOMAINS = [];        // ordre des domaines
+let CATEGORIES = {};     // domaine -> [catégories]
 
-  // RETOUCH
-  {c:"Retouch",s:"Cleanup",i:"bi-eraser",cmd:"/remove",t:"Remove",d:"Supprime l’élément sélectionné.",tags:["Edit"],ex:"/remove the background person"},
-  {c:"Retouch",s:"Cleanup",i:"bi-trash3",cmd:"/objectremove",t:"Object Remove",d:"Supprime un objet indésirable de l’image.",tags:["AI","Edit"],ex:"/objectremove cables"},
-  {c:"Retouch",s:"Cleanup",i:"bi-eraser-fill",cmd:"/erase",t:"Erase",d:"Efface une zone ou un élément.",tags:["Edit"],ex:"/erase the sign"},
-  {c:"Retouch",s:"Cleanup",i:"bi-stars",cmd:"/clean",t:"Clean",d:"Nettoie les imperfections et éléments indésirables.",tags:["Edit"],ex:"/clean dust and scratches"},
-  {c:"Retouch",s:"Repair",i:"bi-bandaid",cmd:"/heal",t:"Heal",d:"Corrige une imperfection en utilisant intelligemment les pixels voisins.",tags:["Edit"],ex:"/heal skin blemishes"},
-  {c:"Retouch",s:"Repair",i:"bi-copy",cmd:"/clone",t:"Clone",d:"Copie une zone source vers une autre partie de l’image.",tags:["Edit"],ex:"/clone texture to empty area"},
-  {c:"Retouch",s:"Repair",i:"bi-patch-check",cmd:"/patch",t:"Patch",d:"Remplace une zone par une texture provenant d’une autre partie.",tags:["Edit"],ex:"/patch damaged wall"},
-  {c:"Retouch",s:"Quality",i:"bi-soundwave",cmd:"/denoise",t:"Denoise",d:"Réduit le bruit numérique tout en préservant les détails.",tags:["Edit","Quality"],ex:"/denoise high ISO"},
-  {c:"Retouch",s:"Quality",i:"bi-eye",cmd:"/deblur",t:"Deblur",d:"Réduit le flou et récupère de la netteté.",tags:["AI","Quality"],ex:"/deblur motion blur"},
-  {c:"Retouch",s:"Quality",i:"bi-bullseye",cmd:"/sharpen",t:"Sharpen",d:"Augmente la netteté des détails.",tags:["Edit","Quality"],ex:"/sharpen fine details"},
-  {c:"Retouch",s:"Quality",i:"bi-image-alt",cmd:"/enhance",t:"Enhance",d:"Améliore globalement la qualité visuelle.",tags:["AI","Quality"],ex:"/enhance photo quality"},
-  {c:"Retouch",s:"Quality",i:"bi-x-diamond",cmd:"/artifact-remove",t:"Artifact Remove",d:"Supprime les artefacts de compression, génération ou traitement.",tags:["AI","Quality"],ex:"/artifact-remove JPEG artifacts"},
-
-  // PORTRAIT
-  {c:"Portrait",s:"Portrait Types",i:"bi-person-square",cmd:"/portrait",t:"Portrait",d:"Applique un traitement spécialisé pour les portraits.",tags:["Portrait"],ex:"/portrait natural editorial"},
-  {c:"Portrait",s:"Portrait Types",i:"bi-person-bounding-box",cmd:"/headshot",t:"Headshot",d:"Crée ou améliore un portrait cadré sur la tête et les épaules.",tags:["Portrait"],ex:"/headshot professional"},
-  {c:"Portrait",s:"Portrait Types",i:"bi-camera",cmd:"/portraistudio",t:"Portrait Studio",d:"Crée un portrait avec une esthétique de studio professionnel.",tags:["Portrait","Creative"],ex:"/portraistudio softbox lighting"},
-  {c:"Portrait",s:"Portrait Types",i:"bi-film",cmd:"/cinematiqueportrait",t:"Cinematic Portrait",d:"Donne au portrait une esthétique cinématographique.",tags:["Portrait","Creative"],ex:"/cinematiqueportrait teal shadows"},
-  {c:"Portrait",s:"Portrait Types",i:"bi-sun",cmd:"/outdoorportrait",t:"Outdoor Portrait",d:"Optimise ou génère un portrait réalisé en extérieur.",tags:["Portrait"],ex:"/outdoorportrait golden hour"},
-  {c:"Portrait",s:"Portrait Types",i:"bi-moon-stars",cmd:"/nightportrait",t:"Night Portrait",d:"Crée un portrait avec une ambiance nocturne.",tags:["Portrait","Creative"],ex:"/nightportrait neon city"},
-  {c:"Portrait",s:"Face",i:"bi-person",cmd:"/face",t:"Face",d:"Cible, analyse ou améliore les caractéristiques du visage.",tags:["Portrait","AI"],ex:"/face improve facial detail"},
-  {c:"Portrait",s:"Face",i:"bi-person-check",cmd:"/facefix",t:"Face Fix",d:"Corrige les défauts ou anomalies du visage.",tags:["Portrait","AI"],ex:"/facefix natural symmetry"},
-  {c:"Portrait",s:"Face",i:"bi-stars",cmd:"/face-enhance",t:"Face Enhance",d:"Améliore les détails et la qualité du visage.",tags:["Portrait","AI"],ex:"/face-enhance restore details"},
-  {c:"Portrait",s:"Features",i:"bi-droplet",cmd:"/skinfix",t:"Skin Fix",d:"Améliore la texture et l’apparence de la peau.",tags:["Portrait","Edit"],ex:"/skinfix natural texture"},
-  {c:"Portrait",s:"Features",i:"bi-eye",cmd:"/eyes",t:"Eyes",d:"Améliore, corrige ou met en valeur les yeux.",tags:["Portrait"],ex:"/eyes enhance clarity"},
-  {c:"Portrait",s:"Features",i:"bi-emoji-smile",cmd:"/teeth",t:"Teeth",d:"Corrige ou améliore l’apparence des dents.",tags:["Portrait"],ex:"/teeth natural whitening"},
-  {c:"Portrait",s:"Features",i:"bi-scissors",cmd:"/hair",t:"Hair",d:"Améliore ou modifie les cheveux.",tags:["Portrait","AI"],ex:"/hair improve strands"},
-  {c:"Portrait",s:"Features",i:"bi-emoji-expressionless",cmd:"/expression",t:"Expression",d:"Modifie ou améliore l’expression faciale.",tags:["Portrait","AI"],ex:"/expression confident smile"},
-
-  // LIGHT & COLOR
-  {c:"Light & FX",s:"Lighting",i:"bi-brightness-high",cmd:"/light",t:"Light",d:"Ajuste ou ajoute de la lumière.",tags:["Edit"],ex:"/light soft studio"},
-  {c:"Light & FX",s:"Lighting",i:"bi-sunrise",cmd:"/relight",t:"Relight",d:"Reconstruit l’éclairage d’une scène selon une nouvelle direction.",tags:["AI","Creative"],ex:"/relight sunset from left"},
-  {c:"Light & FX",s:"Lighting",i:"bi-brightness-high-fill",cmd:"/rimlight",t:"Rim Light",d:"Ajoute une lumière de contour autour du sujet.",tags:["Creative"],ex:"/rimlight subtle cyan"},
-  {c:"Light & FX",s:"Lighting",i:"bi-lightbulb",cmd:"/softlight",t:"Soft Light",d:"Crée une lumière douce et diffuse.",tags:["Creative"],ex:"/softlight portrait"},
-  {c:"Light & FX",s:"Lighting",i:"bi-lightning-charge",cmd:"/dramatic-light",t:"Dramatic Light",d:"Crée un éclairage contrasté et théâtral.",tags:["Creative"],ex:"/dramatic-light chiaroscuro"},
-  {c:"Light & FX",s:"Effects",i:"bi-stars",cmd:"/glow",t:"Glow",d:"Ajoute un halo lumineux autour des éléments.",tags:["Creative"],ex:"/glow neon edges"},
-  {c:"Light & FX",s:"Effects",i:"bi-sun-fill",cmd:"/flare",t:"Flare",d:"Ajoute un effet de lens flare.",tags:["Creative"],ex:"/flare cinematic"},
-  {c:"Light & FX",s:"Effects",i:"bi-circle-half",cmd:"/vignette",t:"Vignette",d:"Modifie progressivement les bords de l’image.",tags:["Edit"],ex:"/vignette subtle"},
-  {c:"Light & FX",s:"Effects",i:"bi-camera-reels",cmd:"/bokeh",t:"Bokeh",d:"Ajoute ou renforce un effet bokeh en arrière-plan.",tags:["Creative","Portrait"],ex:"/bokeh creamy background"},
-  {c:"Light & FX",s:"Effects",i:"bi-arrows-collapse",cmd:"/depth-of-field",t:"Depth of Field",d:"Simule une profondeur de champ photographique.",tags:["Creative","Photo"],ex:"/depth-of-field shallow"},
-  {c:"Light & FX",s:"Effects",i:"bi-droplet-half",cmd:"/blur",t:"Blur",d:"Applique un flou général ou localisé.",tags:["Edit"],ex:"/blur background"},
-  {c:"Light & FX",s:"Effects",i:"bi-wind",cmd:"/motion-blur",t:"Motion Blur",d:"Simule un flou dû au mouvement.",tags:["Creative"],ex:"/motion-blur directional"},
-
-  {c:"Color",s:"Correction",i:"bi-brightness-high",cmd:"/brightness",t:"Brightness",d:"Ajuste la luminosité globale.",tags:["Edit"],ex:"/brightness +12"},
-  {c:"Color",s:"Correction",i:"bi-circle-half",cmd:"/contrast",t:"Contrast",d:"Ajuste le contraste entre les tons clairs et foncés.",tags:["Edit"],ex:"/contrast +18"},
-  {c:"Color",s:"Correction",i:"bi-camera",cmd:"/exposure",t:"Exposure",d:"Corrige l’exposition globale.",tags:["Edit"],ex:"/exposure +0.4"},
-  {c:"Color",s:"Correction",i:"bi-palette",cmd:"/saturation",t:"Saturation",d:"Augmente ou réduit la saturation.",tags:["Edit"],ex:"/saturation -10"},
-  {c:"Color",s:"Correction",i:"bi-palette2",cmd:"/vibrance",t:"Vibrance",d:"Renforce principalement les couleurs moins saturées.",tags:["Edit"],ex:"/vibrance +20"},
-  {c:"Color",s:"Correction",i:"bi-thermometer-sun",cmd:"/temperature",t:"Temperature",d:"Rend l’image plus chaude ou plus froide.",tags:["Edit"],ex:"/temperature warm"},
-  {c:"Color",s:"Advanced",i:"bi-sliders",cmd:"/curves",t:"Curves",d:"Contrôle précisément les tonalités via une courbe.",tags:["Edit","Advanced"],ex:"/curves lift shadows"},
-  {c:"Color",s:"Advanced",i:"bi-bar-chart",cmd:"/levels",t:"Levels",d:"Ajuste noirs, tons moyens et blancs.",tags:["Edit","Advanced"],ex:"/levels improve contrast"},
-  {c:"Color",s:"Advanced",i:"bi-brightness-alt-high",cmd:"/highlights",t:"Highlights",d:"Contrôle les hautes lumières.",tags:["Edit"],ex:"/highlights -20"},
-  {c:"Color",s:"Advanced",i:"bi-moon",cmd:"/shadows",t:"Shadows",d:"Contrôle les zones sombres.",tags:["Edit"],ex:"/shadows +25"},
-  {c:"Color",s:"Grading",i:"bi-film",cmd:"/colorgrade",t:"Color Grade",d:"Applique une direction colorimétrique complète.",tags:["Creative","Edit"],ex:"/colorgrade cinematic warm"},
-  {c:"Color",s:"Grading",i:"bi-intersect",cmd:"/duotone",t:"Duotone",d:"Convertit l’image en traitement à deux couleurs.",tags:["Creative","Design"],ex:"/duotone violet cyan"},
-  {c:"Color",s:"Grading",i:"bi-camera2",cmd:"/hdr",t:"HDR",d:"Renforce la dynamique et les détails dans les hautes et basses lumières.",tags:["Edit","Quality"],ex:"/hdr natural"},
-
-  // RESTORE
-  {c:"AI Restore",s:"Restoration",i:"bi-clock-history",cmd:"/restore",t:"Restore",d:"Restaure une image détériorée.",tags:["AI","Quality"],ex:"/restore old photo"},
-  {c:"AI Restore",s:"Restoration",i:"bi-image",cmd:"/restore-photo",t:"Restore Photo",d:"Restaure une photographie ancienne ou endommagée.",tags:["AI","Quality"],ex:"/restore-photo scratches"},
-  {c:"AI Restore",s:"Restoration",i:"bi-palette",cmd:"/restore-color",t:"Restore Color",d:"Restaure les couleurs dégradées d’une image.",tags:["AI","Color"],ex:"/restore-color faded photo"},
-  {c:"AI Restore",s:"Restoration",i:"bi-palette-fill",cmd:"/colorize",t:"Colorize",d:"Ajoute automatiquement des couleurs à une image monochrome.",tags:["AI","Color"],ex:"/colorize historical portrait"},
-  {c:"AI Restore",s:"Enhancement",i:"bi-zoom-in",cmd:"/upscale",t:"Upscale",d:"Augmente la résolution de l’image avec reconstruction des détails.",tags:["AI","Quality"],ex:"/upscale 4x"},
-  {c:"AI Restore",s:"Enhancement",i:"bi-badge-hd",cmd:"/superres",t:"Super Resolution",d:"Améliore fortement la résolution et les détails.",tags:["AI","Quality"],ex:"/superres 4x"},
-  {c:"AI Restore",s:"Enhancement",i:"bi-search",cmd:"/detail",t:"Detail",d:"Renforce ou récupère les détails fins.",tags:["AI","Quality"],ex:"/detail micro textures"},
-  {c:"AI Restore",s:"Enhancement",i:"bi-arrow-up-circle",cmd:"/recover",t:"Recover",d:"Tente de récupérer des informations visuelles perdues.",tags:["AI","Quality"],ex:"/recover lost facial details"},
-  {c:"AI Restore",s:"Specialized",i:"bi-person-bounding-box",cmd:"/restoreandcolorizephoto",t:"Restore & Colorize",d:"Restaure une ancienne photo puis lui ajoute des couleurs réalistes.",tags:["AI","Portrait"],ex:"/restoreandcolorizephoto vintage family photo"},
-
-  // SELECT / BACKGROUND
-  {c:"Select & Mask",s:"Selection",i:"bi-cursor",cmd:"/select",t:"Select",d:"Sélectionne une zone ou un élément.",tags:["Edit"],ex:"/select the main product"},
-  {c:"Select & Mask",s:"Selection",i:"bi-person-check",cmd:"/select-subject",t:"Select Subject",d:"Détecte et sélectionne automatiquement le sujet principal.",tags:["AI","Edit"],ex:"/select-subject"},
-  {c:"Select & Mask",s:"Selection",i:"bi-palette",cmd:"/select-color",t:"Select Color",d:"Sélectionne les pixels selon leur couleur.",tags:["Edit"],ex:"/select-color red"},
-  {c:"Select & Mask",s:"Selection",i:"bi-cloud-sun",cmd:"/select-sky",t:"Select Sky",d:"Détecte et sélectionne automatiquement le ciel.",tags:["AI","Edit"],ex:"/select-sky"},
-  {c:"Select & Mask",s:"Mask",i:"bi-mask",cmd:"/mask",t:"Mask",d:"Crée ou applique un masque de sélection.",tags:["Edit"],ex:"/mask subject"},
-  {c:"Select & Mask",s:"Mask",i:"bi-circle-half",cmd:"/invert-selection",t:"Invert Selection",d:"Inverse la sélection actuelle.",tags:["Edit"],ex:"/invert-selection"},
-  {c:"Select & Mask",s:"Mask",i:"bi-feather",cmd:"/feather",t:"Feather",d:"Adoucit les contours d’une sélection.",tags:["Edit"],ex:"/feather 12px"},
-  {c:"Select & Mask",s:"Background",i:"bi-scissors",cmd:"/remove-bg",t:"Remove Background",d:"Supprime automatiquement l’arrière-plan.",tags:["AI","Edit"],ex:"/remove-bg"},
-  {c:"Select & Mask",s:"Background",i:"bi-image-alt",cmd:"/replace-bg",t:"Replace Background",d:"Remplace complètement l’arrière-plan.",tags:["AI","Edit"],ex:"/replace-bg modern studio"},
-  {c:"Select & Mask",s:"Background",i:"bi-cloud-sun",cmd:"/sky-replace",t:"Sky Replace",d:"Remplace le ciel par un autre ciel.",tags:["AI","Creative"],ex:"/sky-replace dramatic sunset"},
-  {c:"Select & Mask",s:"Background",i:"bi-arrows-fullscreen",cmd:"/extend-bg",t:"Extend Background",d:"Étend l’arrière-plan existant.",tags:["AI","Edit"],ex:"/extend-bg left and right"},
-  {c:"Select & Mask",s:"Background",i:"bi-stars",cmd:"/generate-bg",t:"Generate Background",d:"Génère un nouvel arrière-plan avec IA.",tags:["AI","Creative"],ex:"/generate-bg luxury marble studio"},
-  {c:"Select & Mask",s:"Background",i:"bi-bounding-box-circles",cmd:"/background-match",t:"Background Match",d:"Adapte l’arrière-plan à la lumière, perspective et ambiance du sujet.",tags:["AI","Creative"],ex:"/background-match product lighting"},
-
-  // STYLES
-  {c:"Styles",s:"Illustration",i:"bi-emoji-smile",cmd:"/anime",t:"Anime",d:"Transforme l’image dans un style anime.",tags:["Creative","Style"],ex:"/anime detailed cinematic"},
-  {c:"Styles",s:"Illustration",i:"bi-palette",cmd:"/cartoon",t:"Cartoon",d:"Applique un style cartoon.",tags:["Creative","Style"],ex:"/cartoon clean 3D"},
-  {c:"Styles",s:"Illustration",i:"bi-book",cmd:"/comic",t:"Comic",d:"Donne une esthétique bande dessinée.",tags:["Creative","Style"],ex:"/comic ink dynamic"},
-  {c:"Styles",s:"Illustration",i:"bi-pencil",cmd:"/sketch",t:"Sketch",d:"Transforme l’image en croquis ou dessin au crayon.",tags:["Creative","Style"],ex:"/sketch graphite"},
-  {c:"Styles",s:"Illustration",i:"bi-pen",cmd:"/ink",t:"Ink",d:"Applique un rendu à l’encre.",tags:["Creative","Style"],ex:"/ink black linework"},
-  {c:"Styles",s:"Painting",i:"bi-droplet",cmd:"/watercolor",t:"Watercolor",d:"Simule une peinture à l’aquarelle.",tags:["Creative","Style"],ex:"/watercolor soft paper"},
-  {c:"Styles",s:"Painting",i:"bi-brush",cmd:"/oilpaint",t:"Oil Paint",d:"Simule une peinture à l’huile.",tags:["Creative","Style"],ex:"/oilpaint museum texture"},
-  {c:"Styles",s:"Visual",i:"bi-box",cmd:"/3d",t:"3D",d:"Crée ou simule un rendu 3D.",tags:["Creative","Style"],ex:"/3d product render"},
-  {c:"Styles",s:"Visual",i:"bi-lightning",cmd:"/neon",t:"Neon",d:"Applique un style lumineux basé sur le néon.",tags:["Creative","Style"],ex:"/neon cyberpunk"},
-  {c:"Styles",s:"Visual",i:"bi-stars",cmd:"/neonmorph",t:"Neonmorph",d:"Combine esthétique néon, profondeur et formes futuristes.",tags:["Creative","Style"],ex:"/neonmorph futuristic UI"},
-  {c:"Styles",s:"Visual",i:"bi-hourglass-split",cmd:"/vintage",t:"Vintage",d:"Donne un aspect ancien et photographique.",tags:["Creative","Style"],ex:"/vintage 1970s film"},
-  {c:"Styles",s:"Visual",i:"bi-disc",cmd:"/retro",t:"Retro",d:"Applique une esthétique inspirée des anciennes décennies.",tags:["Creative","Style"],ex:"/retro 1980s"},
-  {c:"Styles",s:"Visual",i:"bi-square",cmd:"/minimal",t:"Minimal",d:"Simplifie l’image avec une esthétique minimaliste.",tags:["Creative","Design"],ex:"/minimal clean composition"},
-  {c:"Styles",s:"Visual",i:"bi-film",cmd:"/cinematic",t:"Cinematic",d:"Applique un rendu cinématographique.",tags:["Creative","Style"],ex:"/cinematic film still"},
-  {c:"Styles",s:"Visual",i:"bi-brush",cmd:"/style-transfer",t:"Style Transfer",d:"Transfère le style visuel d’une référence vers l’image.",tags:["AI","Creative"],ex:"/style-transfer editorial fashion"},
-
-  // DESIGN
-  {c:"Design",s:"Layout",i:"bi-layout-text-window",cmd:"/design",t:"Design",d:"Crée ou améliore une composition graphique.",tags:["Design","Creative"],ex:"/design premium landing hero"},
-  {c:"Design",s:"Layout",i:"bi-grid-3x3-gap",cmd:"/layout",t:"Layout",d:"Organise les éléments dans une mise en page structurée.",tags:["Design"],ex:"/layout balanced grid"},
-  {c:"Design",s:"Layout",i:"bi-align-center",cmd:"/align",t:"Align",d:"Aligne plusieurs éléments.",tags:["Design"],ex:"/align center"},
-  {c:"Design",s:"Layout",i:"bi-distribute-vertical",cmd:"/distribute",t:"Distribute",d:"Répartit régulièrement les éléments.",tags:["Design"],ex:"/distribute horizontal"},
-  {c:"Design",s:"Layout",i:"bi-grid",cmd:"/grid",t:"Grid",d:"Affiche ou utilise une grille de composition.",tags:["Design"],ex:"/grid 12 columns"},
-  {c:"Design",s:"Layout",i:"bi-bounding-box",cmd:"/safe-area",t:"Safe Area",d:"Définit une zone sûre pour éviter les découpes.",tags:["Design","Social"],ex:"/safe-area social post"},
-  {c:"Design",s:"Typography",i:"bi-fonts",cmd:"/text",t:"Text",d:"Ajoute ou modifie du texte dans l’image.",tags:["Design"],ex:"/text NEW COLLECTION"},
-  {c:"Design",s:"Typography",i:"bi-type",cmd:"/font",t:"Font",d:"Change la police utilisée.",tags:["Design"],ex:"/font Inter"},
-  {c:"Design",s:"Typography",i:"bi-type-h1",cmd:"/font-size",t:"Font Size",d:"Modifie la taille du texte.",tags:["Design"],ex:"/font-size 48px"},
-  {c:"Design",s:"Typography",i:"bi-type-bold",cmd:"/font-weight",t:"Font Weight",d:"Contrôle l’épaisseur de la police.",tags:["Design"],ex:"/font-weight 700"},
-  {c:"Design",s:"Typography",i:"bi-text-left",cmd:"/text-align",t:"Text Align",d:"Modifie l’alignement du texte.",tags:["Design"],ex:"/text-align center"},
-  {c:"Design",s:"Typography",i:"bi-type",cmd:"/text-color",t:"Text Color",d:"Change la couleur du texte.",tags:["Design"],ex:"/text-color white"},
-  {c:"Design",s:"Typography",i:"bi-badge-3d",cmd:"/text-effect",t:"Text Effect",d:"Applique un effet graphique au texte.",tags:["Design","Creative"],ex:"/text-effect glass neon"},
-  {c:"Design",s:"Brand",i:"bi-bookmark-star",cmd:"/brand",t:"Brand",d:"Applique les éléments graphiques d’une marque.",tags:["Design","Brand"],ex:"/brand use corporate identity"},
-  {c:"Design",s:"Brand",i:"bi-megaphone",cmd:"/branding",t:"Branding",d:"Adapte une création à une identité de marque.",tags:["Design","Brand"],ex:"/branding premium tech"},
-  {c:"Design",s:"Print",i:"bi-file-earmark-image",cmd:"/poster",t:"Poster",d:"Crée une composition de type affiche.",tags:["Design","Creative"],ex:"/poster event campaign"},
-  {c:"Design",s:"Print",i:"bi-file-earmark-text",cmd:"/flyer",t:"Flyer",d:"Crée un flyer promotionnel.",tags:["Design","Marketing"],ex:"/flyer product launch"},
-  {c:"Design",s:"Print",i:"bi-card-image",cmd:"/banner",t:"Banner",d:"Crée une bannière adaptée au format demandé.",tags:["Design","Marketing"],ex:"/banner website hero"},
-
-  // LAYERS
-  {c:"Layers",s:"Management",i:"bi-layers",cmd:"/layer",t:"Layer",d:"Manipule le calque actif ou les calques.",tags:["Edit"],ex:"/layer active"},
-  {c:"Layers",s:"Management",i:"bi-plus-square",cmd:"/new-layer",t:"New Layer",d:"Crée un nouveau calque.",tags:["Edit"],ex:"/new-layer"},
-  {c:"Layers",s:"Management",i:"bi-pencil",cmd:"/rename-layer",t:"Rename Layer",d:"Renomme un calque.",tags:["Edit"],ex:"/rename-layer Hero"},
-  {c:"Layers",s:"Management",i:"bi-eye-slash",cmd:"/hide-layer",t:"Hide Layer",d:"Masque un calque.",tags:["Edit"],ex:"/hide-layer Background"},
-  {c:"Layers",s:"Management",i:"bi-eye",cmd:"/show-layer",t:"Show Layer",d:"Affiche un calque masqué.",tags:["Edit"],ex:"/show-layer Background"},
-  {c:"Layers",s:"Management",i:"bi-lock",cmd:"/lock-layer",t:"Lock Layer",d:"Verrouille un calque contre les modifications.",tags:["Edit"],ex:"/lock-layer Logo"},
-  {c:"Layers",s:"Operations",i:"bi-transparency",cmd:"/opacity",t:"Opacity",d:"Modifie la transparence du calque.",tags:["Edit"],ex:"/opacity 75%"},
-  {c:"Layers",s:"Operations",i:"bi-layers-half",cmd:"/blend",t:"Blend",d:"Modifie le mode de fusion du calque.",tags:["Edit","Creative"],ex:"/blend screen"},
-  {c:"Layers",s:"Operations",i:"bi-folder",cmd:"/group",t:"Group",d:"Regroupe plusieurs calques.",tags:["Edit"],ex:"/group product elements"},
-  {c:"Layers",s:"Operations",i:"bi-folder-minus",cmd:"/ungroup",t:"Ungroup",d:"Sépare un groupe de calques.",tags:["Edit"],ex:"/ungroup"},
-  {c:"Layers",s:"Operations",i:"bi-intersect",cmd:"/merge",t:"Merge",d:"Fusionne plusieurs éléments ou calques.",tags:["Edit"],ex:"/merge selected layers"},
-  {c:"Layers",s:"Operations",i:"bi-layers",cmd:"/flatten",t:"Flatten",d:"Fusionne tous les calques en une seule image.",tags:["Edit","Export"],ex:"/flatten"},
-
-  // FASHION / MARKETING
-  {c:"Fashion",s:"Editorial",i:"bi-person-bounding-box",cmd:"/fashionmodel",t:"Fashion Model",d:"Génère ou met en scène un modèle de mode.",tags:["Creative","Portrait"],ex:"/fashionmodel haute couture"},
-  {c:"Fashion",s:"Editorial",i:"bi-journal",cmd:"/fashionditorial",t:"Fashion Editorial",d:"Applique une direction artistique éditoriale fashion.",tags:["Creative","Design"],ex:"/fashionditorial luxury studio"},
-  {c:"Fashion",s:"Editorial",i:"bi-camera",cmd:"/fashioncomping",t:"Fashion Comping",d:"Crée une composition visuelle destinée au domaine de la mode.",tags:["Creative","Design"],ex:"/fashioncomping campaign"},
-  {c:"Fashion",s:"Styles",i:"bi-shop-window",cmd:"/fashiontunway",t:"Fashion Runway",d:"Simule une présentation de mode de type runway.",tags:["Creative"],ex:"/fashiontunway Paris runway"},
-  {c:"Fashion",s:"Styles",i:"bi-buildings",cmd:"/streetfashion",t:"Street Fashion",d:"Crée une esthétique streetwear ou street fashion.",tags:["Creative","Portrait"],ex:"/streetfashion urban night"},
-  {c:"Marketing",s:"Advertising",i:"bi-meta",cmd:"/metaads",t:"Meta Ads",d:"Prépare un visuel publicitaire pour les plateformes Meta.",tags:["Marketing","Social"],ex:"/metaads conversion campaign"},
-  {c:"Marketing",s:"Advertising",i:"bi-gem",cmd:"/luxury ads",t:"Luxury Ads",d:"Crée une publicité avec une esthétique luxueuse.",tags:["Marketing","Creative"],ex:"/luxury ads premium perfume"},
-  {c:"Marketing",s:"Advertising",i:"bi-box-seam",cmd:"/product hero",t:"Product Hero",d:"Crée un visuel hero centré sur un produit principal.",tags:["Marketing","Product"],ex:"/product hero smartphone"},
-  {c:"Marketing",s:"Showcase",i:"bi-display",cmd:"/showcase",t:"Showcase",d:"Présente un produit ou contenu de manière professionnelle.",tags:["Marketing","Creative"],ex:"/showcase new product"},
-  {c:"Marketing",s:"Product",i:"bi-box",cmd:"/product",t:"Product",d:"Oriente la création vers une présentation de produit.",tags:["Marketing","Product"],ex:"/product photography white background"},
-
-  // VISUALIZATION
-  {c:"Visualization",s:"Scientific",i:"bi-microscope",cmd:"/microscop",t:"Microscope",d:"Simule une vue microscopique très rapprochée.",tags:["Creative","Analysis"],ex:"/microscop plant cell"},
-  {c:"Visualization",s:"Scientific",i:"bi-box-arrow-in-down",cmd:"/cutaway",t:"Cutaway",d:"Produit une vue en coupe révélant l’intérieur d’un objet.",tags:["Creative","Analysis"],ex:"/cutaway electric motor"},
-  {c:"Visualization",s:"Scientific",i:"bi-diagram-3",cmd:"/visual dissection",t:"Visual Dissection",d:"Décompose visuellement un sujet en différentes parties.",tags:["Creative","Analysis"],ex:"/visual dissection camera"},
-  {c:"Visualization",s:"Scientific",i:"bi-heart-pulse",cmd:"/body systems",t:"Body Systems",d:"Visualise les différents systèmes du corps humain.",tags:["Creative","Analysis"],ex:"/body systems respiratory"},
-  {c:"Visualization",s:"Perspective",i:"bi-house",cmd:"/inside",t:"Inside",d:"Représente l’intérieur d’un objet, organisme ou environnement.",tags:["Creative"],ex:"/inside smartphone"},
-  {c:"Visualization",s:"Perspective",i:"bi-globe",cmd:"/world inside",t:"World Inside",d:"Visualise un monde ou environnement situé à l’intérieur d’un objet.",tags:["Creative"],ex:"/world inside a watch"},
-  {c:"Visualization",s:"Perspective",i:"bi-window",cmd:"/windowbox",t:"Window Box",d:"Crée une présentation visuelle encadrée ou une vue à travers une fenêtre.",tags:["Creative","Design"],ex:"/windowbox architectural scene"},
-  {c:"Visualization",s:"Perspective",i:"bi-airplane",cmd:"/droneview",t:"Drone View",d:"Simule une vue aérienne ou une prise de vue par drone.",tags:["Creative","Photo"],ex:"/droneview coastal city"},
-
-  // ANALYZE
-  {c:"Analyze",s:"Vision",i:"bi-search",cmd:"/analyze",t:"Analyze",d:"Analyse globalement le contenu et la qualité de l’image.",tags:["AI","Analysis"],ex:"/analyze composition and lighting"},
-  {c:"Analyze",s:"Vision",i:"bi-card-text",cmd:"/describe",t:"Describe",d:"Décrit le contenu visuel de l’image.",tags:["AI","Analysis"],ex:"/describe image in detail"},
-  {c:"Analyze",s:"Vision",i:"bi-image",cmd:"/describe-image",t:"Describe Image",d:"Produit une description détaillée du contenu de l’image.",tags:["AI","Analysis"],ex:"/describe-image detailed"},
-  {c:"Analyze",s:"Detection",i:"bi-crosshair",cmd:"/detect",t:"Detect",d:"Détecte automatiquement les éléments présents.",tags:["AI","Analysis"],ex:"/detect objects"},
-  {c:"Analyze",s:"Detection",i:"bi-person",cmd:"/detect-faces",t:"Detect Faces",d:"Détecte les visages présents dans l’image.",tags:["AI","Analysis","Portrait"],ex:"/detect-faces"},
-  {c:"Analyze",s:"Detection",i:"bi-fonts",cmd:"/detect-text",t:"Detect Text",d:"Détecte les zones contenant du texte.",tags:["AI","Analysis"],ex:"/detect-text"},
-  {c:"Analyze",s:"Detection",i:"bi-file-text",cmd:"/ocr",t:"OCR",d:"Extrait le texte visible dans l’image.",tags:["AI","Analysis"],ex:"/ocr extract all text"},
-  {c:"Analyze",s:"Analysis",i:"bi-palette",cmd:"/colors",t:"Colors",d:"Analyse la palette et les couleurs dominantes.",tags:["Analysis","Design"],ex:"/colors dominant palette"},
-  {c:"Analyze",s:"Analysis",i:"bi-bounding-box-circles",cmd:"/composition",t:"Composition",d:"Analyse le cadrage, la hiérarchie et la composition.",tags:["Analysis","Design"],ex:"/composition rule of thirds"},
-  {c:"Analyze",s:"Analysis",i:"bi-stars",cmd:"/quality",t:"Quality",d:"Évalue la qualité technique de l’image.",tags:["Analysis","Quality"],ex:"/quality resolution noise"},
-  {c:"Analyze",s:"Analysis",i:"bi-lightbulb",cmd:"/lighting",t:"Lighting",d:"Analyse l’éclairage et les sources lumineuses.",tags:["Analysis"],ex:"/lighting key fill rim"},
-  {c:"Analyze",s:"Analysis",i:"bi-palette2",cmd:"/style",t:"Style",d:"Identifie ou analyse le style visuel.",tags:["Analysis","Creative"],ex:"/style cinematic editorial"},
-  {c:"Analyze",s:"Accessibility",i:"bi-universal-access",cmd:"/alt-text",t:"Alt Text",d:"Génère une description alternative accessible pour l’image.",tags:["Analysis","Accessibility"],ex:"/alt-text concise accessible"},
-
-  // SOCIAL
-  {c:"Social",s:"Instagram",i:"bi-instagram",cmd:"/instagram",t:"Instagram",d:"Adapte une création aux formats Instagram.",tags:["Social"],ex:"/instagram 1080x1350"},
-  {c:"Social",s:"Instagram",i:"bi-phone",cmd:"/story",t:"Story",d:"Prépare un visuel vertical pour une story.",tags:["Social"],ex:"/story 1080x1920"},
-  {c:"Social",s:"Instagram",i:"bi-play-btn",cmd:"/reel",t:"Reel",d:"Prépare un visuel pour un Reel.",tags:["Social"],ex:"/reel vertical cover"},
-  {c:"Social",s:"Platforms",i:"bi-facebook",cmd:"/facebook",t:"Facebook",d:"Adapte la création aux formats Facebook.",tags:["Social"],ex:"/facebook cover"},
-  {c:"Social",s:"Platforms",i:"bi-youtube",cmd:"/youtube",t:"YouTube",d:"Prépare une création pour YouTube.",tags:["Social"],ex:"/youtube channel art"},
-  {c:"Social",s:"Platforms",i:"bi-youtube",cmd:"/thumbnail",t:"Thumbnail",d:"Crée une miniature optimisée pour attirer l’attention.",tags:["Social","Design"],ex:"/thumbnail high CTR"},
-  {c:"Social",s:"Platforms",i:"bi-tiktok",cmd:"/tiktok",t:"TikTok",d:"Adapte le contenu aux formats TikTok.",tags:["Social"],ex:"/tiktok cover"},
-  {c:"Social",s:"Platforms",i:"bi-linkedin",cmd:"/linkedin",t:"LinkedIn",d:"Adapte la création à LinkedIn.",tags:["Social","Business"],ex:"/linkedin post"},
-  {c:"Social",s:"Platforms",i:"bi-twitter-x",cmd:"/twitter",t:"Twitter / X",d:"Prépare une image adaptée à Twitter/X.",tags:["Social"],ex:"/twitter post"},
-  {c:"Social",s:"Platforms",i:"bi-pinterest",cmd:"/pinterest",t:"Pinterest",d:"Adapte le visuel au format Pinterest.",tags:["Social"],ex:"/pinterest pin"},
-  {c:"Social",s:"Platforms",i:"bi-whatsapp",cmd:"/whatsapp",t:"WhatsApp",d:"Prépare une image pour les usages WhatsApp.",tags:["Social"],ex:"/whatsapp status"},
-
-  // EXPORT
-  {c:"Export",s:"Workflow",i:"bi-arrow-counterclockwise",cmd:"/undo",t:"Undo",d:"Annule la dernière modification.",tags:["Export"],ex:"/undo"},
-  {c:"Export",s:"Workflow",i:"bi-arrow-clockwise",cmd:"/redo",t:"Redo",d:"Rétablit une modification annulée.",tags:["Export"],ex:"/redo"},
-  {c:"Export",s:"Workflow",i:"bi-arrow-repeat",cmd:"/reset",t:"Reset",d:"Réinitialise les modifications.",tags:["Export"],ex:"/reset"},
-  {c:"Export",s:"Workflow",i:"bi-eye",cmd:"/preview",t:"Preview",d:"Affiche un aperçu du résultat.",tags:["Export"],ex:"/preview"},
-  {c:"Export",s:"Workflow",i:"bi-copy",cmd:"/duplicate",t:"Duplicate",d:"Duplique un élément, calque ou image.",tags:["Edit"],ex:"/duplicate selected layer"},
-  {c:"Export",s:"Workflow",i:"bi-save",cmd:"/save",t:"Save",d:"Enregistre le travail actuel.",tags:["Export"],ex:"/save project"},
-  {c:"Export",s:"Output",i:"bi-box-arrow-up",cmd:"/export",t:"Export",d:"Exporte le résultat final.",tags:["Export"],ex:"/export final"},
-  {c:"Export",s:"Output",i:"bi-download",cmd:"/download",t:"Download",d:"Télécharge le résultat.",tags:["Export"],ex:"/download"},
-  {c:"Export",s:"Formats",i:"bi-filetype-jpg",cmd:"/jpg",t:"JPG",d:"Exporte l’image au format JPEG.",tags:["Export"],ex:"/jpg quality 95"},
-  {c:"Export",s:"Formats",i:"bi-filetype-png",cmd:"/png",t:"PNG",d:"Exporte l’image au format PNG.",tags:["Export"],ex:"/png transparent"},
-  {c:"Export",s:"Formats",i:"bi-filetype-webp",cmd:"/webp",t:"WebP",d:"Exporte l’image au format WebP.",tags:["Export"],ex:"/webp quality 90"},
-  {c:"Export",s:"Formats",i:"bi-filetype-pdf",cmd:"/pdf",t:"PDF",d:"Exporte la création au format PDF.",tags:["Export"],ex:"/pdf print-ready"},
-  {c:"Export",s:"Formats",i:"bi-filetype-svg",cmd:"/svg",t:"SVG",d:"Exporte les éléments compatibles en SVG.",tags:["Export"],ex:"/svg vector"},
-  {c:"Export",s:"Production",i:"bi-badge-hd",cmd:"/dpi",t:"DPI",d:"Définit la résolution destinée à l’impression.",tags:["Export","Print"],ex:"/dpi 300"},
-  {c:"Export",s:"Production",i:"bi-transparency",cmd:"/transparent",t:"Transparent",d:"Produit une image avec arrière-plan transparent.",tags:["Export","Design"],ex:"/transparent background"},
-  {c:"Export",s:"Production",i:"bi-printer",cmd:"/print",t:"Print",d:"Prépare l’image pour l’impression.",tags:["Export","Print"],ex:"/print A4 300dpi"},
-
-  // SPECIAL / OTHER
-  {c:"Special",s:"Effects",i:"bi-bricks",cmd:"/glassbreack",t:"Glass Break",d:"Crée un effet de verre brisé ou de fragmentation vitrée.",tags:["Creative","FX"],ex:"/glassbreack dramatic impact"},
-  {c:"Special",s:"Effects",i:"bi-lightning-charge",cmd:"/impactfx",t:"Impact FX",d:"Ajoute des effets visuels dynamiques pour renforcer l’impact.",tags:["Creative","FX"],ex:"/impactfx explosive energy"},
-  {c:"Special",s:"Effects",i:"bi-grid-3x3",cmd:"/rivh visual",t:"Rich Visual",d:"Crée un visuel riche et détaillé destiné à une présentation premium.",tags:["Creative","Marketing"],ex:"/rivh visual premium campaign"},
-  {c:"Special",s:"Workflow",i:"bi-magic",cmd:"/apply",t:"Apply",d:"Applique une modification, un effet ou un réglage sélectionné.",tags:["Edit"],ex:"/apply current adjustment"},
-  {c:"Special",s:"Anatomy",i:"bi-body-text",cmd:"/anatomyfix",t:"Anatomy Fix",d:"Corrige les incohérences anatomiques ou corporelles.",tags:["AI","Portrait"],ex:"/anatomyfix natural hands"},
-  {c:"Special",s:"Anatomy",i:"bi-body-text",cmd:"/analyze",t:"Analyze",d:"Analyse globalement le contenu et la qualité de l’image.",tags:["AI","Analysis"],ex:"/analyze"},
-  {c:"Special",s:"Effects",i:"bi-palette2",cmd:"/tyon",t:"Tyon",d:"Applique une transformation visuelle ou stylistique prédéfinie.",tags:["Creative","Style"],ex:"/tyon premium visual"},
-];
-
-const domainMeta = {
-  "Create": ["bi-stars", "Création & génération"],
-  "Edit": ["bi-pencil-square", "Édition & transformation"],
-  "Retouch": ["bi-eraser", "Retouche & nettoyage"],
-  "Portrait": ["bi-person-bounding-box", "Portrait & visage"],
-  "Light & FX": ["bi-lightning-charge", "Lumière & effets"],
-  "Color": ["bi-palette", "Couleur & grading"],
-  "AI Restore": ["bi-clock-history", "Restauration IA"],
-  "Select & Mask": ["bi-cursor", "Sélection & masques"],
-  "Styles": ["bi-brush", "Styles artistiques"],
-  "Design": ["bi-layout-text-window", "Design & typographie"],
-  "Layers": ["bi-layers", "Calques & workflow"],
-  "Fashion": ["bi-person-standing-dress", "Mode & fashion"],
-  "Marketing": ["bi-megaphone", "Marketing & publicité"],
-  "Visualization": ["bi-microscope", "Visualisation scientifique"],
-  "Analyze": ["bi-search", "Analyse & détection"],
-  "Social": ["bi-phone", "Réseaux sociaux"],
-  "Export": ["bi-box-arrow-up", "Export & production"],
-  "Special": ["bi-stars", "Commandes spéciales"]
-};
-
-const domainOrder = Object.keys(domainMeta);
-const domainNav = document.getElementById("domainNav");
-const grid = document.getElementById("commandGrid");
-const empty = document.getElementById("emptyState");
-const searchInput = document.getElementById("searchInput");
-const detailPanel = document.getElementById("detailPanel");
-const overlay = document.getElementById("overlay");
-
-let activeDomain = "all";
-let activeFilter = "all";
+let activeDomain = 'all';
+let activeSub = null;
+let activeFilter = 'all';
 let selectedCommand = null;
 
-function slug(s) {
-  return s.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-");
+/* =========================================================
+   MÉTADONNÉES (icônes + tags)
+   ========================================================= */
+const DOMAIN_ICONS = {
+  "Color, Light & Camera": "bi-camera",
+  "Compositing & Editing": "bi-layers",
+  "Creative & Design": "bi-stars",
+  "Marketing & Social": "bi-megaphone",
+  "Portrait, Beauty & Styling": "bi-person-bounding-box",
+  "Technical & Data": "bi-cpu",
+  "Travel Content": "bi-geo-alt"
+};
+
+const DOMAIN_TAGS = {
+  "Color, Light & Camera": ["Edit"],
+  "Compositing & Editing": ["Edit"],
+  "Creative & Design": ["Creative", "Design"],
+  "Marketing & Social": ["Marketing", "Social"],
+  "Portrait, Beauty & Styling": ["Portrait"],
+  "Technical & Data": ["Analysis"],
+  "Travel Content": ["Creative"]
+};
+
+const CATEGORY_TAGS = {
+  "AI Restore": ["AI"],
+  "Retouch": ["AI"],
+  "Select & Mask": ["AI"],
+  "Create": ["AI"],
+  "Layers": ["Edit"],
+  "Design": ["Design"],
+  "Styles": ["Creative"],
+  "Marketing": ["Marketing"],
+  "Social": ["Social"],
+  "Analyze": ["Analysis", "AI"],
+  "Export": ["Export"],
+  "Visualization": ["Analysis"],
+  "Accessories": ["Portrait"],
+  "Beauty": ["Portrait"],
+  "Fashion": ["Portrait"],
+  "Hair": ["Portrait"],
+  "Outfit": ["Portrait"],
+  "Portrait": ["Portrait"],
+  "Skin": ["Portrait"],
+  "Styling": ["Portrait"],
+  "Technology Dataset / CAD & Specs / Data": ["Design", "Analysis"],
+  "Technology, Scientific & Industrial Scan / Spatial / Design": ["Design", "Analysis"]
+};
+
+function iconFor(domain) {
+  if (DOMAIN_ICONS[domain]) return DOMAIN_ICONS[domain];
+  const d = normalize(domain);
+  if (d.includes('color') || d.includes('light') || d.includes('camera')) return 'bi-camera';
+  if (d.includes('portrait') || d.includes('beauty') || d.includes('style')) return 'bi-person-bounding-box';
+  if (d.includes('travel')) return 'bi-geo-alt';
+  if (d.includes('market') || d.includes('social')) return 'bi-megaphone';
+  if (d.includes('technical') || d.includes('data') || d.includes('tech')) return 'bi-cpu';
+  if (d.includes('composit') || d.includes('edit')) return 'bi-layers';
+  return 'bi-stars';
 }
 
-function domainCount(domain) {
-  return commands.filter(x => x.c === domain).length;
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function normalize(s) {
+  return String(s)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
-function renderSidebar() {
-  domainNav.innerHTML = domainOrder.map(domain => {
-    const [icon, label] = domainMeta[domain];
-    const subs = [...new Set(commands.filter(x => x.c === domain).map(x => x.s))];
-    return `
-      <div class="domain-group">
-        <button class="domain-btn" data-domain="${domain}">
-          <span class="domain-icon"><i class="bi ${icon}"></i></span>
-          <span>${domain}</span>
-          <span class="domain-count">${domainCount(domain)}</span>
-        </button>
-        <div class="subnav d-none" data-subnav="${domain}">
-          ${subs.map(sub => `<button class="sub-btn" data-domain="${domain}" data-sub="${sub}">${sub}</button>`).join("")}
-        </div>
-      </div>`;
-  }).join("");
+function escHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+}
+function escAttr(s) { return escHtml(s).replace(/`/g, "&#096;"); }
 
-  domainNav.querySelectorAll(".domain-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const domain = btn.dataset.domain;
-      setDomain(domain);
-      const sub = domainNav.querySelector(`[data-subnav="${CSS.escape(domain)}"]`);
-      if (sub) sub.classList.toggle("d-none");
+function titleFromCmd(cmd) {
+  const base = String(cmd).replace(/^\//, '').replace(/[-_]+/g, ' ').trim();
+  return base.split(/\s+/)
+    .map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : '')
+    .join(' ');
+}
+
+function deriveTags(domain, category, cmd, desc) {
+  const set = new Set();
+  (DOMAIN_TAGS[domain] || []).forEach(t => set.add(t));
+  (CATEGORY_TAGS[category] || []).forEach(t => set.add(t));
+
+  const hay = normalize([cmd, desc, category, domain].join(' '));
+  const padded = ' ' + hay + ' ';
+
+  if (padded.includes(' ai ') || padded.includes(' ia ')) set.add('AI');
+
+  const aiHints = ['automat', 'genere', 'generat', 'detect', 'restaur', 'upscal',
+                   'inpaint', 'outpaint', 'reconstruct', 'entrain', 'intelligence',
+                   'machine learning', 'neural', 'dataset', 'superres', 'denoise', 'deblur'];
+  if (aiHints.some(h => hay.includes(h))) set.add('AI');
+
+  const editHints = ['supprime', 'efface', 'corrige', 'recadre', 'nettoie', 'modifie'];
+  if (editHints.some(h => hay.includes(h))) set.add('Edit');
+
+  if (hay.includes('portrait') || hay.includes('visage') || hay.includes('beaute')) set.add('Portrait');
+  if (hay.includes('export') || hay.includes('telecharge')) set.add('Export');
+  if (hay.includes('analyse') || hay.includes('detect')) set.add('Analysis');
+
+  return [...set];
+}
+
+/* =========================================================
+   CONSTRUCTION DU DATASET
+   ========================================================= */
+function setup(data) {
+  ALL = [];
+  DOMAINS = [];
+  CATEGORIES = {};
+
+  const domains = (data && data.domains) ? data.domains : {};
+
+  Object.keys(domains).forEach(domainName => {
+    const cats = domains[domainName] || {};
+    DOMAINS.push(domainName);
+    CATEGORIES[domainName] = [];
+
+    Object.keys(cats).forEach(catName => {
+      const arr = Array.isArray(cats[catName]) ? cats[catName] : [];
+      CATEGORIES[domainName].push(catName);
+
+      arr.forEach(item => {
+        if (!item || !item.command) return;
+        const cmd = String(item.command).trim();
+        if (!cmd) return;
+        const desc = String(item.description || '').trim();
+
+        const rec = {
+          c: domainName,
+          s: catName,
+          cmd,
+          d: desc,
+          t: titleFromCmd(cmd),
+          tags: deriveTags(domainName, catName, cmd, desc)
+        };
+        rec.hay = normalize([cmd, desc, domainName, catName, rec.tags.join(' ')].join(' '));
+        rec._i = ALL.length;
+        ALL.push(rec);
+      });
     });
   });
 
-  domainNav.querySelectorAll(".sub-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
+  // Mise à jour de l'UI
+  document.getElementById('loader').classList.add('d-none');
+  document.getElementById('loadError').classList.add('d-none');
+  document.getElementById('commandGrid').classList.remove('d-none');
+
+  document.getElementById('allCount').textContent = ALL.length;
+  document.getElementById('statCommands').textContent = ALL.length;
+  document.getElementById('statDomains').textContent = DOMAINS.length;
+
+  activeDomain = 'all';
+  activeSub = null;
+  activeFilter = 'all';
+
+  renderSidebar();
+  setDomain('all');
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+function countInDomain(domain) {
+  return ALL.filter(x => x.c === domain).length;
+}
+function countInCategory(domain, cat) {
+  return ALL.filter(x => x.c === domain && x.s === cat).length;
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('domainNav');
+
+  nav.innerHTML = DOMAINS.map(domain => {
+    const cats = CATEGORIES[domain] || [];
+    return `
+      <div class="domain-group">
+        <button class="domain-btn" data-domain="${escAttr(domain)}">
+          <span class="domain-icon"><i class="bi ${iconFor(domain)}"></i></span>
+          <span class="domain-label">${escHtml(domain)}</span>
+          <span class="domain-count">${countInDomain(domain)}</span>
+        </button>
+        <div class="subnav d-none">
+          ${cats.map(cat => `
+            <button class="sub-btn" data-domain="${escAttr(domain)}" data-sub="${escAttr(cat)}">
+              <span>${escHtml(cat)}</span>
+              <span class="sub-count">${countInCategory(domain, cat)}</span>
+            </button>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  nav.querySelectorAll('.domain-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const domain = btn.dataset.domain;
+      setDomain(domain);
+      const sub = btn.parentElement.querySelector('.subnav');
+      if (sub) sub.classList.toggle('d-none');
+    });
+  });
+
+  nav.querySelectorAll('.sub-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
       setDomain(btn.dataset.domain, btn.dataset.sub);
     });
   });
@@ -1061,195 +1034,275 @@ function renderSidebar() {
 
 function setDomain(domain, sub = null) {
   activeDomain = domain;
-  activeSub = sub;
-  document.querySelectorAll(".domain-btn").forEach(b => b.classList.toggle("active", b.dataset.domain === domain));
-  document.querySelectorAll(".sub-btn").forEach(b => b.classList.toggle("active", b.dataset.domain === domain && b.dataset.sub === sub));
+  activeSub = sub || null;
+
+  document.querySelectorAll('.domain-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.domain === domain));
+  document.querySelectorAll('.sub-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.domain === domain && b.dataset.sub === activeSub));
+
   render();
   if (window.innerWidth < 992) closeSidebar();
 }
 
-let activeSub = null;
-
+/* =========================================================
+   FILTRAGE + RENDU
+   ========================================================= */
 function getFiltered() {
-  const q = searchInput.value.trim().toLowerCase();
+  const q = normalize(searchInput.value.trim());
 
-  return commands.filter(x => {
-    const domainOk = activeDomain === "all" || x.c === activeDomain;
-    const subOk = !activeSub || x.s === activeSub;
-    const filterOk = activeFilter === "all" ||
-      x.tags.some(t => t.toLowerCase() === activeFilter) ||
-      (activeFilter === "creative" && x.tags.includes("Creative")) ||
-      (activeFilter === "edit" && x.tags.includes("Edit")) ||
-      (activeFilter === "ai" && x.tags.includes("AI")) ||
-      (activeFilter === "portrait" && x.tags.includes("Portrait")) ||
-      (activeFilter === "design" && x.tags.includes("Design")) ||
-      (activeFilter === "analysis" && x.tags.includes("Analysis")) ||
-      (activeFilter === "export" && x.tags.includes("Export"));
-
-    const hay = [x.cmd, x.t, x.d, x.c, x.s, ...x.tags].join(" ").toLowerCase();
-    return domainOk && subOk && filterOk && (!q || hay.includes(q));
+  return ALL.filter(x => {
+    if (activeDomain !== 'all' && x.c !== activeDomain) return false;
+    if (activeSub && x.s !== activeSub) return false;
+    if (activeFilter !== 'all' && !x.tags.some(t => t.toLowerCase() === activeFilter)) return false;
+    if (q && !x.hay.includes(q)) return false;
+    return true;
   });
 }
 
 function render() {
+  if (!ALL.length) return;
+
   const list = getFiltered();
-  grid.innerHTML = list.map((x, idx) => {
-    const isCyanAccent = idx % 2 === 0;
-    return `
-    <div class="col-12 col-lg-6 col-xxl-6">
-      <article class="command-card ${isCyanAccent ? 'accent-cyan' : ''}" data-index="${commands.indexOf(x)}">
+
+  grid.innerHTML = list.map(x => `
+    <div class="col-12 col-lg-6">
+      <article class="command-card" data-index="${x._i}">
         <div class="command-card-header">
-          <span class="command-name">${escapeHtml(x.cmd)}</span>
-          <span class="command-desc-short" title="${escapeAttr(x.d)}">${escapeHtml(x.d)}</span>
+          <span class="command-name" title="${escAttr(x.cmd)}">${escHtml(x.cmd)}</span>
+          <span class="command-desc-short" title="${escAttr(x.c + ' › ' + x.s)}">${escHtml(x.s)}</span>
         </div>
         <div class="command-card-body">
-          <div class="command-prompt-box" title="${escapeAttr(x.ex)}">${escapeHtml(x.ex)}</div>
-          <button class="copy-btn" data-copy="${escapeAttr(x.cmd)}">COPY</button>
+          <div class="command-prompt-box" title="${escAttr(x.d)}">${escHtml(x.d)}</div>
+          <button class="copy-btn" data-copy="${escAttr(x.cmd)}" type="button">COPY</button>
         </div>
       </article>
     </div>
-  `}).join("");
+  `).join('');
 
-  document.querySelectorAll(".command-card").forEach(card => {
-    card.addEventListener("click", e => {
-      if (e.target.closest(".copy-btn")) return;
-      openDetail(commands[Number(card.dataset.index)]);
+  grid.querySelectorAll('.command-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('.copy-btn')) return;
+      openDetail(ALL[Number(card.dataset.index)]);
     });
   });
 
-  document.querySelectorAll(".copy-btn").forEach(btn => {
-    btn.addEventListener("click", async e => {
+  grid.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async e => {
       e.stopPropagation();
       await copyText(btn.dataset.copy);
-      const old = btn.innerHTML;
-      btn.innerHTML = 'COPIÉ';
-      setTimeout(() => btn.innerHTML = old, 1000);
+      const old = btn.textContent;
+      btn.textContent = 'COPIÉ';
+      setTimeout(() => { btn.textContent = old; }, 1000);
     });
   });
 
-  empty.classList.toggle("d-none", list.length !== 0);
-  document.getElementById("statVisible").textContent = list.length;
-  document.getElementById("resultCount").textContent = `${list.length} résultat${list.length > 1 ? "s" : ""}`;
+  empty.classList.toggle('d-none', list.length !== 0);
+  document.getElementById('statVisible').textContent = list.length;
+  document.getElementById('resultCount').textContent =
+    `${list.length} résultat${list.length > 1 ? 's' : ''}`;
 
-  let title = activeDomain === "all" ? "Toutes les commandes" : activeDomain;
+  let title = activeDomain === 'all' ? 'Toutes les commandes' : activeDomain;
   if (activeSub) title += ` / ${activeSub}`;
-  document.getElementById("sectionTitle").textContent = title;
-  document.getElementById("sectionMeta").textContent =
-    searchInput.value ? `Recherche : “${searchInput.value}”` : "Bibliothèque de commandes slash";
+  document.getElementById('sectionTitle').textContent = title;
+
+  document.getElementById('sectionMeta').textContent =
+    searchInput.value.trim()
+      ? `Recherche : “${searchInput.value.trim()}”`
+      : `${ALL.length} commandes indexées · ${DOMAINS.length} domaines`;
 }
 
+/* =========================================================
+   PANNEAU DE DÉTAIL
+   ========================================================= */
 function openDetail(x) {
+  if (!x) return;
   selectedCommand = x;
-  document.getElementById("detailCommand").textContent = x.cmd;
-  document.getElementById("detailTitle").textContent = x.t;
-  document.getElementById("detailDescription").textContent = x.d;
-  document.getElementById("detailSyntax").textContent = x.cmd + " [instructions]";
-  document.getElementById("detailExample").textContent = x.ex;
-  document.getElementById("detailTags").innerHTML =
-    [x.c, x.s, ...x.tags].map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
-  document.getElementById("detailUsage").innerHTML = [
+
+  document.getElementById('detailCommand').textContent = x.cmd;
+  document.getElementById('detailTitle').textContent = x.t || x.cmd;
+  document.getElementById('detailDescription').textContent = x.d || 'Aucune description disponible.';
+  document.getElementById('detailSyntax').textContent = x.cmd + ' [paramètres]';
+  document.getElementById('detailContext').textContent = x.c + ' › ' + x.s;
+
+  document.getElementById('detailTags').innerHTML =
+    [x.c, x.s, ...x.tags]
+      .map(t => `<span class="tag">${escHtml(t)}</span>`)
+      .join('');
+
+  document.getElementById('detailUsage').innerHTML = [
     "Décrivez précisément le résultat souhaité.",
     "Ajoutez le sujet, le style, le cadrage ou les contraintes nécessaires.",
     "Combinez la commande avec des paramètres ou instructions supplémentaires."
-  ].map(v => `<li>${v}</li>`).join("");
-  detailPanel.classList.add("open");
-  overlay.classList.add("show");
+  ].map(v => `<li>${v}</li>`).join('');
+
+  detailPanel.classList.add('open');
+  overlay.classList.add('show');
+}
+
+function closeDetail() {
+  detailPanel.classList.remove('open');
+  overlay.classList.remove('show');
 }
 
 async function copyText(text) {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
-    const ta = document.createElement("textarea");
+    const ta = document.createElement('textarea');
     ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     ta.remove();
   }
 }
 
-document.getElementById("detailCopy").addEventListener("click", async () => {
+/* =========================================================
+   RÉFÉRENCES DOM
+   ========================================================= */
+const grid = document.getElementById('commandGrid');
+const empty = document.getElementById('emptyState');
+const searchInput = document.getElementById('searchInput');
+const detailPanel = document.getElementById('detailPanel');
+const overlay = document.getElementById('overlay');
+const sidebar = document.getElementById('sidebar');
+
+/* =========================================================
+   ÉVÉNEMENTS
+   ========================================================= */
+document.getElementById('detailCopy').addEventListener('click', async () => {
   if (!selectedCommand) return;
   await copyText(selectedCommand.cmd);
-  const btn = document.getElementById("detailCopy");
+  const btn = document.getElementById('detailCopy');
   const old = btn.innerHTML;
   btn.innerHTML = '<i class="bi bi-check2 me-1"></i> Copié';
-  setTimeout(() => btn.innerHTML = old, 1100);
+  setTimeout(() => { btn.innerHTML = old; }, 1100);
 });
 
-function closeDetail() {
-  detailPanel.classList.remove("open");
-  overlay.classList.remove("show");
-}
-document.getElementById("closeDetail").addEventListener("click", closeDetail);
-overlay.addEventListener("click", closeDetail);
+document.getElementById('closeDetail').addEventListener('click', closeDetail);
+overlay.addEventListener('click', closeDetail);
 
-document.querySelectorAll(".filter-chip").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filter-chip").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+document.querySelectorAll('.filter-chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     activeFilter = btn.dataset.filter;
     render();
   });
 });
 
-searchInput.addEventListener("input", render);
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 140);
+});
 
-document.getElementById("clearBtn").addEventListener("click", () => {
-  searchInput.value = "";
-  activeDomain = "all";
+document.getElementById('clearBtn').addEventListener('click', () => {
+  searchInput.value = '';
+  activeDomain = 'all';
   activeSub = null;
-  activeFilter = "all";
-  document.querySelectorAll(".filter-chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "all"));
-  document.querySelectorAll(".domain-btn").forEach(b => b.classList.toggle("active", b.dataset.domain === "all"));
-  document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
+  activeFilter = 'all';
+
+  document.querySelectorAll('.filter-chip').forEach(b =>
+    b.classList.toggle('active', b.dataset.filter === 'all'));
+  document.querySelectorAll('.domain-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.domain === 'all'));
+  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.subnav').forEach(s => s.classList.add('d-none'));
+
   render();
 });
 
-document.addEventListener("keydown", e => {
-  if (e.key === "/" && document.activeElement !== searchInput &&
-      !["INPUT","TEXTAREA"].includes(document.activeElement.tagName)) {
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== searchInput &&
+      !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
     e.preventDefault();
     searchInput.focus();
   }
-  if (e.key === "Escape") {
+  if (e.key === 'Escape') {
     closeDetail();
     if (document.activeElement === searchInput) searchInput.blur();
   }
 });
 
-const savedTheme = localStorage.getItem("command-theme");
-if (savedTheme === "light") document.body.classList.add("light-mode");
+/* Thème */
+const savedTheme = localStorage.getItem('command-theme');
+if (savedTheme === 'light') document.body.classList.add('light-mode');
 
-document.getElementById("themeBtn").addEventListener("click", () => {
-  document.body.classList.toggle("light-mode");
-  localStorage.setItem("command-theme", document.body.classList.contains("light-mode") ? "light" : "dark");
-  document.getElementById("themeBtn").innerHTML =
-    document.body.classList.contains("light-mode") ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+document.getElementById('themeBtn').innerHTML = document.body.classList.contains('light-mode')
+  ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+
+document.getElementById('themeBtn').addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('command-theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeBtn').innerHTML = isLight
+    ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
 });
 
-const sidebar = document.getElementById("sidebar");
+/* Sidebar mobile */
 function closeSidebar() {
-  sidebar.classList.remove("open");
-  overlay.classList.remove("show");
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
 }
-document.getElementById("menuBtn").addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  overlay.classList.toggle("show", sidebar.classList.contains("open"));
+document.getElementById('menuBtn').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show', sidebar.classList.contains('open'));
 });
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+/* Bouton "Aperçu" */
+document.querySelector('.domain-btn[data-domain="all"]').addEventListener('click', () => {
+  document.querySelectorAll('.subnav').forEach(s => s.classList.add('d-none'));
+  setDomain('all');
+});
+
+/* =========================================================
+   CHARGEMENT DES DONNÉES
+   ========================================================= */
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    setup(data);
+  } catch (err) {
+    console.warn('Chargement automatique impossible :', err);
+    document.getElementById('loader').classList.add('d-none');
+    document.getElementById('loadError').classList.remove('d-none');
+    document.getElementById('sectionMeta').textContent = 'En attente du fichier JSON…';
+  }
 }
-function escapeAttr(s) { return escapeHtml(s).replace(/`/g, "&#096;"); }
 
-document.getElementById("allCount").textContent = commands.length;
-document.getElementById("statCommands").textContent = commands.length;
-document.getElementById("statDomains").textContent = domainOrder.length;
+/* Import manuel du JSON */
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      setup(data);
+    } catch (err) {
+      alert('Fichier JSON invalide : ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
 
-renderSidebar();
-render();
+document.getElementById('jsonFile').addEventListener('change', e => handleFile(e.target.files[0]));
+
+/* Glisser-déposer */
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => {
+  e.preventDefault();
+  const f = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files[0] : null;
+  if (f) handleFile(f);
+});
+
+/* Démarrage */
+loadData();
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
