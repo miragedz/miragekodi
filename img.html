@@ -317,6 +317,44 @@
             background: rgba(2, 132, 199, .12);
         }
 
+        /* ── collapsible sidebar group ── */
+        .cat-group {
+            border: none;
+        }
+        .cat-group summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 10px 8px;
+            padding: 4px 2px;
+            letter-spacing: .5px;
+            user-select: none;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: color .15s ease;
+        }
+        .cat-group summary:hover {
+            color: var(--text);
+        }
+        .cat-group summary::-webkit-details-marker {
+            display: none;
+        }
+        .cat-group summary::after {
+            content: "▸";
+            font-size: 10px;
+            color: var(--muted);
+            transition: transform .2s ease;
+        }
+        .cat-group[open] summary::after {
+            transform: rotate(90deg);
+        }
+
         /* ── content ── */
         .content {
             background: var(--panel);
@@ -664,7 +702,10 @@
             <h3>Catégories</h3>
             <button class="drawer-close" id="drawerClose">✕</button>
         </div>
-        <div class="cats" id="drawerCategories"></div>
+        <details class="cat-group" open>
+            <summary>Image Cmd</summary>
+            <div class="cats" id="drawerCategories"></div>
+        </details>
     </aside>
 
     <!-- ─── header ─── -->
@@ -695,8 +736,10 @@
 
         <div class="layout">
             <aside class="sidebar">
-                <h3>Catégories</h3>
-                <div class="cats" id="categories"></div>
+                <details class="cat-group" open>
+                    <summary>Image Cmd</summary>
+                    <div class="cats" id="categories"></div>
+                </details>
             </aside>
 
             <section class="content">
