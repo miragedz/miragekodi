@@ -1,1140 +1,1109 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Image Editor — Command Palette</title>
-    <style>
-        /* ── reset & base ── */
-        :root {
-            /* Dark Theme Variables (Default) */
-            --bg: #07111f;
-            --bg-gradient: radial-gradient(ellipse 50% 35% at 50% 5%, rgba(110, 231, 249, .18), transparent 70%),
-                           radial-gradient(circle at 85% 20%, rgba(139, 92, 246, .14), transparent 30%),
-                           linear-gradient(180deg, #081722 0%, #07111f 55%, #030913 100%);
-            --header-bg: rgba(4, 12, 22, .85);
-            --panel: rgba(15, 28, 48, .72);
-            --panel2: rgba(10, 20, 35, .86);
-            --card-bg: rgba(7, 17, 31, .58);
-            --text: #edf6ff;
-            --muted: #91a5bb;
-            --border: rgba(255, 255, 255, .12);
-            --cyan: #6ee7f9;
-            --cyan-accent: #6ee7f9;
-            --violet: #8b5cf6;
-            --green: #5eead4;
-            --shadow: 0 20px 60px rgba(0, 0, 0, .35);
-            --radius: 15px;
-            --radius-sm: 10px;
-            --grid-line: rgba(255, 255, 255, .05);
-            --kbd-bg: rgba(255, 255, 255, .08);
-            --drawer-bg: #081722;
-            --example-bg: rgba(0, 0, 0, .25);
-            --example-text: #d8e6f3;
-            --cat-hover: rgba(255, 255, 255, .04);
-            --glow-color: rgba(110, 231, 249, 0.4);
-        }
-
-        /* Light Theme Overrides */
-        [data-theme="light"] {
-            --bg: #f4f7fb;
-            --bg-gradient: radial-gradient(ellipse 50% 35% at 50% 5%, rgba(14, 165, 233, .12), transparent 70%),
-                           radial-gradient(circle at 85% 20%, rgba(139, 92, 246, .10), transparent 30%),
-                           linear-gradient(180deg, #f8fafc 0%, #f1f5f9 55%, #e2e8f0 100%);
-            --header-bg: rgba(255, 255, 255, .85);
-            --panel: rgba(255, 255, 255, .75);
-            --panel2: rgba(255, 255, 255, .92);
-            --card-bg: rgba(255, 255, 255, .65);
-            --text: #0f172a;
-            --muted: #64748b;
-            --border: rgba(0, 0, 0, .1);
-            --cyan: #0284c7;
-            --cyan-accent: #0284c7;
-            --violet: #7c3aed;
-            --green: #0d9488;
-            --shadow: 0 10px 30px rgba(0, 0, 0, .06);
-            --grid-line: rgba(0, 0, 0, .04);
-            --kbd-bg: rgba(0, 0, 0, .06);
-            --drawer-bg: #ffffff;
-            --example-bg: rgba(241, 245, 249, .9);
-            --example-text: #1e293b;
-            --cat-hover: rgba(0, 0, 0, .04);
-            --glow-color: rgba(2, 132, 199, 0.3);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
-            color: var(--text);
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: .8;
-            background-image:
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        /* ── header ── */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 14px 24px;
-            backdrop-filter: blur(20px);
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.3s ease;
-        }
-        .top {
-            max-width: 1400px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .logo {
-            font-size: 20px;
-            font-weight: 800;
-            white-space: nowrap;
-        }
-        .logo span {
-            color: var(--cyan);
-        }
-
-        /* theme toggle button */
-        .theme-toggle {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all .2s ease;
-            box-shadow: var(--shadow);
-        }
-        .theme-toggle:hover {
-            border-color: var(--cyan);
-            transform: translateY(-1px);
-        }
-
-        /* search */
-        .search {
-            flex: 1;
-            max-width: 500px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 9px 14px;
-        }
-        .search input {
-            width: 100%;
-            background: none;
-            border: 0;
-            outline: 0;
-            color: var(--text);
-            font-size: 15px;
-        }
-        .search input::placeholder {
-            color: var(--muted);
-            opacity: .7;
-        }
-        kbd {
-            background: var(--kbd-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 3px 7px;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        /* mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 15px;
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* ── side drawer ── */
-        .side-drawer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 280px;
-            background: var(--drawer-bg);
-            border-right: 1px solid var(--border);
-            z-index: 200;
-            padding: 20px;
-            transform: translateX(-100%);
-            transition: transform .3s ease, background 0.3s ease;
-            overflow-y: auto;
-            box-shadow: 10px 0 30px rgba(0, 0, 0, .2);
-        }
-        .side-drawer.open {
-            transform: translateX(0);
-        }
-        .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        .drawer-header h3 {
-            margin: 0;
-            font-size: 16px;
-            color: var(--cyan);
-        }
-        .drawer-close {
-            background: none;
-            border: 0;
-            color: var(--muted);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0 4px;
-        }
-        .drawer-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .4);
-            backdrop-filter: blur(4px);
-            z-index: 150;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .3s ease;
-        }
-        .drawer-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* ── main layout ── */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 28px 24px 60px;
-        }
-        .hero {
-            margin-bottom: 26px;
-        }
-        .hero h1 {
-            margin: 0 0 8px;
-            font-size: clamp(28px, 4vw, 46px);
-        }
-        .hero p {
-            color: var(--muted);
-            margin: 0;
-            max-width: 760px;
-        }
-
-        .layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-        }
-
-        /* ── sidebar ── */
-        .sidebar {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            border-radius: 20px;
-            padding: 14px;
-            height: max-content;
-            position: sticky;
-            top: 92px;
-        }
-        .sidebar h3 {
-            font-size: 12px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 10px 10px 8px;
-            letter-spacing: .5px;
-        }
-        .cat {
-            display: block;
-            width: 100%;
-            text-align: left;
-            border: 0;
-            background: transparent;
-            margin: 3px 0;
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            color: var(--muted);
-            font-size: 14px;
-            cursor: pointer;
-            transition: .15s;
-        }
-        .cat:hover {
-            background: var(--cat-hover);
-            color: var(--text);
-        }
-        .cat.active {
-            background: rgba(110, 231, 249, .15);
-            color: var(--cyan);
-            font-weight: 600;
-        }
-        [data-theme="light"] .cat.active {
-            background: rgba(2, 132, 199, .12);
-        }
-
-        /* ── collapsible sidebar group ── */
-        .cat-group {
-            border: none;
-        }
-        .cat-group summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 12px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 10px 10px 8px;
-            padding: 4px 2px;
-            letter-spacing: .5px;
-            user-select: none;
-            font-weight: 700;
-            border-radius: 6px;
-            transition: color .15s ease;
-        }
-        .cat-group summary:hover {
-            color: var(--text);
-        }
-        .cat-group summary::-webkit-details-marker {
-            display: none;
-        }
-        .cat-group summary::after {
-            content: "▸";
-            font-size: 10px;
-            color: var(--muted);
-            transition: transform .2s ease;
-        }
-        .cat-group[open] summary::after {
-            transform: rotate(90deg);
-        }
-
-        /* ── content ── */
-        .content {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            border-radius: 20px;
-            padding: 18px;
-        }
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 4px 4px 16px;
-        }
-        .section-title h2 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
-        }
-        .count {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        /* ── command grid ── */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-            gap: 12px;
-        }
-
-        /* ── command card ── */
-        .command {
-            border-radius: var(--radius);
-            padding: 15px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-            overflow: hidden;
-
-            /* Fade-in initial state */
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-                        border-color 0.3s ease, 
-                        box-shadow 0.3s ease;
-        }
-
-        /* Fade-in visible state when scrolled into view */
-        .command.fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Interactive Glow Hover Overlay */
-        .command::before {
-            content: "";
-            position: absolute;
-            top: var(--mouse-y, -100px);
-            left: var(--mouse-x, -100px);
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .command:hover::before {
-            opacity: 1;
-        }
-
-        .command:hover {
-            transform: translateY(-2px);
-            border-color: var(--cyan);
-            box-shadow: 0 10px 30px -10px var(--glow-color);
-        }
-
-        .command:active {
-            transform: scale(.98);
-        }
-
-        .cmd-top, .desc, .example {
-            position: relative;
-            z-index: 2;
-        }
-
-        .cmd-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-        .cmd {
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            color: var(--cyan);
-            font-weight: 700;
-            font-size: 15px;
-            letter-spacing: .2px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .cmd .copy-badge {
-            font-size: 10px;
-            opacity: 0;
-            color: var(--muted);
-            transition: .2s;
-            font-weight: 400;
-        }
-        .command:hover .cmd .copy-badge {
-            opacity: .8;
-        }
-
-        .cmd-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .cmd-actions button {
-            background: transparent;
-            border: 0;
-            color: var(--muted);
-            font-size: 14px;
-            padding: 4px 6px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: .15s;
-            line-height: 1;
-        }
-        .cmd-actions button:hover {
-            background: var(--cat-hover);
-            color: var(--text);
-        }
-
-        .num {
-            font-size: 11px;
-            color: var(--muted);
-            font-variant-numeric: tabular-nums;
-        }
-        .desc {
-            font-size: 13px;
-            color: var(--muted);
-            margin: 9px 0 8px;
-            line-height: 1.4;
-        }
-        .example {
-            font-family: ui-monospace, monospace;
-            font-size: 12px;
-            color: var(--example-text);
-            background: var(--example-bg);
-            border: 1px solid var(--border);
-            padding: 9px;
-            border-radius: 9px;
-            overflow: auto;
-        }
-
-        /* ── empty state ── */
-        .empty {
-            padding: 50px;
-            text-align: center;
-            color: var(--muted);
-            display: none;
-        }
-
-        /* ── toast ── */
-        #toast-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 400px;
-            pointer-events: none;
-        }
-        .toast {
-            background: var(--panel2);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 14px 20px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            pointer-events: auto;
-            transform: translateX(120%);
-            opacity: 0;
-            transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
-            min-width: 200px;
-        }
-        .toast.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        .toast.hide {
-            transform: translateX(60%);
-            opacity: 0;
-        }
-        .toast .icon {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-        .toast .msg {
-            font-size: 14px;
-            color: var(--text);
-            flex: 1;
-        }
-        .toast .msg .cmd-highlight {
-            font-family: ui-monospace, monospace;
-            color: var(--cyan);
-            background: rgba(110, 231, 249, .12);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        .toast.success .icon {
-            color: var(--green);
-        }
-        .toast.copy .icon {
-            color: var(--cyan);
-        }
-
-        /* ── footer ── */
-        footer {
-            text-align: center;
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 25px;
-            opacity: .8;
-        }
-
-        /* ── responsive ── */
-        @media (max-width: 850px) {
-            .menu-toggle {
-                display: flex;
-            }
-            .search {
-                order: 3;
-                max-width: 100%;
-                flex-basis: 100%;
-            }
-            .layout {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                display: none;
-            }
-            kbd {
-                display: none;
-            }
-            #toast-container {
-                bottom: 16px;
-                right: 16px;
-                left: 16px;
-                max-width: none;
-            }
-            .toast {
-                font-size: 13px;
-                padding: 12px 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .cmd {
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- ─── overlay & drawer ─── -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <aside class="side-drawer" id="sideDrawer">
-        <div class="drawer-header">
-            <h3>Catégories</h3>
-            <button class="drawer-close" id="drawerClose">✕</button>
-        </div>
-        <details class="cat-group" open>
-            <summary>Image Cmd</summary>
-            <div class="cats" id="drawerCategories"></div>
-        </details>
-    </aside>
-
-    <!-- ─── header ─── -->
-    <header>
-        <div class="top">
-            <div class="header-left">
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-                <div class="logo">✨ <span>AI</span> Image Editor</div>
-            </div>
-            <div class="header-right">
-                <button class="theme-toggle" id="themeToggle" aria-label="Basculer le thème">
-                    <span id="themeIcon">☀️</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- ─── main ─── -->
-    <main>
-        <section class="hero">
-            <h1>Command Palette</h1>
-            <p>Commandes pour un éditeur d’images inspiré des outils IA génératifs. Cliquez sur une commande pour la copier.</p>
-            <div class="search">⌕
-                <input id="search" placeholder="Rechercher une commande…  ex. remove, upscale, portrait" />
-                <kbd>/</kbd>
-            </div>
-        </section>
-
-        <div class="layout">
-            <aside class="sidebar">
-                <details class="cat-group" open>
-                    <summary>Image Cmd</summary>
-                    <div class="cats" id="categories"></div>
-                </details>
-            </aside>
-
-            <section class="content">
-                <div class="section-title">
-                    <h2 id="title">Toutes les commandes</h2>
-                    <span class="count" id="count"></span>
-                </div>
-                <div class="grid" id="grid"></div>
-                <div class="empty" id="empty">Aucune commande trouvée.</div>
-            </section>
-        </div>
-
-        <footer>AI Image Editor Command Palette · /commande cible --paramètre valeur</footer>
-    </main>
-
-    <!-- ─── toast container ─── -->
-    <div id="toast-container"></div>
-
-    <script>
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  1. DATA (Catégories supprimées : Crop, Core, Ajustement (si partiel), Portrait, Calque/Arrière-plan, IA, Style, Design, Texte, Calques, Réseaux, Export)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        const sections = [
-            ["Ajustement", "adjustment", [
-                ["/retouch", "Retouche générale", "/retouch portrait naturel"],
-                ["/remove", "Supprimer un objet", "/remove voiture"],
-                ["/erase", "Effacer une zone", "/erase arrière-plan"],
-                ["/clean", "Nettoyer les artefacts", "/clean artifacts"],
-                ["/heal", "Corriger une imperfection", "/heal imperfection"],
-                ["/clone", "Cloner une zone", "/clone zone1 zone2"],
-                ["/patch", "Réparer une zone", "/patch tache"],
-                ["/decontaminate", "Nettoyer les contours", "/decontaminate edges"],
-                ["/denoise", "Réduire le bruit", "/denoise 40"],
-                ["/deblur", "Réduire le flou", "/deblur medium"],
-                ["/sharpen", "Accentuer la netteté", "/sharpen 25"],
-                ["/artifact-remove", "Supprimer les artefacts", "/artifact-remove jpeg"],
-                ["/brightness", "Luminosité", "/brightness +15"],
-                ["/contrast", "Contraste", "/contrast +20"],
-                ["/exposure", "Exposition", "/exposure +0.5"],
-                ["/saturation", "Saturation", "/saturation -10"],
-                ["/vibrance", "Vibrance", "/vibrance +25"],
-                ["/temperature", "Température", "/temperature +8"],
-                ["/tint", "Teinte", "/tint -5"],
-                ["/hue", "Rotation de teinte", "/hue +15"],
-                ["/curves", "Courbes", "/curves cinematic"],
-                ["/levels", "Niveaux", "/levels auto"],
-                ["/highlights", "Hautes lumières", "/highlights -20"],
-                ["/shadows", "Ombres", "/shadows +30"],
-                ["/whites", "Blancs", "/whites +10"],
-                ["/blacks", "Noirs", "/blacks -15"],
-                ["/colorgrade", "Color grading", "/colorgrade teal-orange"],
-                ["/relight", "Rééclairer avec IA", "/relight sunset"],
-                ["/light", "Preset lumière", "/light softbox"],
-                ["/rimlight", "Lumière de contour", "/rimlight right"],
-                ["/softlight", "Lumière douce", "/softlight 50"],
-                ["/dramatic-light", "Lumière dramatique", "/dramatic-light medium"],
-                ["/shadow", "Modifier les ombres", "/shadow soften"],
-                ["/glow", "Lueur", "/glow subtle"],
-                ["/flare", "Lens flare", "/flare top-left"],
-                ["/vignette", "Vignette", "/vignette 20"],
-                ["/hdr", "Rendu HDR", "/hdr 30"],
-                ["/restore", "Restaurer", "/restore high"],
-                ["/restore-photo", "Restaurer une photo", "/restore-photo"],
-                ["/restore-color", "Restaurer les couleurs", "/restore-color"],
-                ["/colorize", "Coloriser", "/colorize natural"],
-                ["/upscale", "Upscaling", "/upscale 4x"],
-                ["/superres", "Super-résolution", "/superres 4x"],
-                ["/enhance", "Améliorer", "/enhance detail"],
-                ["/face-enhance", "Améliorer un visage", "/face-enhance 30"],
-                ["/detail", "Récupérer les détails", "/detail +25"],
-                ["/recover", "Récupérer les zones", "/recover shadows"]
-            ]],
-            ["Portrait", "portrait", [
-                ["/portrait", "Optimiser un portrait", "/portrait professional"],
-                ["/face", "Améliorer le visage", "/face improve details"],
-                ["/skin", "Retouche légère de peau", "/skin 20"],
-                ["/eyes", "Ajuster les yeux", "/eyes brighten"],
-                ["/teeth", "Ajustement des dents", "/teeth subtle"],
-                ["/hair", "Améliorer les cheveux", "/hair improve detail"],
-                ["/face-light", "Éclairage du visage", "/face-light soft-left"],
-                ["/headshot", "Portrait professionnel", "/headshot corporate"],
-                ["/expression", "Modifier l’expression", "/expression smile"],
-                ["/portrait-light", "Éclairage portrait", "/portrait-light studio"]
-            ]],
-            ["IA Générative", "ai", [
-                ["/generate", "Générer", "/generate futur maison"],
-                ["/imagine", "Imaginer", "/imagine cyberpunk city"],
-                ["/inpaint", "Inpainting", "/inpaint zone1 ajoute une lampe"],
-                ["/outpaint", "Outpainting", "/outpaint right 500px"],
-                ["/fill", "Remplissage IA", "/fill sélection paysage"],
-                ["/generative-fill", "Generative Fill", "/generative-fill wooden table"],
-                ["/generative-expand", "Generative Expand", "/generative-expand top"],
-                ["/add", "Ajouter un objet", "/add vase"],
-                ["/replace", "Remplacer un objet", "/replace chair sofa"],
-                ["/reconstruct", "Reconstruire une zone", "/reconstruct missing area"],
-                ["/variation", "Créer des variations", "/variation 4"],
-                ["/remix", "Remixer", "/remix futuristic"],
-                ["/restyle", "Restyler", "/restyle watercolor"],
-                ["/style-transfer", "Transfert de style", "/style-transfer comic"],
-                ["/semantic-edit", "Édition sémantique", "/semantic-edit make it winter"]
-            ]],
-            ["Style / Effet", "style", [
-                ["/anime", "Style anime", "/anime soft cinematic"],
-                ["/cartoon", "Style cartoon", "/cartoon modern"],
-                ["/comic", "Style comic", "/comic superhero"],
-                ["/sketch", "Croquis", "/sketch pencil"],
-                ["/ink", "Encre", "/ink black-white"],
-                ["/watercolor", "Aquarelle", "/watercolor soft"],
-                ["/oilpaint", "Peinture à l’huile", "/oilpaint classical"],
-                ["/pixelart", "Pixel art", "/pixelart 16bit"],
-                ["/3d", "Rendu 3D", "/3d realistic"],
-                ["/clay", "Rendu clay", "/clay render"],
-                ["/neon", "Style néon", "/neon cyberpunk"],
-                ["/vintage", "Vintage", "/vintage 1970s"],
-                ["/retro", "Retro", "/retro poster"],
-                ["/minimal", "Minimaliste", "/minimal editorial"],
-                ["/cinematic", "Cinématique", "/cinematic movie still"],
-                ["/photo", "Optimiser une photo", "/photo professional"],
-                ["/studio", "Photo studio", "/studio product photography"],
-                ["/product", "Photo produit", "/product ecommerce"],
-                ["/macro", "Macro", "/macro detailed"],
-                ["/landscape", "Paysage", "/landscape HDR"],
-                ["/street", "Street photography", "/street photography"],
-                ["/architecture", "Architecture", "/architecture corrected"],
-                ["/night", "Photo de nuit", "/night photography"],
-                ["/long-exposure", "Pose longue", "/long-exposure effect"],
-                ["/depth-of-field", "Profondeur de champ", "/depth-of-field shallow"],
-                ["/blur", "Flou", "/blur 20px"],
-                ["/gaussian-blur", "Flou gaussien", "/gaussian-blur 15"],
-                ["/motion-blur", "Flou de mouvement", "/motion-blur horizontal"],
-                ["/bokeh", "Bokeh", "/bokeh strong"],
-                ["/drop-shadow", "Ombre portée", "/drop-shadow 10 10 20"],
-                ["/inner-shadow", "Ombre interne", "/inner-shadow subtle"],
-                ["/noise", "Bruit", "/noise 5"],
-                ["/grain", "Grain photo", "/grain film"],
-                ["/chromatic", "Aberration chromatique", "/chromatic subtle"],
-                ["/duotone", "Duo-ton", "/duotone blue-orange"],
-                ["/halftone", "Demi-teinte", "/halftone comic"],
-                ["/pixelate", "Pixelliser", "/pixelate 10"],
-                ["/posterize", "Posteriser", "/posterize 6"]
-            ]],
-            ["Design / Canva", "design", [
-                ["/design", "Créer une composition", "/design poster moderne"],
-                ["/layout", "Mise en page", "/layout balanced"],
-                ["/align", "Aligner", "/align center"],
-                ["/distribute", "Distribuer", "/distribute horizontal"],
-                ["/grid", "Créer une grille", "/grid 3x3"],
-                ["/margin", "Marges", "/margin 40"],
-                ["/spacing", "Espacement", "/spacing 20"],
-                ["/guides", "Guides", "/guides on"],
-                ["/safe-area", "Zone sûre", "/safe-area social"],
-                ["/template", "Appliquer un modèle", "/template instagram"],
-                ["/brand", "Identité de marque", "/brand mybrand"],
-                ["/mockup", "Créer un mockup", "/mockup smartphone"],
-                ["/poster", "Créer une affiche", "/poster event"],
-                ["/flyer", "Créer un flyer", "/flyer promotion"],
-                ["/banner", "Créer une bannière", "/banner website"]
-            ]],
-            ["Analyse IA", "analysis", [
-                ["/analyze", "Analyser l’image", "/analyze"],
-                ["/describe", "Décrire", "/describe"],
-                ["/detect", "Détecter les objets", "/detect"],
-                ["/detect-faces", "Détecter les visages", "/detect-faces"],
-                ["/detect-text", "Détecter le texte", "/detect-text"],
-                ["/ocr", "Extraire le texte", "/ocr"],
-                ["/colors", "Extraire la palette", "/colors"],
-                ["/composition", "Analyser la composition", "/composition"],
-                ["/quality", "Analyser la qualité", "/quality"],
-                ["/lighting", "Analyser l’éclairage", "/lighting"],
-                ["/style", "Identifier le style", "/style"],
-                ["/metadata", "Lire les métadonnées", "/metadata"],
-                ["/alt-text", "Créer un texte alternatif", "/alt-text"]
-            ]]
-        ];
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  2. BUILD COMMANDS LIST
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        let commands = [];
-        let n = 0;
-        sections.forEach(([name, cat, items]) =>
-            items.forEach(x =>
-                commands.push({ name, cat, id: ++n, cmd: x[0], desc: x[1], example: x[2] })
-            )
-        );
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  3. DOM REFS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        const categories = document.getElementById("categories");
-        const drawerCategories = document.getElementById("drawerCategories");
-        const grid = document.getElementById("grid");
-        const search = document.getElementById("search");
-        const title = document.getElementById("title");
-        const count = document.getElementById("count");
-        const empty = document.getElementById("empty");
-        const sideDrawer = document.getElementById("sideDrawer");
-        const drawerOverlay = document.getElementById("drawerOverlay");
-        const menuToggle = document.getElementById("menuToggle");
-        const drawerClose = document.getElementById("drawerClose");
-        const toastContainer = document.getElementById("toast-container");
-        const themeToggle = document.getElementById("themeToggle");
-        const themeIcon = document.getElementById("themeIcon");
-
-        let current = "all";
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  4. THEME SWITCHER
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        function initTheme() {
-            const savedTheme = localStorage.getItem("theme") || 
-                (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-            setTheme(savedTheme);
-        }
-
-        function setTheme(theme) {
-            document.documentElement.setAttribute("data-theme", theme);
-            localStorage.setItem("theme", theme);
-            if (theme === "light") {
-                themeIcon.textContent = "🌙";
-            } else {
-                themeIcon.textContent = "☀️";
-            }
-        }
-
-        themeToggle.addEventListener("click", () => {
-            const currentTheme = document.documentElement.getAttribute("data-theme");
-            setTheme(currentTheme === "light" ? "dark" : "light");
-        });
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  5. TOAST SYSTEM
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        function showToast(message, type = "copy", cmd = "") {
-            const icon = type === "copy" ? "📋" : type === "run" ? "▶" : "✓";
-            const cls = type === "copy" ? "copy" : "success";
-            const el = document.createElement("div");
-            el.className = `toast ${cls}`;
-            let msgHtml = message;
-            if (cmd) {
-                msgHtml = message.replace(cmd, `<span class="cmd-highlight">${cmd}</span>`);
-            }
-            el.innerHTML = `
-            <span class="icon">${icon}</span>
-            <span class="msg">${msgHtml}</span>
-          `;
-            toastContainer.appendChild(el);
-            requestAnimationFrame(() => {
-                el.classList.add("show");
-            });
-            const timeout = setTimeout(() => {
-                el.classList.remove("show");
-                el.classList.add("hide");
-                setTimeout(() => el.remove(), 400);
-            }, 2800);
-            el._timeout = timeout;
-            return el;
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  6. COPY TO CLIPBOARD
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        async function copyCommand(cmdStr, cmdObj) {
-            try {
-                await navigator.clipboard.writeText(cmdStr);
-                const name = cmdObj ? cmdObj.cmd : cmdStr;
-                showToast(`Copié : ${name}`, "copy", name);
-            } catch (_) {
-                const ta = document.createElement("textarea");
-                ta.value = cmdStr;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand("copy");
-                ta.remove();
-                const name = cmdObj ? cmdObj.cmd : cmdStr;
-                showToast(`Copié : ${name}`, "copy", name);
-            }
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  7. FADE-IN OBSERVER & GLOW EFFECTS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("fade-in");
-                    scrollObserver.unobserve(entry.target);
-                }
-            });
-        }, {
-            root: null,
-            threshold: 0.1,
-            rootMargin: "0px 0px -30px 0px"
-        });
-
-        function setupCardEffects(card) {
-            card.addEventListener("mousemove", (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty("--mouse-x", `${x}px`);
-                card.style.setProperty("--mouse-y", `${y}px`);
-            });
-
-            scrollObserver.observe(card);
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  8. RENDER
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        function render() {
-            const q = search.value.toLowerCase().trim();
-            const data = commands.filter(x =>
-                (current === "all" || x.cat === current) &&
-                (!q || [x.cmd, x.desc, x.example, x.name].join(" ").toLowerCase().includes(q))
-            );
-
-            grid.innerHTML = "";
-            data.forEach(x => {
-                const card = document.createElement("article");
-                card.className = "command";
-                card.dataset.cmdId = x.id;
-
-                const top = document.createElement("div");
-                top.className = "cmd-top";
-
-                const cmdSpan = document.createElement("span");
-                cmdSpan.className = "cmd";
-                cmdSpan.innerHTML = `${x.cmd} <span class="copy-badge">⤵ copier</span>`;
-
-                cmdSpan.style.cursor = "pointer";
-                cmdSpan.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    copyCommand(x.cmd, x);
-                });
-
-                top.appendChild(cmdSpan);
-
-                const desc = document.createElement("div");
-                desc.className = "desc";
-                desc.textContent = `${x.desc} · ${x.name}`;
-
-                const ex = document.createElement("div");
-                ex.className = "example";
-                ex.textContent = x.example;
-
-                card.appendChild(top);
-                card.appendChild(desc);
-                card.appendChild(ex);
-
-                card.addEventListener("click", () => {
-                    copyCommand(x.cmd, x);
-                });
-
-                setupCardEffects(card);
-
-                grid.appendChild(card);
-            });
-
-            const sectionName = current === "all" ?
-                "Toutes les commandes" :
-                (sections.find(s => s[1] === current)?.[0] || "Commandes");
-            title.textContent = sectionName;
-            count.textContent = `${data.length} commande${data.length > 1 ? "s" : ""}`;
-            empty.style.display = data.length ? "none" : "block";
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  9. CATEGORY BUTTONS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        function buildCategoryHTML() {
-            const total = commands.length;
-            let html =
-                `<button class="cat active" data-cat="all">✨ Toutes (${total})</button>`;
-            sections.forEach(s => {
-                html += `<button class="cat" data-cat="${s[1]}">${s[0]} (${s[2].length})</button>`;
-            });
-            return html;
-        }
-
-        function setupCategoryClick(container) {
-            container.querySelectorAll(".cat").forEach(btn => {
-                btn.addEventListener("click", () => {
-                    document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
-                    document.querySelectorAll(`.cat[data-cat="${btn.dataset.cat}"]`)
-                        .forEach(b => b.classList.add("active"));
-                    current = btn.dataset.cat;
-                    render();
-                    closeDrawer();
-                });
-            });
-        }
-
-        const catHTML = buildCategoryHTML();
-        categories.innerHTML = catHTML;
-        drawerCategories.innerHTML = catHTML;
-        setupCategoryClick(categories);
-        setupCategoryClick(drawerCategories);
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  10. DRAWER TOGGLE
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        function openDrawer() {
-            sideDrawer.classList.add("open");
-            drawerOverlay.classList.add("open");
-        }
-
-        function closeDrawer() {
-            sideDrawer.classList.remove("open");
-            drawerOverlay.classList.remove("open");
-        }
-
-        menuToggle.addEventListener("click", openDrawer);
-        drawerClose.addEventListener("click", closeDrawer);
-        drawerOverlay.addEventListener("click", closeDrawer);
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  11. SEARCH & KEYBOARD
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        search.addEventListener("input", render);
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "/" && document.activeElement !== search) {
-                e.preventDefault();
-                search.focus();
-            }
-            if (e.key === "Escape") {
-                if (search.value) {
-                    search.value = "";
-                    render();
-                }
-                search.blur();
-                closeDrawer();
-            }
-        });
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  12. INIT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        initTheme();
-        render();
-    </script>
-</body>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Editor — Command Palette</title>
+    <style>
+        /* ── reset & base ── */
+        :root {
+            /* Dark Theme Variables (Default) */
+            --bg: #07111f;
+            --bg-gradient: radial-gradient(ellipse 50% 35% at 50% 5%, rgba(110, 231, 249, .18), transparent 70%),
+                           radial-gradient(circle at 85% 20%, rgba(139, 92, 246, .14), transparent 30%),
+                           linear-gradient(180deg, #081722 0%, #07111f 55%, #030913 100%);
+            --header-bg: rgba(4, 12, 22, .85);
+            --panel: rgba(15, 28, 48, .72);
+            --panel2: rgba(10, 20, 35, .86);
+            --card-bg: rgba(7, 17, 31, .58);
+            --text: #edf6ff;
+            --muted: #91a5bb;
+            --border: rgba(255, 255, 255, .12);
+            --cyan: #6ee7f9;
+            --cyan-accent: #6ee7f9;
+            --violet: #8b5cf6;
+            --green: #5eead4;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .35);
+            --radius: 15px;
+            --radius-sm: 10px;
+            --grid-line: rgba(255, 255, 255, .05);
+            --kbd-bg: rgba(255, 255, 255, .08);
+            --drawer-bg: #081722;
+            --example-bg: rgba(0, 0, 0, .25);
+            --example-text: #d8e6f3;
+            --cat-hover: rgba(255, 255, 255, .04);
+        }
+
+        /* Light Theme Overrides */
+        [data-theme="light"] {
+            --bg: #f4f7fb;
+            --bg-gradient: radial-gradient(ellipse 50% 35% at 50% 5%, rgba(14, 165, 233, .12), transparent 70%),
+                           radial-gradient(circle at 85% 20%, rgba(139, 92, 246, .10), transparent 30%),
+                           linear-gradient(180deg, #f8fafc 0%, #f1f5f9 55%, #e2e8f0 100%);
+            --header-bg: rgba(255, 255, 255, .85);
+            --panel: rgba(255, 255, 255, .75);
+            --panel2: rgba(255, 255, 255, .92);
+            --card-bg: rgba(255, 255, 255, .65);
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(0, 0, 0, .1);
+            --cyan: #0284c7;
+            --cyan-accent: #0284c7;
+            --violet: #7c3aed;
+            --green: #0d9488;
+            --shadow: 0 10px 30px rgba(0, 0, 0, .06);
+            --grid-line: rgba(0, 0, 0, .04);
+            --kbd-bg: rgba(0, 0, 0, .06);
+            --drawer-bg: #ffffff;
+            --example-bg: rgba(241, 245, 249, .9);
+            --example-text: #1e293b;
+            --cat-hover: rgba(0, 0, 0, .04);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+            color: var(--text);
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .8;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ── header ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+            backdrop-filter: blur(20px);
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s ease;
+        }
+        .top {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .logo span {
+            color: var(--cyan);
+        }
+
+        /* theme toggle button */
+        .theme-toggle {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all .2s ease;
+            box-shadow: var(--shadow);
+        }
+        .theme-toggle:hover {
+            border-color: var(--cyan);
+            transform: translateY(-1px);
+        }
+
+        /* search */
+        .search {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 9px 14px;
+        }
+        .search input {
+            width: 100%;
+            background: none;
+            border: 0;
+            outline: 0;
+            color: var(--text);
+            font-size: 15px;
+        }
+        .search input::placeholder {
+            color: var(--muted);
+            opacity: .7;
+        }
+        kbd {
+            background: var(--kbd-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 15px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ── side drawer ── */
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: var(--drawer-bg);
+            border-right: 1px solid var(--border);
+            z-index: 200;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform .3s ease, background 0.3s ease;
+            overflow-y: auto;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, .2);
+        }
+        .side-drawer.open {
+            transform: translateX(0);
+        }
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--cyan);
+        }
+        .drawer-close {
+            background: none;
+            border: 0;
+            color: var(--muted);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease;
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ── main layout ── */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+        .hero {
+            margin-bottom: 26px;
+        }
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: clamp(28px, 4vw, 46px);
+        }
+        .hero p {
+            color: var(--muted);
+            margin: 0;
+            max-width: 760px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        /* ── sidebar ── */
+        .sidebar {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 14px;
+            height: max-content;
+            position: sticky;
+            top: 92px;
+        }
+        .sidebar h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 10px 8px;
+            letter-spacing: .5px;
+        }
+        .cat {
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            margin: 3px 0;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            font-size: 14px;
+            cursor: pointer;
+            transition: .15s;
+        }
+        .cat:hover {
+            background: var(--cat-hover);
+            color: var(--text);
+        }
+        .cat.active {
+            background: rgba(110, 231, 249, .15);
+            color: var(--cyan);
+            font-weight: 600;
+        }
+        [data-theme="light"] .cat.active {
+            background: rgba(2, 132, 199, .12);
+        }
+
+        /* ── collapsible sidebar group ── */
+        .cat-group {
+            border: none;
+        }
+        .cat-group summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 10px 8px;
+            padding: 4px 2px;
+            letter-spacing: .5px;
+            user-select: none;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: color .15s ease;
+        }
+        .cat-group summary:hover {
+            color: var(--text);
+        }
+        .cat-group summary::-webkit-details-marker {
+            display: none;
+        }
+        .cat-group summary::after {
+            content: "▸";
+            font-size: 10px;
+            color: var(--muted);
+            transition: transform .2s ease;
+        }
+        .cat-group[open] summary::after {
+            transform: rotate(90deg);
+        }
+
+        /* ── content ── */
+        .content {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 18px;
+        }
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 4px 4px 16px;
+        }
+        .section-title h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ── command grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 12px;
+        }
+
+        /* ── command card ── */
+        .command {
+            border-radius: var(--radius);
+            padding: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            overflow: hidden;
+
+            /* Fade-in initial state */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        border-color 0.3s ease, 
+                        box-shadow 0.3s ease;
+        }
+
+        /* Fade-in visible state when scrolled into view */
+        .command.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .command:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyan);
+        }
+
+        .command:active {
+            transform: scale(.98);
+        }
+
+        .cmd-top, .desc, .example {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cmd-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .cmd {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            color: var(--cyan);
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: .2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cmd .copy-badge {
+            font-size: 10px;
+            opacity: 0;
+            color: var(--muted);
+            transition: .2s;
+            font-weight: 400;
+        }
+        .command:hover .cmd .copy-badge {
+            opacity: .8;
+        }
+
+        .cmd-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cmd-actions button {
+            background: transparent;
+            border: 0;
+            color: var(--muted);
+            font-size: 14px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: .15s;
+            line-height: 1;
+        }
+        .cmd-actions button:hover {
+            background: var(--cat-hover);
+            color: var(--text);
+        }
+
+        .num {
+            font-size: 11px;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+        }
+        .desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin: 9px 0 8px;
+            line-height: 1.4;
+        }
+        .example {
+            font-family: ui-monospace, monospace;
+            font-size: 12px;
+            color: var(--example-text);
+            background: var(--example-bg);
+            border: 1px solid var(--border);
+            padding: 9px;
+            border-radius: 9px;
+            overflow: auto;
+        }
+
+        /* ── empty state ── */
+        .empty {
+            padding: 50px;
+            text-align: center;
+            color: var(--muted);
+            display: none;
+        }
+
+        /* ── toast ── */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--panel2);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform .35s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
+            min-width: 200px;
+        }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .toast.hide {
+            transform: translateX(60%);
+            opacity: 0;
+        }
+        .toast .icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .toast .msg {
+            font-size: 14px;
+            color: var(--text);
+            flex: 1;
+        }
+        .toast .msg .cmd-highlight {
+            font-family: ui-monospace, monospace;
+            color: var(--cyan);
+            background: rgba(110, 231, 249, .12);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .toast.success .icon {
+            color: var(--green);
+        }
+        .toast.copy .icon {
+            color: var(--cyan);
+        }
+
+        /* ── footer ── */
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 25px;
+            opacity: .8;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 850px) {
+            .menu-toggle {
+                display: flex;
+            }
+            .search {
+                order: 3;
+                max-width: 100%;
+                flex-basis: 100%;
+            }
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            kbd {
+                display: none;
+            }
+            #toast-container {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                max-width: none;
+            }
+            .toast {
+                font-size: 13px;
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .cmd {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── overlay & drawer ─── -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <h3>Catégories</h3>
+            <button class="drawer-close" id="drawerClose">✕</button>
+        </div>
+        <details class="cat-group" open>
+            <summary>Image Cmd</summary>
+            <div class="cats" id="drawerCategories"></div>
+        </details>
+    </aside>
+
+    <!-- ─── header ─── -->
+    <header>
+        <div class="top">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <div class="logo">✨ <span>AI</span> Image Editor</div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Basculer le thème">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── main ─── -->
+    <main>
+        <section class="hero">
+            <h1>Command Palette</h1>
+            <p>Commandes pour un éditeur d’images inspiré des outils IA génératifs. Cliquez sur une commande pour la copier.</p>
+            <div class="search">⌕
+                <input id="search" placeholder="Rechercher une commande…  ex. remove, upscale, portrait" />
+                <kbd>/</kbd>
+            </div>
+        </section>
+
+        <div class="layout">
+            <aside class="sidebar">
+                <details class="cat-group" open>
+                    <summary>Image Cmd</summary>
+                    <div class="cats" id="categories"></div>
+                </details>
+            </aside>
+
+            <section class="content">
+                <div class="section-title">
+                    <h2 id="title">Toutes les commandes</h2>
+                    <span class="count" id="count"></span>
+                </div>
+                <div class="grid" id="grid"></div>
+                <div class="empty" id="empty">Aucune commande trouvée.</div>
+            </section>
+        </div>
+
+        <footer>AI Image Editor Command Palette · /commande cible --paramètre valeur</footer>
+    </main>
+
+    <!-- ─── toast container ─── -->
+    <div id="toast-container"></div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  1. DATA (Catégories supprimées : Crop, Core, Ajustement (si partiel), Portrait, Calque/Arrière-plan, IA, Style, Design, Texte, Calques, Réseaux, Export)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const sections = [
+            ["Ajustement", "adjustment", [
+                ["/retouch", "Retouche générale", "/retouch portrait naturel"],
+                ["/remove", "Supprimer un objet", "/remove voiture"],
+                ["/erase", "Effacer une zone", "/erase arrière-plan"],
+                ["/clean", "Nettoyer les artefacts", "/clean artifacts"],
+                ["/heal", "Corriger une imperfection", "/heal imperfection"],
+                ["/clone", "Cloner une zone", "/clone zone1 zone2"],
+                ["/patch", "Réparer une zone", "/patch tache"],
+                ["/decontaminate", "Nettoyer les contours", "/decontaminate edges"],
+                ["/denoise", "Réduire le bruit", "/denoise 40"],
+                ["/deblur", "Réduire le flou", "/deblur medium"],
+                ["/sharpen", "Accentuer la netteté", "/sharpen 25"],
+                ["/artifact-remove", "Supprimer les artefacts", "/artifact-remove jpeg"],
+                ["/brightness", "Luminosité", "/brightness +15"],
+                ["/contrast", "Contraste", "/contrast +20"],
+                ["/exposure", "Exposition", "/exposure +0.5"],
+                ["/saturation", "Saturation", "/saturation -10"],
+                ["/vibrance", "Vibrance", "/vibrance +25"],
+                ["/temperature", "Température", "/temperature +8"],
+                ["/tint", "Teinte", "/tint -5"],
+                ["/hue", "Rotation de teinte", "/hue +15"],
+                ["/curves", "Courbes", "/curves cinematic"],
+                ["/levels", "Niveaux", "/levels auto"],
+                ["/highlights", "Hautes lumières", "/highlights -20"],
+                ["/shadows", "Ombres", "/shadows +30"],
+                ["/whites", "Blancs", "/whites +10"],
+                ["/blacks", "Noirs", "/blacks -15"],
+                ["/colorgrade", "Color grading", "/colorgrade teal-orange"],
+                ["/relight", "Rééclairer avec IA", "/relight sunset"],
+                ["/light", "Preset lumière", "/light softbox"],
+                ["/rimlight", "Lumière de contour", "/rimlight right"],
+                ["/softlight", "Lumière douce", "/softlight 50"],
+                ["/dramatic-light", "Lumière dramatique", "/dramatic-light medium"],
+                ["/shadow", "Modifier les ombres", "/shadow soften"],
+                ["/glow", "Lueur", "/glow subtle"],
+                ["/flare", "Lens flare", "/flare top-left"],
+                ["/vignette", "Vignette", "/vignette 20"],
+                ["/hdr", "Rendu HDR", "/hdr 30"],
+                ["/restore", "Restaurer", "/restore high"],
+                ["/restore-photo", "Restaurer une photo", "/restore-photo"],
+                ["/restore-color", "Restaurer les couleurs", "/restore-color"],
+                ["/colorize", "Coloriser", "/colorize natural"],
+                ["/upscale", "Upscaling", "/upscale 4x"],
+                ["/superres", "Super-résolution", "/superres 4x"],
+                ["/enhance", "Améliorer", "/enhance detail"],
+                ["/face-enhance", "Améliorer un visage", "/face-enhance 30"],
+                ["/detail", "Récupérer les détails", "/detail +25"],
+                ["/recover", "Récupérer les zones", "/recover shadows"]
+            ]],
+            ["Portrait", "portrait", [
+                ["/portrait", "Optimiser un portrait", "/portrait professional"],
+                ["/face", "Améliorer le visage", "/face improve details"],
+                ["/skin", "Retouche légère de peau", "/skin 20"],
+                ["/eyes", "Ajuster les yeux", "/eyes brighten"],
+                ["/teeth", "Ajustement des dents", "/teeth subtle"],
+                ["/hair", "Améliorer les cheveux", "/hair improve detail"],
+                ["/face-light", "Éclairage du visage", "/face-light soft-left"],
+                ["/headshot", "Portrait professionnel", "/headshot corporate"],
+                ["/expression", "Modifier l’expression", "/expression smile"],
+                ["/portrait-light", "Éclairage portrait", "/portrait-light studio"]
+            ]],
+            ["IA Générative", "ai", [
+                ["/generate", "Générer", "/generate futur maison"],
+                ["/imagine", "Imaginer", "/imagine cyberpunk city"],
+                ["/inpaint", "Inpainting", "/inpaint zone1 ajoute une lampe"],
+                ["/outpaint", "Outpainting", "/outpaint right 500px"],
+                ["/fill", "Remplissage IA", "/fill sélection paysage"],
+                ["/generative-fill", "Generative Fill", "/generative-fill wooden table"],
+                ["/generative-expand", "Generative Expand", "/generative-expand top"],
+                ["/add", "Ajouter un objet", "/add vase"],
+                ["/replace", "Remplacer un objet", "/replace chair sofa"],
+                ["/reconstruct", "Reconstruire une zone", "/reconstruct missing area"],
+                ["/variation", "Créer des variations", "/variation 4"],
+                ["/remix", "Remixer", "/remix futuristic"],
+                ["/restyle", "Restyler", "/restyle watercolor"],
+                ["/style-transfer", "Transfert de style", "/style-transfer comic"],
+                ["/semantic-edit", "Édition sémantique", "/semantic-edit make it winter"]
+            ]],
+            ["Style / Effet", "style", [
+                ["/anime", "Style anime", "/anime soft cinematic"],
+                ["/cartoon", "Style cartoon", "/cartoon modern"],
+                ["/comic", "Style comic", "/comic superhero"],
+                ["/sketch", "Croquis", "/sketch pencil"],
+                ["/ink", "Encre", "/ink black-white"],
+                ["/watercolor", "Aquarelle", "/watercolor soft"],
+                ["/oilpaint", "Peinture à l’huile", "/oilpaint classical"],
+                ["/pixelart", "Pixel art", "/pixelart 16bit"],
+                ["/3d", "Rendu 3D", "/3d realistic"],
+                ["/clay", "Rendu clay", "/clay render"],
+                ["/neon", "Style néon", "/neon cyberpunk"],
+                ["/vintage", "Vintage", "/vintage 1970s"],
+                ["/retro", "Retro", "/retro poster"],
+                ["/minimal", "Minimaliste", "/minimal editorial"],
+                ["/cinematic", "Cinématique", "/cinematic movie still"],
+                ["/photo", "Optimiser une photo", "/photo professional"],
+                ["/studio", "Photo studio", "/studio product photography"],
+                ["/product", "Photo produit", "/product ecommerce"],
+                ["/macro", "Macro", "/macro detailed"],
+                ["/landscape", "Paysage", "/landscape HDR"],
+                ["/street", "Street photography", "/street photography"],
+                ["/architecture", "Architecture", "/architecture corrected"],
+                ["/night", "Photo de nuit", "/night photography"],
+                ["/long-exposure", "Pose longue", "/long-exposure effect"],
+                ["/depth-of-field", "Profondeur de champ", "/depth-of-field shallow"],
+                ["/blur", "Flou", "/blur 20px"],
+                ["/gaussian-blur", "Flou gaussien", "/gaussian-blur 15"],
+                ["/motion-blur", "Flou de mouvement", "/motion-blur horizontal"],
+                ["/bokeh", "Bokeh", "/bokeh strong"],
+                ["/drop-shadow", "Ombre portée", "/drop-shadow 10 10 20"],
+                ["/inner-shadow", "Ombre interne", "/inner-shadow subtle"],
+                ["/noise", "Bruit", "/noise 5"],
+                ["/grain", "Grain photo", "/grain film"],
+                ["/chromatic", "Aberration chromatique", "/chromatic subtle"],
+                ["/duotone", "Duo-ton", "/duotone blue-orange"],
+                ["/halftone", "Demi-teinte", "/halftone comic"],
+                ["/pixelate", "Pixelliser", "/pixelate 10"],
+                ["/posterize", "Posteriser", "/posterize 6"]
+            ]],
+            ["Design / Canva", "design", [
+                ["/design", "Créer une composition", "/design poster moderne"],
+                ["/layout", "Mise en page", "/layout balanced"],
+                ["/align", "Aligner", "/align center"],
+                ["/distribute", "Distribuer", "/distribute horizontal"],
+                ["/grid", "Créer une grille", "/grid 3x3"],
+                ["/margin", "Marges", "/margin 40"],
+                ["/spacing", "Espacement", "/spacing 20"],
+                ["/guides", "Guides", "/guides on"],
+                ["/safe-area", "Zone sûre", "/safe-area social"],
+                ["/template", "Appliquer un modèle", "/template instagram"],
+                ["/brand", "Identité de marque", "/brand mybrand"],
+                ["/mockup", "Créer un mockup", "/mockup smartphone"],
+                ["/poster", "Créer une affiche", "/poster event"],
+                ["/flyer", "Créer un flyer", "/flyer promotion"],
+                ["/banner", "Créer une bannière", "/banner website"]
+            ]],
+            ["Analyse IA", "analysis", [
+                ["/analyze", "Analyser l’image", "/analyze"],
+                ["/describe", "Décrire", "/describe"],
+                ["/detect", "Détecter les objets", "/detect"],
+                ["/detect-faces", "Détecter les visages", "/detect-faces"],
+                ["/detect-text", "Détecter le texte", "/detect-text"],
+                ["/ocr", "Extraire le texte", "/ocr"],
+                ["/colors", "Extraire la palette", "/colors"],
+                ["/composition", "Analyser la composition", "/composition"],
+                ["/quality", "Analyser la qualité", "/quality"],
+                ["/lighting", "Analyser l’éclairage", "/lighting"],
+                ["/style", "Identifier le style", "/style"],
+                ["/metadata", "Lire les métadonnées", "/metadata"],
+                ["/alt-text", "Créer un texte alternatif", "/alt-text"]
+            ]]
+        ];
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  2. BUILD COMMANDS LIST
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let commands = [];
+        let n = 0;
+        sections.forEach(([name, cat, items]) =>
+            items.forEach(x =>
+                commands.push({ name, cat, id: ++n, cmd: x[0], desc: x[1], example: x[2] })
+            )
+        );
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  3. DOM REFS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const categories = document.getElementById("categories");
+        const drawerCategories = document.getElementById("drawerCategories");
+        const grid = document.getElementById("grid");
+        const search = document.getElementById("search");
+        const title = document.getElementById("title");
+        const count = document.getElementById("count");
+        const empty = document.getElementById("empty");
+        const sideDrawer = document.getElementById("sideDrawer");
+        const drawerOverlay = document.getElementById("drawerOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+        const drawerClose = document.getElementById("drawerClose");
+        const toastContainer = document.getElementById("toast-container");
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+
+        let current = "all";
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  4. THEME SWITCHER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem("theme") || 
+                (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+            if (theme === "light") {
+                themeIcon.textContent = "🌙";
+            } else {
+                themeIcon.textContent = "☀️";
+            }
+        }
+
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            setTheme(currentTheme === "light" ? "dark" : "light");
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  5. TOAST SYSTEM
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function showToast(message, type = "copy", cmd = "") {
+            const icon = type === "copy" ? "📋" : type === "run" ? "▶" : "✓";
+            const cls = type === "copy" ? "copy" : "success";
+            const el = document.createElement("div");
+            el.className = `toast ${cls}`;
+            let msgHtml = message;
+            if (cmd) {
+                msgHtml = message.replace(cmd, `<span class="cmd-highlight">${cmd}</span>`);
+            }
+            el.innerHTML = `
+            <span class="icon">${icon}</span>
+            <span class="msg">${msgHtml}</span>
+          `;
+            toastContainer.appendChild(el);
+            requestAnimationFrame(() => {
+                el.classList.add("show");
+            });
+            const timeout = setTimeout(() => {
+                el.classList.remove("show");
+                el.classList.add("hide");
+                setTimeout(() => el.remove(), 400);
+            }, 2800);
+            el._timeout = timeout;
+            return el;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  6. COPY TO CLIPBOARD
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        async function copyCommand(cmdStr, cmdObj) {
+            try {
+                await navigator.clipboard.writeText(cmdStr);
+                const name = cmdObj ? cmdObj.cmd : cmdStr;
+                showToast(`Copié : ${name}`, "copy", name);
+            } catch (_) {
+                const ta = document.createElement("textarea");
+                ta.value = cmdStr;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                ta.remove();
+                const name = cmdObj ? cmdObj.cmd : cmdStr;
+                showToast(`Copié : ${name}`, "copy", name);
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  7. FADE-IN OBSERVER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("fade-in");
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px 0px -30px 0px"
+        });
+
+        function setupCardEffects(card) {
+            scrollObserver.observe(card);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  8. RENDER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function render() {
+            const q = search.value.toLowerCase().trim();
+            const data = commands.filter(x =>
+                (current === "all" || x.cat === current) &&
+                (!q || [x.cmd, x.desc, x.example, x.name].join(" ").toLowerCase().includes(q))
+            );
+
+            grid.innerHTML = "";
+            data.forEach(x => {
+                const card = document.createElement("article");
+                card.className = "command";
+                card.dataset.cmdId = x.id;
+
+                const top = document.createElement("div");
+                top.className = "cmd-top";
+
+                const cmdSpan = document.createElement("span");
+                cmdSpan.className = "cmd";
+                cmdSpan.innerHTML = `${x.cmd} <span class="copy-badge">⤵ copier</span>`;
+
+                cmdSpan.style.cursor = "pointer";
+                cmdSpan.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    copyCommand(x.cmd, x);
+                });
+
+                top.appendChild(cmdSpan);
+
+                const desc = document.createElement("div");
+                desc.className = "desc";
+                desc.textContent = `${x.desc} · ${x.name}`;
+
+                const ex = document.createElement("div");
+                ex.className = "example";
+                ex.textContent = x.example;
+
+                card.appendChild(top);
+                card.appendChild(desc);
+                card.appendChild(ex);
+
+                card.addEventListener("click", () => {
+                    copyCommand(x.cmd, x);
+                });
+
+                setupCardEffects(card);
+
+                grid.appendChild(card);
+            });
+
+            const sectionName = current === "all" ?
+                "Toutes les commandes" :
+                (sections.find(s => s[1] === current)?.[0] || "Commandes");
+            title.textContent = sectionName;
+            count.textContent = `${data.length} commande${data.length > 1 ? "s" : ""}`;
+            empty.style.display = data.length ? "none" : "block";
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  9. CATEGORY BUTTONS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function buildCategoryHTML() {
+            const total = commands.length;
+            let html =
+                `<button class="cat active" data-cat="all">✨ Toutes (${total})</button>`;
+            sections.forEach(s => {
+                html += `<button class="cat" data-cat="${s[1]}">${s[0]} (${s[2].length})</button>`;
+            });
+            return html;
+        }
+
+        function setupCategoryClick(container) {
+            container.querySelectorAll(".cat").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+                    document.querySelectorAll(`.cat[data-cat="${btn.dataset.cat}"]`)
+                        .forEach(b => b.classList.add("active"));
+                    current = btn.dataset.cat;
+                    render();
+                    closeDrawer();
+                });
+            });
+        }
+
+        const catHTML = buildCategoryHTML();
+        categories.innerHTML = catHTML;
+        drawerCategories.innerHTML = catHTML;
+        setupCategoryClick(categories);
+        setupCategoryClick(drawerCategories);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  10. DRAWER TOGGLE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function openDrawer() {
+            sideDrawer.classList.add("open");
+            drawerOverlay.classList.add("open");
+        }
+
+        function closeDrawer() {
+            sideDrawer.classList.remove("open");
+            drawerOverlay.classList.remove("open");
+        }
+
+        menuToggle.addEventListener("click", openDrawer);
+        drawerClose.addEventListener("click", closeDrawer);
+        drawerOverlay.addEventListener("click", closeDrawer);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  11. SEARCH & KEYBOARD
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        search.addEventListener("input", render);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "/" && document.activeElement !== search) {
+                e.preventDefault();
+                search.focus();
+            }
+            if (e.key === "Escape") {
+                if (search.value) {
+                    search.value = "";
+                    render();
+                }
+                search.blur();
+                closeDrawer();
+            }
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  12. INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        initTheme();
+        render();
+    </script>
+</body>
 </html>
